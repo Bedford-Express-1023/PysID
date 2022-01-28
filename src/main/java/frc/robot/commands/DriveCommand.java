@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,9 +35,9 @@ public class DriveCommand extends CommandBase {
 
         drivetrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        translationXPercent * SwerveDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                        translationYPercent * SwerveDriveSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-                        rotationPercent * SwerveDriveSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                        translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                        translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                        rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                         drivetrain.getRotation()
                 )
         );
