@@ -3,9 +3,12 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix.sensors.Pigeon2;
 
 public class DriveCommand extends CommandBase {
     private final SwerveDriveSubsystem drivetrain;
@@ -32,6 +35,8 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
+        
+        /*move somewhere else*/ SmartDashboard.putNumber("Joystick X value", drivetrain.gyroscope.getYaw());
 
         drivetrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(

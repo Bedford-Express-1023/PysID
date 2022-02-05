@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import frc.robot.SwerveLib.SwerveModule;
 import frc.robot.SwerveLib.Mk4SwerveModuleHelper;
@@ -22,7 +23,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
-    private final PigeonIMU gyroscope = new PigeonIMU(Constants.DRIVETRAIN_PIGEON_ID);
+    public final Pigeon2 gyroscope = new Pigeon2(Constants.DRIVETRAIN_PIGEON_ID);
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -30,7 +31,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
             new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
     );
-    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyroscope.getFusedHeading()));
+    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyroscope.getCompassHeading()));
 
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
 
@@ -89,7 +90,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public void zeroGyroscope() {
         odometry.resetPosition(
                 new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)),
-                Rotation2d.fromDegrees(gyroscope.getFusedHeading())
+                Rotation2d.fromDegrees(gyroscope.getCompassHeading())
         );
     }
 
@@ -103,7 +104,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(Rotation2d.fromDegrees(gyroscope.getFusedHeading()),
+        odometry.update(Rotation2d.fromDegrees(gyroscope.getCompassHeading()),
                 new SwerveModuleState(frontLeftModule.getDriveVelocity(), new Rotation2d(frontLeftModule.getSteerAngle())),
                 new SwerveModuleState(frontRightModule.getDriveVelocity(), new Rotation2d(frontRightModule.getSteerAngle())),
                 new SwerveModuleState(backLeftModule.getDriveVelocity(), new Rotation2d(backLeftModule.getSteerAngle())),
