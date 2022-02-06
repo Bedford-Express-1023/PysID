@@ -35,16 +35,24 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
-        
-
-        drivetrain.drive(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
+        if (drivetrain.RobotCentric) {
+            drivetrain.drive(
+                new ChassisSpeeds(
                         translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
                         translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                        rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-                        drivetrain.getRotation()
+                        rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+                    )
+            );
+        } else {
+            drivetrain.drive(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                            translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                            drivetrain.getRotation()
                 )
-        );
+            );
+        }
     }
 
     @Override

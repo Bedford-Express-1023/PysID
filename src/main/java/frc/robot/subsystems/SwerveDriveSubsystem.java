@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.ctre.phoenix.sensors.PigeonIMU;
 import frc.robot.SwerveLib.SwerveModule;
 import frc.robot.SwerveLib.Mk4SwerveModuleHelper;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,6 +36,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyroscope.getCompassHeading()));
 
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+    public boolean RobotCentric = false;
 
     public SwerveDriveSubsystem() {
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
@@ -86,15 +88,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 Constants.BACK_RIGHT_MODULE_STEER_OFFSET
         );
 
-        shuffleboardTab.addNumber("Gyroscope Angle", () -> getRotation().getDegrees());
+        /*shuffleboardTab.addNumber("Gyroscope Angle", () -> getRotation().getDegrees());
         shuffleboardTab.addNumber("Pose X", () -> odometry.getPoseMeters().getX());
-        shuffleboardTab.addNumber("Pose Y", () -> odometry.getPoseMeters().getY());
+        shuffleboardTab.addNumber("Pose Y", () -> odometry.getPoseMeters().getY());*/
         
-        ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList);
+        ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList).withPosition(5, 0);
         PigeonInfo.addNumber("Yaw", () -> gyroscope.getYaw());
         PigeonInfo.addNumber("Pitch", () -> gyroscope.getPitch());
         PigeonInfo.addNumber("Roll", () -> gyroscope.getRoll());
-        
+        shuffleboardTab.addBoolean("Robot Centric", () -> RobotCentric);
     }
 
     public void zeroGyroscope() {
@@ -123,9 +125,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
 
-        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians());
-        frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians());
+        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI);
+        frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
+        backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians());
+        backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians());
     }
 }

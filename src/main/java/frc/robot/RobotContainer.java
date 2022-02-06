@@ -1,9 +1,10 @@
 package frc.robot;
 
-import frc.robot.commands.AllForwardCommand;
+import frc.robot.commands.RobotCentricCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 
 public class RobotContainer {
@@ -29,10 +30,15 @@ public class RobotContainer {
 
         new Button(controller::getXButtonPressed)
                 .whenPressed(drivetrain::zeroGyroscope);
-        new Button(controller::getYButton)
-                .whenPressed(new AllForwardCommand(drivetrain, 0.25, 0.25, 0.25));
-        new Button(controller::getAButton)
-                .whenPressed(new AllForwardCommand(drivetrain, -0.25, -0.25, -0.25));
+        new Button(controller::getLeftBumper)
+                .whenPressed(new ParallelCommandGroup(
+                        new RobotCentricCommand(drivetrain, controller), 
+                        new DriveCommand(
+                                drivetrain, 
+                                () -> -modifyAxis(controller.getLeftY()), // Axes are flipped here on purpose
+                                () -> -modifyAxis(controller.getLeftX()),
+                                () -> -modifyAxis(controller.getRightX()))));
+                
         
         //new Button(controller::getYButton)
                 //.whenReleased(new AllForwardCommand(drivetrain, 0.0, 0.0, 0.0));
