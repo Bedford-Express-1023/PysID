@@ -36,7 +36,6 @@ public class DriveCommand extends CommandBase {
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
         
-        /*move somewhere else*/ SmartDashboard.putNumber("Joystick X value", drivetrain.gyroscope.getYaw());
 
         drivetrain.drive(
                 ChassisSpeeds.fromFieldRelativeSpeeds(

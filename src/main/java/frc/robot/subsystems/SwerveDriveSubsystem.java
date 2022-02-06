@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -38,12 +39,15 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public SwerveDriveSubsystem() {
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
 
+
+
         frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withSize(2, 4)
                         .withPosition(0, 0),
                 Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
+
                 Constants.FRONT_LEFT_MODULE_STEER_MOTOR,
                 Constants.FRONT_LEFT_MODULE_STEER_ENCODER,
                 Constants.FRONT_LEFT_MODULE_STEER_OFFSET
@@ -73,7 +77,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         backRightModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Back Right Module", BuiltInLayouts.kList)
-                        .withSize(2, 4)
+                        .withSize(2, 3)
                         .withPosition(6, 0),
                         Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
@@ -85,12 +89,18 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         shuffleboardTab.addNumber("Gyroscope Angle", () -> getRotation().getDegrees());
         shuffleboardTab.addNumber("Pose X", () -> odometry.getPoseMeters().getX());
         shuffleboardTab.addNumber("Pose Y", () -> odometry.getPoseMeters().getY());
+        
+        ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList);
+        PigeonInfo.addNumber("Yaw", () -> gyroscope.getYaw());
+        PigeonInfo.addNumber("Pitch", () -> gyroscope.getPitch());
+        PigeonInfo.addNumber("Roll", () -> gyroscope.getRoll());
+        
     }
 
     public void zeroGyroscope() {
         odometry.resetPosition(
                 new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)),
-                Rotation2d.fromDegrees(gyroscope.getCompassHeading())
+                Rotation2d.fromDegrees(gyroscope.getYaw())
         );
     }
 
@@ -104,7 +114,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(Rotation2d.fromDegrees(gyroscope.getCompassHeading()),
+        odometry.update(Rotation2d.fromDegrees(gyroscope.getYaw()),
                 new SwerveModuleState(frontLeftModule.getDriveVelocity(), new Rotation2d(frontLeftModule.getSteerAngle())),
                 new SwerveModuleState(frontRightModule.getDriveVelocity(), new Rotation2d(frontRightModule.getSteerAngle())),
                 new SwerveModuleState(backLeftModule.getDriveVelocity(), new Rotation2d(backLeftModule.getSteerAngle())),
@@ -113,9 +123,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
 
-        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE, states[0].angle.getRadians());
-        frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE, states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE, states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE, states[3].angle.getRadians());
+        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians());
+        frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
+        backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians());
+        backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.max(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians());
     }
 }

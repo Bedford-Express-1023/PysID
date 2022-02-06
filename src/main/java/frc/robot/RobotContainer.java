@@ -27,7 +27,7 @@ public class RobotContainer {
                 () -> -modifyAxis(controller.getRightX())
         ));
 
-        new Button(controller::getBackButtonPressed)
+        new Button(controller::getXButtonPressed)
                 .whenPressed(drivetrain::zeroGyroscope);
         new Button(controller::getYButton)
                 .whenPressed(new AllForwardCommand(drivetrain, 0.25, 0.25, 0.25));
