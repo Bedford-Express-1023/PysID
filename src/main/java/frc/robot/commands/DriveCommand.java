@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
@@ -15,18 +16,23 @@ public class DriveCommand extends CommandBase {
     private final DoubleSupplier translationXSupplier;
     private final DoubleSupplier translationYSupplier;
     private final DoubleSupplier rotationSupplier;
+    private final BooleanSupplier robotCentric;
+    public double drivePower;
 
     public DriveCommand(
             SwerveDriveSubsystem drivetrain,
             DoubleSupplier translationXSupplier,
             DoubleSupplier translationYSupplier,
-            DoubleSupplier rotationSupplier
+            DoubleSupplier rotationSupplier,
+            BooleanSupplier robotCentric,
+            Double drivePower
     ) {
         this.drivetrain = drivetrain;
         this.translationXSupplier = translationXSupplier;
         this.translationYSupplier = translationYSupplier;
         this.rotationSupplier = rotationSupplier;
-
+        this.robotCentric = robotCentric;
+        this.drivePower = drivePower;
         addRequirements(drivetrain);
     }
 
@@ -35,11 +41,11 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
-        if (drivetrain.RobotCentric) {
+        if (robotCentric.getAsBoolean()) {
             drivetrain.drive(
                 new ChassisSpeeds(
-                        translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                        translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                        translationXPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                        translationYPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
                         rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     )
             );
