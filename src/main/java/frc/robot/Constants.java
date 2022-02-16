@@ -1,6 +1,11 @@
 package frc.robot;
 
+import frc.robot.Utils.Gains;
+
 public class Constants {
+    //////////////////////
+    //DRIVETRAIN CONSTANTS
+    //////////////////////
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.521;
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.521;
 
@@ -31,4 +36,17 @@ public class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 10;
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(345);
+
+    ///////////////////
+    //SHOOTER CONSTANTS
+    ///////////////////
+    public static final double kNominalVoltage = 12.0;
+    public static final int kFalconCPR = 2048; //pulses per rotation
+    public static final int kCANTimeoutMs = 250;
+
+    public final static int shooterPID = 0;
+    public static int shooterTimeout = 100;
+    public static final Gains kGains = new Gains(.001 , 0.0, 0.0, 0.05, 0, 0.8);//FIXME run sysid
+    public final static int SLOT_0 = 0;
+
 }
