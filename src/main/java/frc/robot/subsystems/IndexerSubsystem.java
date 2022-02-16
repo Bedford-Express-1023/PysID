@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax indexerTopMotor = new CANSparkMax(30, MotorType.kBrushless); //FIXME
   private final CANSparkMax indexerFrontMotor = new CANSparkMax(31, MotorType.kBrushless); //FIXME
-  private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); //FIXME
+  //private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); //FIXME
 
   private final DigitalInput indexerBeamBreak = new DigitalInput(9);
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); //FIXME
@@ -57,9 +57,15 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerTopMotor.set(indexingSpeed);
   }
 
+  public void indexerUnjam(){
+    indexerTopMotor.set(-0.5);
+    indexerFrontMotor.set(-0.5);
+  }
+
   public void indexerStop(){
     indexerTopMotor.stopMotor();
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
