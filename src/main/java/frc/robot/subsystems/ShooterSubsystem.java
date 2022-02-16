@@ -41,7 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopTalon.setInverted(TalonFXInvertType.FollowMaster);
   }
 
-  public void shooterIdle(int velocity){
+  public void shooterRunAtVelocity(int velocity){
     shooterBottomTalon.set(TalonFXControlMode.Velocity, velocity); //FIXME set correct velocity
   }
 

@@ -5,6 +5,7 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -22,14 +23,15 @@ public class ShootAtVelocity extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSubsystem.getShooterVelocity();
+    m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_ShooterSubsystem.getShooterVelocity() > 9900.0 && m_ShooterSubsystem.getShooterVelocity() < 10200){
-      m_IndexerSubsystem.feedShooter();
+    if (m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) > 9900.0 
+      && m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) < 10200){
+            m_IndexerSubsystem.feedShooter();
     }
     else {
       return;
@@ -39,7 +41,7 @@ public class ShootAtVelocity extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ShooterSubsystem.shooterIdle(3000);
+    m_ShooterSubsystem.shooterRunAtVelocity(Constants.ShooterRPM);
   }
 
   // Returns true when the command should end.

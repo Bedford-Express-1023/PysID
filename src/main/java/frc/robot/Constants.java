@@ -48,5 +48,6 @@ public class Constants {
     public static int shooterTimeout = 100;
     public static final Gains kGains = new Gains(.001 , 0.0, 0.0, 0.05, 0, 0.8);//FIXME run sysid
     public final static int SLOT_0 = 0;
+    public final static int ShooterRPM = 3000;
 
 }
