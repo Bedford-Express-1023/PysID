@@ -6,34 +6,39 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import org.opencv.video.FarnebackOpticalFlow;
+
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(40);
-  private final DoubleSolenoid leftCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-  private final DoubleSolenoid rightCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+  private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(20);
+  //private final DoubleSolenoid leftCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, 14, 15);
+  private final Solenoid rightCylinder = new Solenoid(PneumaticsModuleType.REVPH, 15);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
   }
 
   public void deployIntake(){
-    leftCylinder.set(Value.kForward);
-    rightCylinder.set(Value.kForward);
-    intakeMotor.set(0.7);
+    //leftCylinder.set(Value.kReverse);
+    rightCylinder.set(true);
+    intakeMotor.set(1.0);
   }
 
   public void stowIntake(){
-    leftCylinder.set(Value.kReverse);
-    rightCylinder.set(Value.kReverse);
+    //leftCylinder.set(Value.kForward);
+    rightCylinder.set(false);
     intakeMotor.set(0.0);
   }
 
   public void unjamIntake(){
-    leftCylinder.set(Value.kForward);
-    rightCylinder.set(Value.kForward);
+    //leftCylinder.set(Value.kForward);
+    rightCylinder.set(true);
     intakeMotor.set(-0.4);
   }
 

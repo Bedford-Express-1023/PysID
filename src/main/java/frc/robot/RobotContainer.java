@@ -16,6 +16,8 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -29,9 +31,12 @@ public class RobotContainer {
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final ShooterRunAtVelocity shooterIdle = new ShooterRunAtVelocity(m_shooter);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
+    private final FeedShooter feedShooter = new FeedShooter(m_indexer);
+    private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
+    private final DeployIntake deployIntake = new DeployIntake(m_intake);
 
     private final XboxController brendanController = new XboxController(0);
-    private final CommandXboxController oliviaController = new CommandXboxController(1);
+    private final XboxController oliviaController = new XboxController(1);
 
     public RobotContainer() {
         m_drivetrain.register();
@@ -75,14 +80,18 @@ public class RobotContainer {
         new Button(brendanController::getXButton)
                 .whenPressed(new SwerveXPattern(m_drivetrain));
         
-        new Button(oliviaController.a())
+        /*new Button(oliviaController.getAButton())
                 .whileHeld(new DeployIntake(m_intake));
-        new Button(oliviaController.b())
+        new Button(oliviaController.getBButton())
                 .whileHeld(new UnjamIntake(m_intake));
-        new Button(oliviaController.y())
-                .whileHeld(new ShootAtVelocity(m_indexer, m_shooter));
-        new Button(oliviaController.x())
-                .whileHeld(new IndexerUnjam(m_indexer));
+        new Button(oliviaController.getYButton())
+                .whileHeld(new FeedShooter(m_indexer));*/
+        new Button(oliviaController::getXButton)
+                .whileHeld(indexerUnjam);
+        new Button(oliviaController::getYButton)
+                .whileHeld(feedShooter);
+        new Button(oliviaController::getAButton)
+                .whileHeld(deployIntake);
         
     }
 

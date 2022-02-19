@@ -12,7 +12,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShooterRunAtVelocity extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
   double shooterRPM = (3000 * 3.33); 
-  int shooterClicks = (int) Math.round(shooterRPM);
+  int shooterClicks = 13000;
   /** Creates a new shootClose. */
   public ShooterRunAtVelocity(ShooterSubsystem shooterSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
