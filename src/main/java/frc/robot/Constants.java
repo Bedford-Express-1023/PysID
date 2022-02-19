@@ -17,25 +17,25 @@ public class Constants {
 
     public static final int DRIVETRAIN_PIGEON_ID = 0;
 
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 42;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(16);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(198+180);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 4;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(354);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(351);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9;
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(7);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(6.6);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 11;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 10;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(345);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(350.6);
 
     ///////////////////
     //SHOOTER CONSTANTS
@@ -48,5 +48,6 @@ public class Constants {
     public static int shooterTimeout = 100;
     public static final Gains kGains = new Gains(.001 , 0.0, 0.0, 0.05, 0, 0.8);//FIXME run sysid
     public final static int SLOT_0 = 0;
+    public final static int ShooterRPM = 9990;
 
 }

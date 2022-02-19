@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(20);
-  public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(21);
+  public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
+  public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
     shooterBottomTalon.configAllSettings(flywheelTalonConfig);
     shooterBottomTalon.setNeutralMode(NeutralMode.Coast);
-    shooterBottomTalon.setInverted(true);
+    shooterBottomTalon.setInverted(false);
     shooterBottomTalon.configSupplyCurrentLimit(
       new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
@@ -38,16 +38,22 @@ public class ShooterSubsystem extends SubsystemBase {
 		shooterBottomTalon.config_kF(Constants.SLOT_0, Constants.kGains.kF, Constants.shooterTimeout);
 
     shooterTopTalon.follow(shooterBottomTalon);
-    shooterTopTalon.setInverted(TalonFXInvertType.FollowMaster);
+    shooterTopTalon.setInverted(TalonFXInvertType.OpposeMaster);
   }
 
-  public void shoot(int velocity){
+  public void shooterRunAtVelocity(int velocity){
     shooterBottomTalon.set(TalonFXControlMode.Velocity, velocity); //FIXME set correct velocity
+  }
+
+  public double getShooterVelocity(ShooterSubsystem shooterSubsystem){
+    double velocity = shooterBottomTalon.getSelectedSensorVelocity();
+    return velocity;
   }
 
   public void shootStop(){
     shooterBottomTalon.stopMotor();
   }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
