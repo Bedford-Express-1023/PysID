@@ -79,6 +79,8 @@ public class RobotContainer {
                         0.7));
         new Button(brendanController::getXButton)
                 .whenPressed(new SwerveXPattern(m_drivetrain));
+        new Button(brendanController::getAButton)
+                .whileHeld(deployIntake);
         
         /*new Button(oliviaController.getAButton())
                 .whileHeld(new DeployIntake(m_intake));
