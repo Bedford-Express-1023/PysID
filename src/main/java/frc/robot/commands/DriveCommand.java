@@ -17,6 +17,7 @@ public class DriveCommand extends CommandBase {
     private final DoubleSupplier translationYSupplier;
     private final DoubleSupplier rotationSupplier;
     private final BooleanSupplier robotCentric;
+    private BooleanSupplier lowPower;
     public double drivePower;
 
     public DriveCommand(
@@ -25,14 +26,14 @@ public class DriveCommand extends CommandBase {
             DoubleSupplier translationYSupplier,
             DoubleSupplier rotationSupplier,
             BooleanSupplier robotCentric,
-            Double drivePower
+            BooleanSupplier lowPower
     ) {
         this.drivetrain = drivetrain;
         this.translationXSupplier = translationXSupplier;
         this.translationYSupplier = translationYSupplier;
         this.rotationSupplier = rotationSupplier;
         this.robotCentric = robotCentric;
-        this.drivePower = drivePower;
+        this.lowPower = lowPower;
         addRequirements(drivetrain);
     }
 
@@ -41,6 +42,7 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
+        if (this.lowPower.getAsBoolean()) {drivePower = 0.7;} 
         if (robotCentric.getAsBoolean()) {
             drivetrain.drive(
                 new ChassisSpeeds(
@@ -59,6 +61,7 @@ public class DriveCommand extends CommandBase {
                 )
             );
         }
+        this.drivePower = 1.0;
     }
 
     @Override

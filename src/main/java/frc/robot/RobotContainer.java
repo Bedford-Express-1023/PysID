@@ -50,15 +50,7 @@ public class RobotContainer {
                 () -> -modifyAxis(brendanController.getLeftX()),
                 () -> -modifyAxis(brendanController.getRightX()),
                 () -> brendanController.getLeftBumper(),
-                1.0
-        ));
-        m_drivetrain.setDefaultCommand(new DriveCommand(
-                m_drivetrain,
-                () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
-                () -> -modifyAxis(brendanController.getLeftX()),
-                () -> -modifyAxis(brendanController.getRightX()),
-                () -> brendanController.getLeftBumper(),
-                1.0
+                () -> brendanController.getRightBumper()
         ));
 
         m_intake.setDefaultCommand(stowIntake);
@@ -69,14 +61,6 @@ public class RobotContainer {
             //Taken buttons: Left Stick, Right Stick, left stick button, right bumper, left bumper, X
         new Button(brendanController::getLeftStickButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
-        new Button(brendanController::getRightBumper)
-                .whenPressed(new DriveCommand(
-                        m_drivetrain, 
-                        () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
-                        () -> -modifyAxis(brendanController.getLeftX()),
-                        () -> -modifyAxis(brendanController.getRightX()),
-                        () -> brendanController.getLeftBumper(),
-                        0.7));
         new Button(brendanController::getXButton)
                 .whenPressed(new SwerveXPattern(m_drivetrain));
         
