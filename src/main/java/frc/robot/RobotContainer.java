@@ -63,6 +63,8 @@ public class RobotContainer {
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
                 .whenPressed(new SwerveXPattern(m_drivetrain));
+        new Button(brendanController::getAButton)
+                .whileHeld(deployIntake);
         
         /*new Button(oliviaController.getAButton())
                 .whileHeld(new DeployIntake(m_intake));
