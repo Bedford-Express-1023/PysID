@@ -1,7 +1,8 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
+// 2800
+//
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -27,31 +28,47 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterBottomTalon.configSupplyCurrentLimit(
       new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
+      shooterTopTalon.configAllSettings(flywheelTalonConfig);
+      shooterTopTalon.setNeutralMode(NeutralMode.Coast);
+      shooterTopTalon.setInverted(false);
+      shooterTopTalon.configSupplyCurrentLimit(
+        new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
+
     shooterBottomTalon.configSelectedFeedbackSensor(
       TalonFXFeedbackDevice.IntegratedSensor, // Sensor Type 
       Constants.shooterPID,      // PID Index
       Constants.shooterTimeout);      // Config Timeout
 
-    shooterBottomTalon.config_kP(Constants.SLOT_0, Constants.kGains.kP, Constants.shooterTimeout);
-		shooterBottomTalon.config_kI(Constants.SLOT_0, Constants.kGains.kI, Constants.shooterTimeout);
-		shooterBottomTalon.config_kD(Constants.SLOT_0, Constants.kGains.kD, Constants.shooterTimeout);
-		shooterBottomTalon.config_kF(Constants.SLOT_0, Constants.kGains.kF, Constants.shooterTimeout);
+    shooterBottomTalon.config_kP(Constants.SLOT_0, Constants.kBottomGains.kP, Constants.shooterTimeout);
+		shooterBottomTalon.config_kI(Constants.SLOT_0, Constants.kBottomGains.kI, Constants.shooterTimeout);
+		shooterBottomTalon.config_kD(Constants.SLOT_0, Constants.kBottomGains.kD, Constants.shooterTimeout);
+		shooterBottomTalon.config_kF(Constants.SLOT_0, Constants.kBottomGains.kF, Constants.shooterTimeout);
 
-    shooterTopTalon.follow(shooterBottomTalon);
+    shooterTopTalon.config_kP(Constants.SLOT_0, Constants.kTopGains.kP, Constants.shooterTimeout);
+		shooterTopTalon.config_kI(Constants.SLOT_0, Constants.kTopGains.kI, Constants.shooterTimeout);
+		shooterTopTalon.config_kD(Constants.SLOT_0, Constants.kTopGains.kD, Constants.shooterTimeout);
+		shooterTopTalon.config_kF(Constants.SLOT_0, Constants.kTopGains.kF, Constants.shooterTimeout);
+    
     shooterTopTalon.setInverted(TalonFXInvertType.OpposeMaster);
   }
 
-  public void shooterRunAtVelocity(int velocity){
-    shooterBottomTalon.set(TalonFXControlMode.Velocity, velocity); //FIXME set correct velocity
+  public void shooterRunAtVelocity(int bottomShooterVelocity, int topShooterVelocity2){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterVelocity); //FIXME set correct velocity
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterVelocity2);
   }
+
 
   public double getShooterVelocity(ShooterSubsystem shooterSubsystem){
     double velocity = shooterBottomTalon.getSelectedSensorVelocity();
+    shooterTopTalon.getSelectedSensorVelocity();
     return velocity;
   }
 
+
+
   public void shootStop(){
     shooterBottomTalon.stopMotor();
+    shooterTopTalon.stopMotor();
   }
   
   @Override

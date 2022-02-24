@@ -12,7 +12,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShooterRunAtVelocity extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
   double shooterRPM = (3000 * 3.33); 
-  int shooterClicks = 13000;
+  int shooterLowClicks = 10000;
+  int shooterHighClicks = 10000;
   /** Creates a new shootClose. */
   public ShooterRunAtVelocity(ShooterSubsystem shooterSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
@@ -27,7 +28,7 @@ public class ShooterRunAtVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtVelocity(shooterClicks);
+    m_ShooterSubsystem.shooterRunAtVelocity(10000, 10000);
   }
   // Called once the command ends or is interrupted.
   @Override
