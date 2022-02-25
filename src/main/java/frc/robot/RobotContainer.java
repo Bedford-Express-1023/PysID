@@ -16,11 +16,15 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.util.WPIUtilJNI;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
@@ -38,6 +42,10 @@ public class RobotContainer {
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
 
+    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(3);
+    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(3);
+    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(3);
+
     public RobotContainer() {
         m_drivetrain.register();
         m_intake.register();
@@ -46,9 +54,9 @@ public class RobotContainer {
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
-                () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
-                () -> -modifyAxis(brendanController.getLeftX()),
-                () -> -modifyAxis(brendanController.getRightX()),
+                () -> -modifyAxis(brendanControllerLeftY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
+                () -> -modifyAxis(brendanControllerLeftX.calculate(brendanController.getLeftX())),
+                () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
                 () -> brendanController.getLeftBumper(),
                 () -> brendanController.getRightBumper()
         ));
@@ -59,17 +67,10 @@ public class RobotContainer {
     
 
             //Taken buttons: Left Stick, Right Stick, left stick button, right bumper, left bumper, X
-        new Button(brendanController::getLeftStickButtonPressed)
+        new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
                 .whenPressed(new SwerveXPattern(m_drivetrain));
-        
-        /*new Button(oliviaController.getAButton())
-                .whileHeld(new DeployIntake(m_intake));
-        new Button(oliviaController.getBButton())
-                .whileHeld(new UnjamIntake(m_intake));
-        new Button(oliviaController.getYButton())
-                .whileHeld(new FeedShooter(m_indexer));*/
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
         new Button(oliviaController::getYButton)
@@ -77,10 +78,6 @@ public class RobotContainer {
         new Button(oliviaController::getAButton)
                 .whileHeld(deployIntake);
         
-    }
-
-    public SwerveDriveSubsystem getDrivetrain() {
-        return m_drivetrain;
     }
 
     private static double deadband(double value, double deadband) {
