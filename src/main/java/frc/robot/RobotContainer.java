@@ -42,9 +42,9 @@ public class RobotContainer {
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
 
-    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(3);
-    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(3);
-    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(3);
+    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(2.9);
+    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(2.9);
+    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(2.9);
 
     public RobotContainer() {
         m_drivetrain.register();
@@ -60,10 +60,10 @@ public class RobotContainer {
                 () -> brendanController.getLeftBumper(),
                 () -> brendanController.getRightBumper()
         ));
-
+        /*
         m_intake.setDefaultCommand(stowIntake);
         m_shooter.setDefaultCommand(shooterIdle);
-        m_indexer.setDefaultCommand(indexBalls);
+        m_indexer.setDefaultCommand(indexBalls);*/
     
 
             //Taken buttons: Left Stick, Right Stick, left stick button, right bumper, left bumper, X
