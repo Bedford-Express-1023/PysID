@@ -45,7 +45,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
-                        .withSize(2, 4)
+                        .withSize(1, 4)
                         .withPosition(0, 0),
                 Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
@@ -57,8 +57,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Front Right Module", BuiltInLayouts.kList)
-                        .withSize(2, 4)
-                        .withPosition(2, 0),
+                        .withSize(1, 4)
+                        .withPosition(1, 0),
                 Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.FRONT_RIGHT_MODULE_STEER_MOTOR,
@@ -68,8 +68,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Back Left Module", BuiltInLayouts.kList)
-                        .withSize(2, 4)
-                        .withPosition(4, 0),
+                        .withSize(1, 4)
+                        .withPosition(2, 0),
                         Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_LEFT_MODULE_STEER_MOTOR,
@@ -79,8 +79,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
         backRightModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Back Right Module", BuiltInLayouts.kList)
-                        .withSize(2, 3)
-                        .withPosition(6, 0),
+                        .withSize(1, 4)
+                        .withPosition(3, 0),
                         Mk4SwerveModuleHelper.GearRatio.L3,
                 Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_RIGHT_MODULE_STEER_MOTOR,
@@ -92,13 +92,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         shuffleboardTab.addNumber("Pose X", () -> odometry.getPoseMeters().getX());
         shuffleboardTab.addNumber("Pose Y", () -> odometry.getPoseMeters().getY());*/
         
-        ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList).withPosition(5, 0);
+        ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList).withPosition(5, 0).withSize(1, 3);
         PigeonInfo.addNumber("Yaw", () -> gyroscope.getYaw());
         PigeonInfo.addNumber("Pitch", () -> gyroscope.getPitch());
         PigeonInfo.addNumber("Roll", () -> gyroscope.getRoll());
         shuffleboardTab.addBoolean("Robot Centric", () -> RobotCentric);
     }
-
     public void zeroGyroscope() {
         odometry.resetPosition(
                 new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(0.0)),
@@ -121,8 +120,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 new SwerveModuleState(frontRightModule.getDriveVelocity(), new Rotation2d(frontRightModule.getSteerAngle())),
                 new SwerveModuleState(backLeftModule.getDriveVelocity(), new Rotation2d(backLeftModule.getSteerAngle())),
                 new SwerveModuleState(backRightModule.getDriveVelocity(), new Rotation2d(backRightModule.getSteerAngle()))
-        );
-
+                );
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
 
         frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI);

@@ -31,7 +31,7 @@ public class ShootAtVelocity extends CommandBase {
   public void execute() {
     if (m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) > 9900.0 
       && m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) < 10200){
-            m_IndexerSubsystem.feedShooter();
+//m_IndexerSubsystem.feedShooter();
     }
     else {
       return;
@@ -41,7 +41,7 @@ public class ShootAtVelocity extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ShooterSubsystem.shooterRunAtVelocity(Constants.ShooterRPM);
+    m_ShooterSubsystem.shooterRunAtVelocity(Constants.ShooterLowRPM, Constants.ShooterHighRPM);
   }
 
   // Returns true when the command should end.
