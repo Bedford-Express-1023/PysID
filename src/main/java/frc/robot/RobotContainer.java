@@ -74,9 +74,9 @@ public class RobotContainer {
                 .whileHeld(new FeedShooter(m_indexer));*/
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
-        new Button(oliviaController::getYButton)
+        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
                 .whileHeld(feedShooter);
-        new Button(oliviaController::getAButton)
+        new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
         
     }
