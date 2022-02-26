@@ -5,10 +5,13 @@
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ClimberSubsytem;
 
-public class climberOff extends CommandBase {
+public class ClimberOff extends CommandBase {
+  ClimberSubsytem m_ClimberSubsytem;
   /** Creates a new climberOff. */
-  public climberOff() {
+  public ClimberOff(ClimberSubsytem climberSubsytem) {
+    addRequirements(m_ClimberSubsytem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -18,11 +21,16 @@ public class climberOff extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_ClimberSubsytem.climberOff();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_ClimberSubsytem.climberOff();
+
+  }
 
   // Returns true when the command should end.
   @Override

@@ -4,6 +4,8 @@ import frc.robot.Utils.AxisButton;
 import frc.robot.Utils.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
+import frc.robot.commands.Climber.ClimberDown;
+import frc.robot.commands.Climber.ClimberUp;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
@@ -16,17 +18,14 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-
-import javax.swing.DefaultRowSorter;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.WPIUtilJNI;
+import frc.robot.subsystems.cameraSubsystem;
+import frc.robot.subsystems.ClimberSubsytem;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.util.WPIUtilJNI;
 
 public class RobotContainer {
@@ -34,7 +33,11 @@ public class RobotContainer {
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
-
+ private final ClimberSubsytem m_climber = new ClimberSubsytem();
+ private final cameraSubsystem m_camera = new cameraSubsystem();
+ 
+private final ClimberDown climberDown = new ClimberDown(m_climber);
+    private final ClimberUp climberUp = new ClimberUp(m_climber);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final ShooterRunAtVelocity shooterIdle = new ShooterRunAtVelocity(m_shooter);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
@@ -84,6 +87,10 @@ public class RobotContainer {
                 .whileHeld(feedShooter);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
+        new Button(oliviaController::getLeftBumper)
+                .whenHeld(climberUp);
+        new Button(oliviaController::getRightBumper)
+                .whenHeld(climberDown);
         
     }
 
@@ -108,4 +115,5 @@ public class RobotContainer {
 
         return value;
     }
+    
 }
