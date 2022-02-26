@@ -5,6 +5,8 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix.sensors.Pigeon2;
 import frc.robot.SwerveLib.SwerveModule;
 import frc.robot.SwerveLib.Mk4SwerveModuleHelper;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,8 +26,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public final SwerveModule frontRightModule;
     public final SwerveModule backLeftModule;
     public final SwerveModule backRightModule;
+    public ChassisSpeeds previousSpeeds;
 
     public final Pigeon2 gyroscope = new Pigeon2(Constants.DRIVETRAIN_PIGEON_ID);
+    public final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.65743, 0.00032037, 0.000037994);
+    public final PIDController pidX = new PIDController(0.175, 0.0, 0.1); //TODO: find good numbers
+    public final PIDController pidY = new PIDController(0.175, 0.0, 0.1); //TODO: find good numbers
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -110,20 +116,23 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
+        this.previousSpeeds = this.chassisSpeeds;
         this.chassisSpeeds = chassisSpeeds;
     }
 
     @Override
     public void periodic() {
         odometry.update(Rotation2d.fromDegrees(gyroscope.getYaw()),
-                new SwerveModuleState(frontLeftModule.getDriveVelocity(), new Rotation2d(frontLeftModule.getSteerAngle())),
-                new SwerveModuleState(frontRightModule.getDriveVelocity(), new Rotation2d(frontRightModule.getSteerAngle())),
-                new SwerveModuleState(backLeftModule.getDriveVelocity(), new Rotation2d(backLeftModule.getSteerAngle())),
-                new SwerveModuleState(backRightModule.getDriveVelocity(), new Rotation2d(backRightModule.getSteerAngle()))
-                );
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
+                        new SwerveModuleState(frontLeftModule.getDriveVelocity(), new Rotation2d(frontLeftModule.getSteerAngle())),
+                        new SwerveModuleState(frontRightModule.getDriveVelocity(), new Rotation2d(frontRightModule.getSteerAngle())),
+                        new SwerveModuleState(backLeftModule.getDriveVelocity(), new Rotation2d(backLeftModule.getSteerAngle())),
+                        new SwerveModuleState(backRightModule.getDriveVelocity(), new Rotation2d(backRightModule.getSteerAngle()))
+                        );
+        chassisSpeeds.vxMetersPerSecond = feedForward.calculate(chassisSpeeds.vxMetersPerSecond) + pidX.calculate(this.previousSpeeds.vxMetersPerSecond, chassisSpeeds.vxMetersPerSecond);
+        chassisSpeeds.vyMetersPerSecond = feedForward.calculate(chassisSpeeds.vxMetersPerSecond) + pidY.calculate(this.previousSpeeds.vyMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
 
-        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI);
+        SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
+        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
         frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
         backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians());
         backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians());
