@@ -44,6 +44,7 @@ private final ClimberDown climberDown = new ClimberDown(m_climber);
     private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
+    private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -65,7 +66,8 @@ private final ClimberDown climberDown = new ClimberDown(m_climber);
                 () -> -modifyAxis(brendanControllerLeftX.calculate(brendanController.getLeftX())),
                 () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
                 () -> brendanController.getLeftBumper(),
-                () -> brendanController.getRightBumper()
+                () -> brendanController.getRightBumper(),
+                () -> brendanController.getLeftTriggerAxis() > 0.5
         ));
         /*
         m_intake.setDefaultCommand(stowIntake);
@@ -73,11 +75,10 @@ private final ClimberDown climberDown = new ClimberDown(m_climber);
         m_indexer.setDefaultCommand(indexBalls);*/
     
 
-            //Taken buttons: Left Stick, Right Stick, left stick button, right bumper, left bumper, X
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
-                .whenPressed(new SwerveXPattern(m_drivetrain));
+                .whileHeld(swerveXPattern);
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
      
