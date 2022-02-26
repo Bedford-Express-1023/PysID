@@ -16,6 +16,9 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+
+import javax.swing.DefaultRowSorter;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.util.WPIUtilJNI;
@@ -41,10 +44,11 @@ public class RobotContainer {
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    private double slewDouble = 3.0;
 
-    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(2.9);
-    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(2.9);
-    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(2.9);
+    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(slewDouble);
+    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(slewDouble);
+    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(slewDouble);
 
     public RobotContainer() {
         m_drivetrain.register();
