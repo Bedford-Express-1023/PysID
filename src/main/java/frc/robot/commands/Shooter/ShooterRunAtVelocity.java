@@ -28,7 +28,7 @@ public class ShooterRunAtVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtVelocity(10000, 10000);
+    m_ShooterSubsystem.shooterRunAtVelocity(9818, 10710);
   }
   // Called once the command ends or is interrupted.
   @Override

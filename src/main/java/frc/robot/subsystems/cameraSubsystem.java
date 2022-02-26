@@ -7,9 +7,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class cameraSubsystem extends SubsystemBase {
+public class CameraSubsystem extends SubsystemBase {
   /** Creates a new cameraSubsystem. */
-  public cameraSubsystem() {
+  public CameraSubsystem() {
     CameraServer.startAutomaticCapture();
   }
 

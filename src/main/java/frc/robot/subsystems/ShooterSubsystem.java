@@ -30,7 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
       shooterTopTalon.configAllSettings(flywheelTalonConfig);
       shooterTopTalon.setNeutralMode(NeutralMode.Coast);
-      shooterTopTalon.setInverted(false);
+      shooterTopTalon.setInverted(true);
       shooterTopTalon.configSupplyCurrentLimit(
         new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
