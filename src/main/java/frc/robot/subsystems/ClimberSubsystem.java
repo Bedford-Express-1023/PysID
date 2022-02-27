@@ -9,10 +9,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ClimberSubsytem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
   public final WPI_TalonFX climberMotor = new WPI_TalonFX(71);
   /** Creates a new climberSubsytem. */
-  public ClimberSubsytem() {}
+  public ClimberSubsystem() {}
 
   @Override
   public void periodic() {
