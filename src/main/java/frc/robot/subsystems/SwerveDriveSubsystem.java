@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix.sensors.Pigeon2;
 import frc.robot.SwerveLib.SwerveModule;
 import frc.robot.SwerveLib.Mk4SwerveModuleHelper;

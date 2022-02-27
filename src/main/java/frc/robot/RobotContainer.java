@@ -1,7 +1,5 @@
 package frc.robot;
 
-import frc.robot.Utils.AxisButton;
-import frc.robot.Utils.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
 //import frc.robot.commands.Climber.ClimberDown;
@@ -11,32 +9,26 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Intake.UnjamIntake;
-import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.commands.Shooter.ShooterRunAtVelocity;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
-//import frc.robot.subsystems.ClimberSubsytem;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.WPIUtilJNI;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
- //private final ClimberSubsytem m_climber = new ClimberSubsytem();
- private final CameraSubsystem m_camera = new CameraSubsystem();
+    private final ClimberSubsystem m_climber = new ClimberSubsystem();
+    private final CameraSubsystem m_camera = new CameraSubsystem();
  
-//private final ClimberDown climberDown = new ClimberDown(m_climber);
+    //private final ClimberDown climberDown = new ClimberDown(m_climber);
     //private final ClimberUp climberUp = new ClimberUp(m_climber);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final ShooterRunAtVelocity shooterIdle = new ShooterRunAtVelocity(m_shooter);
@@ -45,7 +37,6 @@ public class RobotContainer {
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
-    private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -71,12 +62,9 @@ public class RobotContainer {
                 () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
         ));
         
-        /*
         m_intake.setDefaultCommand(stowIntake);
-        m_shooter.setDefaultCommand(shooterIdle);*/
-        m_indexer.setDefaultCommand(indexBalls);
-    
         //m_shooter.setDefaultCommand(shooterIdle);
+        //m_indexer.setDefaultCommand(indexBalls);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
