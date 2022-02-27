@@ -29,9 +29,9 @@ public class ShootAtVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) > 9900.0 
-      && m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) < 10200){
-//m_IndexerSubsystem.feedShooter();
+    if (m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) > 9500.0 
+      && m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) < 10000){
+          m_IndexerSubsystem.feedShooter();
     }
     else {
       return;
