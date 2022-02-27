@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 import frc.robot.SwerveLib.SwerveModule;
 import frc.robot.SwerveLib.Mk4SwerveModuleHelper;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +14,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -28,8 +31,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public final Pigeon2 gyroscope = new Pigeon2(Constants.DRIVETRAIN_PIGEON_ID);
     public final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.45, 1.85, 0.000037994);
-    public final PIDController pid = new PIDController(0.25, 0.0, 0.0); //TODO: find good numbers
-
+    public final PIDController pid = new PIDController(0.25, 0.0, 0.0);
+    public final HolonomicDriveController driveController = new HolonomicDriveController(new PIDController(0.25, 0.0, 0.0), new PIDController(0.25, 0.0, 0.0), new ProfiledPIDController(0.2, 0.0, 0.1, new TrapezoidProfile.Constraints(5.0,10.0)));
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -37,15 +40,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
             new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
             new Translation2d(-Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0)
     );
-    private final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyroscope.getCompassHeading()));
+    public final SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(gyroscope.getCompassHeading()));
 
     private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
     public boolean RobotCentric = false;
 
     public SwerveDriveSubsystem() {
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
-
-
 
         frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
