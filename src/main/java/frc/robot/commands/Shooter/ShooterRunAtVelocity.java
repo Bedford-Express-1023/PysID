@@ -11,9 +11,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterRunAtVelocity extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
-  double shooterRPM = (3000 * 3.33); 
-  int shooterLowClicks = 10000;
-  int shooterHighClicks = 10000;
+
   /** Creates a new shootClose. */
   public ShooterRunAtVelocity(ShooterSubsystem shooterSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;

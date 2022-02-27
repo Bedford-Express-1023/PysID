@@ -45,6 +45,7 @@ public class RobotContainer {
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
+    private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -72,10 +73,10 @@ public class RobotContainer {
         
         /*
         m_intake.setDefaultCommand(stowIntake);
-        m_shooter.setDefaultCommand(shooterIdle);
-        m_indexer.setDefaultCommand(indexBalls);*/
+        m_shooter.setDefaultCommand(shooterIdle);*/
+        m_indexer.setDefaultCommand(indexBalls);
     
-        m_shooter.setDefaultCommand(shooterIdle);
+        //m_shooter.setDefaultCommand(shooterIdle);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -87,8 +88,10 @@ public class RobotContainer {
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
-                .whileHeld(feedShooter);
+                .whileHeld(shooterIdle);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
+                .whileHeld(feedShooter);
+        new Button(() -> oliviaController.getLeftTriggerAxis() < 0.5)
                 .whenReleased(indexBalls);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
