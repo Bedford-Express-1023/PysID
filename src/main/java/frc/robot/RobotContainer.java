@@ -17,7 +17,6 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.cameraSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -30,7 +29,6 @@ public class RobotContainer {
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
-    private final cameraSubsystem m_camera = new cameraSubsystem();
  
     //private final ClimberDown climberDown = new ClimberDown(m_climber);
     //private final ClimberUp climberUp = new ClimberUp(m_climber);
