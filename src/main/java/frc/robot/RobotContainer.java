@@ -4,6 +4,8 @@ import frc.robot.Utils.AxisButton;
 import frc.robot.Utils.CommandXboxController;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
+import frc.robot.commands.Indexer.BallSpitter;
+import frc.robot.commands.Indexer.BallSpitterStop;
 //import frc.robot.commands.Climber.ClimberDown;
 //import frc.robot.commands.Climber.ClimberUp;
 import frc.robot.commands.Indexer.FeedShooter;
@@ -43,6 +45,8 @@ public class RobotContainer {
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
+    private final BallSpitter ballSpitter = new BallSpitter(m_indexer);
+    private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
 
@@ -75,7 +79,8 @@ public class RobotContainer {
         m_shooter.setDefaultCommand(shooterIdle);
         m_indexer.setDefaultCommand(indexBalls);*/
     
-        m_shooter.setDefaultCommand(shooterIdle);
+        //m_shooter.setDefaultCommand(shooterIdle);
+        m_indexer.setDefaultCommand(indexBalls);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -88,15 +93,18 @@ public class RobotContainer {
                 .whileHeld(indexerUnjam);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
                 .whileHeld(feedShooter);
-        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
+        new Button(() -> oliviaController.getLeftTriggerAxis() < 0.5)
                 .whenReleased(indexBalls);
+        new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
+                .whileHeld(ballSpitter);
+        new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
+                .whenReleased(ballSpitterStop);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
         //new Button(oliviaController::getLeftBumper)
            //     .whenHeld(climberUp);
        // new Button(oliviaController::getRightBumper)
         //        .whenHeld(climberDown);
-        
     }
 
     private static double deadband(double value, double deadband) {
