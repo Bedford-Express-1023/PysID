@@ -23,12 +23,12 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
-public class ForwardLeft extends CommandBase {
+public class DriveBack extends CommandBase {
     private final SwerveDriveSubsystem drivetrain;
     private final Trajectory driveTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(/*new Translation2d(-1+0.53, 0.53)*/), new Pose2d(3, 0, new Rotation2d(Math.PI/2)), new TrajectoryConfig(7, 3));
     private double timer = 0;
 
-    public ForwardLeft(SwerveDriveSubsystem drivetrain) {
+    public DriveBack(SwerveDriveSubsystem drivetrain) {
         this.drivetrain = drivetrain;
         addRequirements(drivetrain);
         drivetrain.zeroGyroscope();
