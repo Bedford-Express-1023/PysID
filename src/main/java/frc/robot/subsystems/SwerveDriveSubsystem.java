@@ -29,9 +29,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public ChassisSpeeds previousSpeeds = new ChassisSpeeds(0,0,0);
 
     public final Pigeon2 gyroscope = new Pigeon2(Constants.DRIVETRAIN_PIGEON_ID);
-    public final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.45, 0.95, 0.000037994);
-    public final PIDController pidX = new PIDController(0.325, 0.0, 0.0); //TODO: find good numbers
-    public final PIDController pidY = new PIDController(0.325, 0.0, 0.0); //TODO: find good numbers
+    public final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.45, 1.85, 0.000037994);
+    public final PIDController pid = new PIDController(0.25, 0.0, 0.0); //TODO: find good numbers
+
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -128,10 +128,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                         );
 
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(chassisSpeeds);
-        frontLeftModule.set(feedForward.calculate((states[0].speedMetersPerSecond) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1)), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
-        frontRightModule.set(feedForward.calculate((states[1].speedMetersPerSecond) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1)), states[1].angle.getRadians());
-        backLeftModule.set(feedForward.calculate((states[2].speedMetersPerSecond) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1)), states[2].angle.getRadians()); 
-        backRightModule.set(feedForward.calculate((states[3].speedMetersPerSecond) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1)), states[3].angle.getRadians()); 
+        frontLeftModule.set((feedForward.calculate(states[0].speedMetersPerSecond) + pid.calculate(states[0].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
+        frontRightModule.set((feedForward.calculate(states[1].speedMetersPerSecond) + pid.calculate(states[1].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
+        backLeftModule.set((feedForward.calculate(states[2].speedMetersPerSecond) + pid.calculate(states[2].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians()); 
+        backRightModule.set((feedForward.calculate(states[3].speedMetersPerSecond) + pid.calculate(states[3].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians()); 
 
         /*
         frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
