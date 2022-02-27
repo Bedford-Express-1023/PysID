@@ -3,13 +3,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix.sensors.Pigeon2;
 
 public class SwerveXPattern extends CommandBase {
     private final SwerveDriveSubsystem drivetrain;

@@ -4,34 +4,27 @@
 
 package frc.robot.commands.Autos;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Indexer.FeedShooter;
-import frc.robot.commands.Intake.DeployIntake;
+import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Shooter.ShooterRunAtVelocity;
 import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.SwerveDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootOneAndGo extends SequentialCommandGroup {
+public class ShootAndDoNothing extends ParallelCommandGroup {
   ShooterSubsystem m_shooter;
   IndexerSubsystem m_indexer;
-  IntakeSubsystem m_intake;
-  SwerveDriveSubsystem m_swerve;
-  /** Creates a new ShootAndGo. */
-  public ShootOneAndGo(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem, IntakeSubsystem intakeSubsystem, SwerveDriveSubsystem swerveDriveSubsystem) {
+  /** Creates a new ShootAndDoNothing. */
+  public ShootAndDoNothing(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem) {
     m_shooter = shooterSubsystem;
     m_indexer = indexerSubsystem;
-    m_intake = intakeSubsystem;
-    m_swerve = swerveDriveSubsystem;
-    addCommands(new ShooterRunAtVelocity(m_shooter), new WaitCommand(0.75), 
-      new FeedShooter(m_indexer), new WaitCommand(2.0)
-      /*, new DriveCommand(m_swerve, 0.0, 0.5, 0.0, true, 0.5)*/);
+    addCommands(new IndexBalls(m_indexer), new WaitCommand(2.0), 
+    new FeedShooter(m_indexer), new WaitCommand(2.0),
+    new ShooterRunAtVelocity(m_shooter), new WaitCommand(3.0));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
   }

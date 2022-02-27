@@ -3,13 +3,9 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix.sensors.Pigeon2;
 
 public class DriveCommand extends CommandBase {
     private final SwerveDriveSubsystem drivetrain;
@@ -57,9 +53,9 @@ public class DriveCommand extends CommandBase {
         } else {
             drivetrain.drive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                            translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                            translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                            rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                            translationXPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            translationYPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            rotationPercent * (slowTurn.getAsBoolean() ? 0.3 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                             drivetrain.getRotation()
                 )
             );
