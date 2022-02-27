@@ -11,6 +11,7 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
+import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.commands.Shooter.ShooterRunAtVelocity;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -21,6 +22,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.robot.commands.Autos.DriveBack;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
@@ -42,7 +44,7 @@ public class RobotContainer {
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
-    private final DriveBack DriveBack= new DriveBack(m_drivetrain);
+    private final DriveBack driveBack= new DriveBack(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -71,7 +73,7 @@ public class RobotContainer {
         m_intake.setDefaultCommand(stowIntake);
 
         m_shooter.setDefaultCommand(shooterIdle);
-        m_indexer.setDefaultCommand(indexBalls);*/
+        m_indexer.setDefaultCommand(indexBalls);
     
         //m_shooter.setDefaultCommand(shooterIdle);
         m_indexer.setDefaultCommand(indexBalls);
@@ -84,7 +86,7 @@ public class RobotContainer {
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
         new Button(brendanController::getYButton)
-                .whenPressed(forwardLeft);
+                .whenPressed(driveBack);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);

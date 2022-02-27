@@ -8,7 +8,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CameraSubsystem extends SubsystemBase {
-  /** Creates a new cameraSubsystem. */
+  /** Creates a new CameraSubsystem. */
   public CameraSubsystem() {
     CameraServer.startAutomaticCapture();
   }
