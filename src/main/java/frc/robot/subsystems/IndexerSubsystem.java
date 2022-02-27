@@ -18,37 +18,50 @@ public class IndexerSubsystem extends SubsystemBase {
   //private final DigitalInput indexerBeamBreak = new DigitalInput(9);
   private final DigitalInput shooterBeamBreak = new DigitalInput(8); //FIXME
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
+  private final DigitalInput spitterBeamBreak = new DigitalInput(9);
   private final double indexingSpeed = 0.9;
+
+  boolean shooterBeamBreakState;
+  boolean indexerBeamBreakState;
+  boolean spitterBeamBreakState;
+
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
   }
 
   public void indexBalls(){
-    if(indexerBeamBreak.get() && shooterBeamBreak.get()){
-      indexerTopMotor.set(indexingSpeed);
+    if (shooterBeamBreakState == true) {
+    indexerFrontMotor.set(indexingSpeed);
+    indexerTopMotor.set(indexingSpeed);
+    indexerBackMotor.stopMotor();
+    }
+    else if (indexerBeamBreakState == true && shooterBeamBreakState == false) {
       indexerFrontMotor.set(indexingSpeed);
+      indexerTopMotor.stopMotor();
       indexerBackMotor.stopMotor();
     }
-    else if(indexerBeamBreak.get() && !shooterBeamBreak.get()){
-      indexerTopMotor.stopMotor();
-      indexerFrontMotor.set(indexingSpeed);
-      indexerBackMotor.stopMotor();
-    }
-    else if(!indexerBeamBreak.get() && !shooterBeamBreak.get()){
-      indexerTopMotor.stopMotor();
+    else if (indexerBeamBreakState == false && shooterBeamBreakState == false) {
       indexerFrontMotor.stopMotor();
+      indexerTopMotor.stopMotor();
+      indexerBackMotor.stopMotor();
     }
-    else if (!indexerBeamBreak.get() && shooterBeamBreak.get()){
-      indexerTopMotor.set(indexingSpeed);
-      indexerFrontMotor.set(indexingSpeed);
-    }
-    else{
+    else {
       indexerStop();
     }
   }
 
+  public void ballSpitter(){
+    indexerFrontMotor.set(indexingSpeed);
+    indexerTopMotor.stopMotor();
+    indexerBackMotor.set(-indexingSpeed);
+  }
+
+  public void ballSpitterStop(){
+    indexerBackMotor.stopMotor();
+  }
+
   public boolean readyCheck(){
-    if(shooterBeamBreak.get()){
+    if(shooterBeamBreakState == false){
       return true;
     }
     else{
@@ -57,27 +70,44 @@ public class IndexerSubsystem extends SubsystemBase {
   }
   
   public void feedShooter(){
-    indexerTopMotor.set(1.0);
+    indexerTopMotor.set(indexingSpeed);
   }
 
   public void indexerUnjam(){
-    indexerTopMotor.set(-1.0);
-    indexerFrontMotor.set(-1.0);
+    indexerTopMotor.set(-indexingSpeed);
+    indexerFrontMotor.set(-indexingSpeed);
+    indexerBackMotor.set(-indexingSpeed);
   }
 
   public void indexerStop(){
     indexerTopMotor.stopMotor();
+    indexerFrontMotor.stopMotor();
+    indexerBackMotor.stopMotor();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    boolean shooterBeamBreakState;
+
     if (shooterBeamBreak.get()){
       shooterBeamBreakState = true;
     }
     else {
       shooterBeamBreakState = false;
+    }
+
+    if (indexerBeamBreak.get()) {
+      indexerBeamBreakState = true;
+    } 
+    else {
+      indexerBeamBreakState = false;
+    }
+
+    if (spitterBeamBreak.get()) {
+      spitterBeamBreakState = true;
+    } 
+    else {
+      spitterBeamBreakState = false;
     }
   }
 }
