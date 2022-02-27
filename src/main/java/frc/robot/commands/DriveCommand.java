@@ -57,9 +57,9 @@ public class DriveCommand extends CommandBase {
         } else {
             drivetrain.drive(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
-                            translationXPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                            translationYPercent * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                            rotationPercent * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                            translationXPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            translationYPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
+                            rotationPercent * (slowTurn.getAsBoolean() ? 0.3 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                             drivetrain.getRotation()
                 )
             );

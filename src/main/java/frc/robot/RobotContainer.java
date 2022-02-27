@@ -61,14 +61,14 @@ public class RobotContainer {
         m_shooter.register();
         m_indexer.register();
 
-        /*m_drivetrain.setDefaultCommand(new DriveCommand(
+        m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
                 () -> -modifyAxis(brendanControllerLeftY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
                 () -> -modifyAxis(brendanControllerLeftX.calculate(brendanController.getLeftX())),
                 () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
-                () -> brendanController.getLeftBumper(),
-                () -> brendanController.getRightBumper(),
-                () -> brendanController.getLeftTriggerAxis() > 0.5
+                () -> brendanController.getLeftBumper(), //RobotCentric
+                () -> brendanController.getRightBumper(), //lowPower
+                () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
         ));
         
         /*
