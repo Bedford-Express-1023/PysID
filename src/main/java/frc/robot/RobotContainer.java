@@ -4,8 +4,6 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
-import frc.robot.commands.Climber.ClimberDown;
-import frc.robot.commands.Climber.ClimberUp;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
