@@ -17,6 +17,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.robot.commands.Autos.DriveBack;
@@ -27,6 +30,8 @@ public class RobotContainer {
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
+
+    private final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
  
     //private final ClimberDown climberDown = new ClimberDown(m_climber);
     //private final ClimberUp climberUp = new ClimberUp(m_climber);
@@ -40,7 +45,7 @@ public class RobotContainer {
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
-    private final DriveBack driveBack= new DriveBack(m_drivetrain);
+    private final DriveBack driveBack = new DriveBack(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -55,6 +60,10 @@ public class RobotContainer {
         m_intake.register();
         m_shooter.register();
         m_indexer.register();
+
+        autoChooser.setDefaultOption("Default", ballSpitter);
+        autoChooser.addOption("Other Option", ballSpitter);
+        SmartDashboard.putData(autoChooser);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
