@@ -18,7 +18,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootAndDoNothing extends ParallelCommandGroup {
   ShooterSubsystem m_shooter;
   IndexerSubsystem m_indexer;
-  /** Creates a new ShootAndDoNothing. */
+  // Creates a new ShootAndDoNothing.
   public ShootAndDoNothing(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem) {
     m_shooter = shooterSubsystem;
     m_indexer = indexerSubsystem;

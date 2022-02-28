@@ -40,7 +40,7 @@ public class RobotContainer {
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     private final CameraSubsystem m_camera = new CameraSubsystem();
-    private final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+    public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
  
     //private final ClimberDown climberDown = new ClimberDown(m_climber);
     //private final ClimberUp climberUp = new ClimberUp(m_climber);
@@ -91,8 +91,8 @@ public class RobotContainer {
         
         m_intake.setDefaultCommand(stowIntake);
 
-        m_shooter.setDefaultCommand(shooterIdle);
-        m_indexer.setDefaultCommand(indexBalls);
+        /*m_shooter.setDefaultCommand(shooterIdle);
+        m_indexer.setDefaultCommand(indexBalls);*/
     
         //m_shooter.setDefaultCommand(shooterIdle);
         m_indexer.setDefaultCommand(indexBalls);
