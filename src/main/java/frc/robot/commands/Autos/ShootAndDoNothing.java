@@ -5,8 +5,6 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -20,7 +18,7 @@ public class ShootAndDoNothing extends SequentialCommandGroup {
   public ShootAndDoNothing(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem) {
     m_shooter = shooterSubsystem;
     m_indexer = indexerSubsystem;
-    addCommands(new IndexBalls(m_indexer), new WaitCommand(2.0), 
+    addCommands( 
     new ShootOnce(m_indexer, m_shooter));
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

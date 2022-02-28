@@ -1,37 +1,34 @@
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
+import frc.robot.commands.Autos.DoNothing;
+import frc.robot.commands.Autos.DriveBack;
+import frc.robot.commands.Autos.DriveForward;
+import frc.robot.commands.Autos.ShootAndDoNothing;
+import frc.robot.commands.Autos.ShootOnce;
+import frc.robot.commands.Autos.ShootOneAndDriveBack;
+import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
+import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
-import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.ShootAtVelocity;
-import frc.robot.commands.Shooter.ShooterRunAtVelocity;
+import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.button.Button;
-
-import org.opencv.features2d.FlannBasedMatcher;
-
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import frc.robot.commands.Autos.DoNothing;
-import frc.robot.commands.Autos.DriveBack;
-import frc.robot.commands.Autos.ShootAndDoNothing;
-import frc.robot.commands.Autos.ShootOneAndDriveBack;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
@@ -42,12 +39,9 @@ public class RobotContainer {
     private final CameraSubsystem m_camera = new CameraSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
  
-    //private final ClimberDown climberDown = new ClimberDown(m_climber);
-    //private final ClimberUp climberUp = new ClimberUp(m_climber);
+    private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final StowIntake stowIntake = new StowIntake(m_intake);
-    private final ShooterRunAtVelocity shooterIdle = new ShooterRunAtVelocity(m_shooter);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
-    private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
     private final BallSpitter ballSpitter = new BallSpitter(m_indexer);
     private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
@@ -55,9 +49,13 @@ public class RobotContainer {
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
+    private final DriveForward driveForward = new DriveForward(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
+    private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
     private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer);
     private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
+    private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
+                        m_drivetrain, m_indexer, m_shooter, m_intake);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -77,6 +75,8 @@ public class RobotContainer {
         autoChooser.addOption("Drive Back", driveBack);
         autoChooser.addOption("Shoot Once and Do Nothing", shootAndDoNothing);
         autoChooser.addOption("Shoot Once and Drive Back", shootOneAndDriveBack);
+        autoChooser.addOption("Shoot Once", shootOnce);
+        autoChooser.addOption("Shoot and Grab", shootOneDriveBackAndGetOne);
         SmartDashboard.putData(autoChooser);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
@@ -90,11 +90,6 @@ public class RobotContainer {
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-
-        /*m_shooter.setDefaultCommand(shooterIdle);
-        m_indexer.setDefaultCommand(indexBalls);*/
-    
-        //m_shooter.setDefaultCommand(shooterIdle);
         m_indexer.setDefaultCommand(indexBalls);
 
 
@@ -105,15 +100,13 @@ public class RobotContainer {
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
         new Button(brendanController::getYButton)
-                .whenPressed(driveBack);
+                .whileHeld(driveForward);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
-                .whileHeld(shooterIdle);
+                .whileHeld(shootAtVelocity);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
-                .whileHeld(feedShooter);
-        new Button(() -> oliviaController.getLeftTriggerAxis() < 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
@@ -121,6 +114,8 @@ public class RobotContainer {
                 .whenReleased(ballSpitterStop);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
+        new Button(oliviaController::getYButton)
+                .whileHeld(climbUp);
         //new Button(oliviaController::getLeftBumper)
            //     .whenHeld(climberUp);
        // new Button(oliviaController::getRightBumper)

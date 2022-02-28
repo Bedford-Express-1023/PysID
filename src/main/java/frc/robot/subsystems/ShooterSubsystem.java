@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shooterRunAtVelocity(int bottomShooterVelocity, int topShooterVelocity2){
-    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterVelocity); //FIXME set correct velocity
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterVelocity);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterVelocity2);
   }
 

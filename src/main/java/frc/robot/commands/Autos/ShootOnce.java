@@ -4,17 +4,15 @@
 
 package frc.robot.commands.Autos;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Indexer.FeedShooter;
-import frc.robot.commands.Shooter.ShooterRunAtVelocity;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootOnce extends ParallelCommandGroup {
+public class ShootOnce extends SequentialCommandGroup {
   IndexerSubsystem m_indexer;
   ShooterSubsystem m_shooter;
 
@@ -24,7 +22,6 @@ public class ShootOnce extends ParallelCommandGroup {
     m_shooter = shooterSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new FeedShooter(m_indexer), new WaitCommand(2.0),
-    new ShooterRunAtVelocity(m_shooter), new WaitCommand(3.0));
+    addCommands(new ShootAtVelocity(m_indexer, m_shooter));
   }
 }

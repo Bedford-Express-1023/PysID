@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
-  private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); //FIXME
-  private final CANSparkMax indexerFrontMotor = new CANSparkMax(30, MotorType.kBrushless); //FIXME
-  private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); //FIXME
+  private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); 
+  private final CANSparkMax indexerFrontMotor = new CANSparkMax(30, MotorType.kBrushless); 
+  private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); 
 
   //private final DigitalInput indexerBeamBreak = new DigitalInput(9);
-  private final DigitalInput shooterBeamBreak = new DigitalInput(7); //FIXME
+  private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
   private final double indexingSpeed = 0.9;
