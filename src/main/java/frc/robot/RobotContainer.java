@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
@@ -49,7 +50,6 @@ public class RobotContainer {
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
-    private final DriveForward driveForward = new DriveForward(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
     private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer);
@@ -99,8 +99,6 @@ public class RobotContainer {
                 .whileHeld(swerveXPattern);
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
-        new Button(brendanController::getYButton)
-                .whileHeld(driveForward);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
@@ -114,7 +112,7 @@ public class RobotContainer {
                 .whenReleased(ballSpitterStop);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
-        new Button(oliviaController::getYButton)
+        new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
         //new Button(oliviaController::getLeftBumper)
            //     .whenHeld(climberUp);
