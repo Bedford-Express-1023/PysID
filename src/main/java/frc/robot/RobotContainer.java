@@ -30,6 +30,7 @@ import org.opencv.features2d.FlannBasedMatcher;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
+import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 
 public class RobotContainer {
@@ -55,7 +56,8 @@ public class RobotContainer {
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
-    private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack();
+    private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer);
+    private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -71,8 +73,10 @@ public class RobotContainer {
         m_shooter.register();
         m_indexer.register();
 
-        autoChooser.setDefaultOption("Default", ballSpitter);
-        autoChooser.addOption("Other Option", ballSpitter);
+        autoChooser.setDefaultOption("Do Nothing", doNothing);
+        autoChooser.addOption("Drive Back", driveBack);
+        autoChooser.addOption("Shoot Once and Do Nothing", shootAndDoNothing);
+        autoChooser.addOption("Shoot Once and Drive Back", shootOneAndDriveBack);
         SmartDashboard.putData(autoChooser);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(

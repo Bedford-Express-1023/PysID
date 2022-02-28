@@ -5,15 +5,26 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootOneAndDriveBack extends SequentialCommandGroup {
+  private final SwerveDriveSubsystem m_drivetrain;
+  private final IndexerSubsystem m_indexer;
+  private final ShooterSubsystem m_shooter;
   /** Creates a new ShootOneAndDriveBack. */
-  public ShootOneAndDriveBack() {
+  public ShootOneAndDriveBack(SwerveDriveSubsystem drivetrain, IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
+    m_drivetrain = drivetrain;
+    m_indexer = indexerSubsystem;
+    m_shooter = shooterSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(new ShootAndDoNothing(m_shooter, m_indexer),
+    new DriveBack(m_drivetrain));
   }
 }
