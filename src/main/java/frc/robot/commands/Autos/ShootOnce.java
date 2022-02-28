@@ -4,25 +4,27 @@
 
 package frc.robot.commands.Autos;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.Indexer.IndexBalls;
+import frc.robot.commands.Indexer.FeedShooter;
+import frc.robot.commands.Shooter.ShooterRunAtVelocity;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootAndDoNothing extends SequentialCommandGroup {
-  ShooterSubsystem m_shooter;
+public class ShootOnce extends ParallelCommandGroup {
   IndexerSubsystem m_indexer;
-  // Creates a new ShootAndDoNothing.
-  public ShootAndDoNothing(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem) {
-    m_shooter = shooterSubsystem;
+  ShooterSubsystem m_shooter;
+
+  /** Creates a new ShootOnce. */
+  public ShootOnce(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
     m_indexer = indexerSubsystem;
-    addCommands(new IndexBalls(m_indexer), new WaitCommand(2.0), 
-    new ShootOnce(m_indexer, m_shooter));
+    m_shooter = shooterSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    addCommands(new FeedShooter(m_indexer), new WaitCommand(2.0),
+    new ShooterRunAtVelocity(m_shooter), new WaitCommand(3.0));
   }
 }
