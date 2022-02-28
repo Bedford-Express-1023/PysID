@@ -24,8 +24,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.button.Button;
+
+import org.opencv.features2d.FlannBasedMatcher;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
+import frc.robot.commands.Autos.ShootOneAndDriveBack;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
@@ -48,7 +53,9 @@ public class RobotContainer {
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
-    private final DriveBack driveBack = new DriveBack(m_drivetrain);
+    private final DriveBack driveBack= new DriveBack(m_drivetrain);
+    private final DoNothing doNothing = new DoNothing();
+    private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack();
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
