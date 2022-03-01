@@ -7,11 +7,11 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterRunAtVelocity extends CommandBase {
+public class ShooterRunAtCloseVelocity extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
 
   /** Creates a new shootClose. */
-  public ShooterRunAtVelocity(ShooterSubsystem shooterSubsystem) {
+  public ShooterRunAtCloseVelocity(ShooterSubsystem shooterSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
     addRequirements(m_ShooterSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.

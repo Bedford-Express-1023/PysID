@@ -5,16 +5,18 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-  public final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(71);
-  public final WPI_TalonFX climberRightMotor = new WPI_TalonFX(72);
+  public final WPI_TalonFX climberRightMotor = new WPI_TalonFX(55);
+  public final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
   /** Creates a new climberSubsytem. */
-  public ClimberSubsystem() {}
+  public ClimberSubsystem() {
+  }
 
   @Override
   public void periodic() {
@@ -22,13 +24,13 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climberUp(){
-    climberLeftMotor.set(ControlMode.PercentOutput, 0.5);
-    climberRightMotor.set(ControlMode.PercentOutput, 0.5);
+    climberLeftMotor.set(ControlMode.PercentOutput, -1.0);
+    climberRightMotor.set(ControlMode.PercentOutput, 1.0);
   }
 
   public void climberDown(){
     climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
-    climberRightMotor.set(ControlMode.PercentOutput, -0.5);
+    climberRightMotor.set(ControlMode.PercentOutput, 0.5);
 
   }
 

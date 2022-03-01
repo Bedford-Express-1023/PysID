@@ -11,11 +11,11 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
-import frc.robot.commands.Autos.DriveForward;
 import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
+import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
@@ -41,6 +41,7 @@ public class RobotContainer {
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
+    private final ClimbStop climbStop = new ClimbStop(m_climber);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
@@ -70,13 +71,14 @@ public class RobotContainer {
         m_intake.register();
         m_shooter.register();
         m_indexer.register();
+        m_climber.register();
 
         autoChooser.setDefaultOption("Do Nothing", doNothing);
         autoChooser.addOption("Drive Back", driveBack);
         autoChooser.addOption("Shoot Once and Do Nothing", shootAndDoNothing);
         autoChooser.addOption("Shoot Once and Drive Back", shootOneAndDriveBack);
         autoChooser.addOption("Shoot Once", shootOnce);
-        autoChooser.addOption("Shoot and Grab", shootOneDriveBackAndGetOne);
+        autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         SmartDashboard.putData(autoChooser);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
@@ -89,8 +91,8 @@ public class RobotContainer {
                 () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
         ));
         
-        m_intake.setDefaultCommand(stowIntake);
-        m_indexer.setDefaultCommand(indexBalls);
+        //m_intake.setDefaultCommand(stowIntake);
+        //m_indexer.setDefaultCommand(indexBalls);
 
 
         new Button(brendanController::getBButtonPressed)
@@ -114,6 +116,8 @@ public class RobotContainer {
                 .whileHeld(deployIntake);
         new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
+        new POVButton(oliviaController, 0)
+                .whenReleased(climbStop);
         //new Button(oliviaController::getLeftBumper)
            //     .whenHeld(climberUp);
        // new Button(oliviaController::getRightBumper)
