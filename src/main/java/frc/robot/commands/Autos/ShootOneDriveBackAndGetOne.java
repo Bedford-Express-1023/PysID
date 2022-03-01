@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Autos;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
@@ -30,10 +32,11 @@ public class ShootOneDriveBackAndGetOne extends SequentialCommandGroup {
     m_intake = intakeSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(3.0), 
+    addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(1.0), 
           new ShootStop(m_shooter).withTimeout(0.1), new DeployIntake(m_intake).alongWith(
           new DriveBack(m_drivetrain)).alongWith(new IndexBalls(m_indexer)).withTimeout(3.0),
           new StowIntake(m_intake).alongWith(new DriveForward(m_drivetrain)).withTimeout(3.0), 
-          new ShootAndDoNothing(m_shooter, m_indexer));
+          new ShootAndDoNothing(m_shooter, m_indexer), new ShootStop(m_shooter).withTimeout(0.1),
+          new Gyroscope180(m_drivetrain));
   }
 }

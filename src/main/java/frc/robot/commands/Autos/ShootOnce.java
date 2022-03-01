@@ -5,9 +5,12 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.Shooter.ShootAtVelocity;
+import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -15,13 +18,17 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootOnce extends SequentialCommandGroup {
   IndexerSubsystem m_indexer;
   ShooterSubsystem m_shooter;
+  SwerveDriveSubsystem m_drivetrain;
 
   /** Creates a new ShootOnce. */
-  public ShootOnce(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
+  public ShootOnce(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem, SwerveDriveSubsystem swerveDriveSubsystem) {
     m_indexer = indexerSubsystem;
     m_shooter = shooterSubsystem;
+    m_drivetrain = swerveDriveSubsystem;
+
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAtVelocity(m_indexer, m_shooter));
+    addCommands(new ShootAtVelocity(m_indexer, m_shooter).withTimeout(2.0), 
+        new ShootStop(m_shooter), new Gyroscope180(m_drivetrain));
   }
 }

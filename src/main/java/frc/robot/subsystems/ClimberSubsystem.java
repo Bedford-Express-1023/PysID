@@ -37,6 +37,5 @@ public class ClimberSubsystem extends SubsystemBase {
   public void climberOff(){
     climberLeftMotor.set(ControlMode.PercentOutput, 0);
     climberRightMotor.set(ControlMode.PercentOutput, 0);
-
   }
 }

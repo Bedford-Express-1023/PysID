@@ -60,8 +60,8 @@ public class RobotContainer {
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    
     private double slewDouble = 3.0;
-
     private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(slewDouble);
     private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(slewDouble);
     private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(slewDouble);
@@ -91,9 +91,8 @@ public class RobotContainer {
                 () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
         ));
         
-        //m_intake.setDefaultCommand(stowIntake);
-        //m_indexer.setDefaultCommand(indexBalls);
-
+        m_intake.setDefaultCommand(stowIntake);
+        m_indexer.setDefaultCommand(indexBalls);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -118,10 +117,6 @@ public class RobotContainer {
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
-        //new Button(oliviaController::getLeftBumper)
-           //     .whenHeld(climberUp);
-       // new Button(oliviaController::getRightBumper)
-        //        .whenHeld(climberDown);
     }
 
     private static double deadband(double value, double deadband) {
