@@ -7,6 +7,7 @@ package frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -14,6 +15,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootAndDoNothing extends SequentialCommandGroup {
   ShooterSubsystem m_shooter;
   IndexerSubsystem m_indexer;
+  SwerveDriveSubsystem m_drivetrain;
   // Creates a new ShootAndDoNothing.
   public ShootAndDoNothing(ShooterSubsystem shooterSubsystem, IndexerSubsystem indexerSubsystem) {
     m_shooter = shooterSubsystem;

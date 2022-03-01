@@ -5,6 +5,7 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Gyroscope180;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -24,6 +25,6 @@ public class ShootOneAndDriveBack extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(3.0),
-    new DriveBack(m_drivetrain));
+    new DriveBack(m_drivetrain).withTimeout(3.0), new Gyroscope180(m_drivetrain));
   }
 }

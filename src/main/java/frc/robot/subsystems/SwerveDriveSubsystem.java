@@ -108,6 +108,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         );
     }
 
+    public void Gyroscope180() {
+        odometry.resetPosition(
+                new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(180.0)),
+                Rotation2d.fromDegrees(gyroscope.getYaw())
+        );
+    }
+
     public Rotation2d getRotation() {
         return odometry.getPoseMeters().getRotation();
     }

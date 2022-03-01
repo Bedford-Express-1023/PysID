@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
@@ -42,6 +43,7 @@ public class RobotContainer {
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
+    private final Gyroscope180 gyroscope180 = new Gyroscope180(m_drivetrain);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
@@ -60,8 +62,8 @@ public class RobotContainer {
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    
     private double slewDouble = 3.0;
-
     private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(slewDouble);
     private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(slewDouble);
     private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(slewDouble);
@@ -91,9 +93,8 @@ public class RobotContainer {
                 () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
         ));
         
-        //m_intake.setDefaultCommand(stowIntake);
-        //m_indexer.setDefaultCommand(indexBalls);
-
+        m_intake.setDefaultCommand(stowIntake);
+        m_indexer.setDefaultCommand(indexBalls);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -101,6 +102,8 @@ public class RobotContainer {
                 .whileHeld(swerveXPattern);
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
+        new Button(brendanController::getYButtonPressed)
+                .whenPressed(gyroscope180);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
@@ -118,10 +121,6 @@ public class RobotContainer {
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
-        //new Button(oliviaController::getLeftBumper)
-           //     .whenHeld(climberUp);
-       // new Button(oliviaController::getRightBumper)
-        //        .whenHeld(climberDown);
     }
 
     private static double deadband(double value, double deadband) {
