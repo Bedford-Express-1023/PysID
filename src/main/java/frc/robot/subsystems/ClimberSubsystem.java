@@ -8,12 +8,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-  public final WPI_TalonFX climberRightMotor = new WPI_TalonFX(55);
-  public final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
+  private final WPI_TalonFX climberRightMotor = new WPI_TalonFX(55);
+  private final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
+  private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 4);
   /** Creates a new climberSubsytem. */
   public ClimberSubsystem() {
   }
@@ -23,18 +26,27 @@ public class ClimberSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void climberUnlock(){
+    climberSolenoid.set(true);
+  }
+
+  public void climberLock(){
+    climberSolenoid.set(false);
+  }
+
   public void climberUp(){
-    climberLeftMotor.set(ControlMode.PercentOutput, -1.0);
-    climberRightMotor.set(ControlMode.PercentOutput, 1.0);
+    climberUnlock();
+    climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
+    climberRightMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void climberDown(){
     climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
     climberRightMotor.set(ControlMode.PercentOutput, 0.5);
-
   }
 
   public void climberOff(){
+    climberLock();
     climberLeftMotor.set(ControlMode.PercentOutput, 0);
     climberRightMotor.set(ControlMode.PercentOutput, 0);
   }

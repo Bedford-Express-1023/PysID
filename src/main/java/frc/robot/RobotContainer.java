@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,6 +19,7 @@ import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
+import frc.robot.commands.Climber.ClimberUnlock;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
 import frc.robot.commands.Indexer.IndexBalls;
@@ -25,6 +27,7 @@ import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.ShootAtVelocity;
+import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -43,6 +46,7 @@ public class RobotContainer {
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
+    private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
     private final Gyroscope180 gyroscope180 = new Gyroscope180(m_drivetrain);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
@@ -52,6 +56,7 @@ public class RobotContainer {
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
+    private final ShootStop shootStop = new ShootStop(m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
@@ -82,6 +87,7 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Once", shootOnce);
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         SmartDashboard.putData(autoChooser);
+        SmartDashboard.putNumber("Delay in Seconds", 0.0);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
@@ -95,6 +101,7 @@ public class RobotContainer {
         
         m_intake.setDefaultCommand(stowIntake);
         m_indexer.setDefaultCommand(indexBalls);
+        m_shooter.setDefaultCommand(shootStop);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -102,8 +109,6 @@ public class RobotContainer {
                 .whileHeld(swerveXPattern);
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
-        new Button(brendanController::getYButtonPressed)
-                .whenPressed(gyroscope180);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
@@ -111,6 +116,8 @@ public class RobotContainer {
                 .whileHeld(shootAtVelocity);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
+        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
+                .whenReleased(shootStop);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
@@ -121,6 +128,8 @@ public class RobotContainer {
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
+        new Button(oliviaController::getStartButton)
+                .toggleWhenPressed(climberUnlock, true);
     }
 
     private static double deadband(double value, double deadband) {
