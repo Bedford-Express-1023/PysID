@@ -96,7 +96,7 @@ public class RobotContainer {
                 () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
                 () -> brendanController.getLeftBumper(), //RobotCentric
                 () -> brendanController.getRightBumper(), //lowPower
-                () -> brendanController.getLeftTriggerAxis() > 0.5 //slowTurn
+                () -> !(brendanController.getLeftTriggerAxis() > 0.5) //slowTurn
         ));
         
         m_intake.setDefaultCommand(stowIntake);

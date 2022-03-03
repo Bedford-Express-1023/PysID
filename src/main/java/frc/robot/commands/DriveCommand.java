@@ -41,7 +41,7 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
-        if (this.lowPower.getAsBoolean()) {drivePower = 0.3;} 
+        if (this.lowPower.getAsBoolean()) {drivePower = 0.4;} 
         if (robotCentric.getAsBoolean()) {
             drivetrain.drive(
                 new ChassisSpeeds(
