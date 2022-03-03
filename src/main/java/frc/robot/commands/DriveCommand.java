@@ -41,13 +41,13 @@ public class DriveCommand extends CommandBase {
         double translationXPercent = translationXSupplier.getAsDouble();
         double translationYPercent = translationYSupplier.getAsDouble();
         double rotationPercent = rotationSupplier.getAsDouble();
-        if (this.lowPower.getAsBoolean()) {drivePower = 0.4;} 
+        if (this.lowPower.getAsBoolean()) {drivePower = 0.2;} 
         if (robotCentric.getAsBoolean()) {
             drivetrain.drive(
                 new ChassisSpeeds(
                         translationXPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
                         translationYPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                        rotationPercent * (slowTurn.getAsBoolean() ? 0.3 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
+                        rotationPercent * (slowTurn.getAsBoolean() ? 0.4 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
                     )
             );
         } else {
@@ -55,7 +55,7 @@ public class DriveCommand extends CommandBase {
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                             translationXPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
                             translationYPercent * drivePower * Constants.MAX_VELOCITY_METERS_PER_SECOND,
-                            rotationPercent * (slowTurn.getAsBoolean() ? 0.3 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                            rotationPercent * (slowTurn.getAsBoolean() ? 0.4 : 1.0) * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                             drivetrain.getRotation()
                 )
             );
