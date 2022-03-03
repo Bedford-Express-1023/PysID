@@ -17,6 +17,7 @@ import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
+import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Climber.ClimberUnlock;
@@ -47,6 +48,7 @@ public class RobotContainer {
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
     private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
+    private final ClimbLock climberLock = new ClimbLock(m_climber);
     private final Gyroscope180 gyroscope180 = new Gyroscope180(m_drivetrain);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
@@ -102,6 +104,7 @@ public class RobotContainer {
         m_intake.setDefaultCommand(stowIntake);
         m_indexer.setDefaultCommand(indexBalls);
         m_shooter.setDefaultCommand(shootStop);
+        m_climber.setDefaultCommand(climberLock);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);

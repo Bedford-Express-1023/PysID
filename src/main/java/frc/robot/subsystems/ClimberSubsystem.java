@@ -34,6 +34,10 @@ public class ClimberSubsystem extends SubsystemBase {
     climberSolenoid.set(false);
   }
 
+  public void climbLock(){
+    climberSolenoid.set(true);
+  }
+
   public void climberUp(){
     climberUnlock();
     climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
