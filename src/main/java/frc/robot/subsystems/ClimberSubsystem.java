@@ -40,13 +40,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void climberUp(){
     climberUnlock();
-    climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
-    climberRightMotor.set(ControlMode.PercentOutput, 0.5);
+    climberLeftMotor.set(ControlMode.PercentOutput, -0.85);
+    climberRightMotor.set(ControlMode.PercentOutput, 0.85);
   }
 
   public void climberDown(){
-    climberLeftMotor.set(ControlMode.PercentOutput, -0.5);
-    climberRightMotor.set(ControlMode.PercentOutput, 0.5);
+    climberLeftMotor.set(ControlMode.PercentOutput, -0.85);
+    climberRightMotor.set(ControlMode.PercentOutput, 0.85);
   }
 
   public void climberOff(){
