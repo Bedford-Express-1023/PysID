@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.beforeStarting(new WaitCommand(autoDelay)).schedule();
+      m_autonomousCommand.beforeStarting(m_robotContainer.autoDelay.getSelected()).schedule();
   }
 }
 

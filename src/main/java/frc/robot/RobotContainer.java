@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
@@ -44,6 +45,7 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     private final CameraSubsystem m_camera = new CameraSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+    public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
@@ -89,7 +91,21 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Once", shootOnce);
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         SmartDashboard.putData(autoChooser);
-        SmartDashboard.putNumber("Delay in Seconds", 0.0);
+        //SmartDashboard.putNumber("Delay in Seconds", 0.0);
+        
+        autoDelay.setDefaultOption("none", new WaitCommand(0.0));
+        autoDelay.addOption("1.0", new WaitCommand(1.0));
+        autoDelay.addOption("2.0", new WaitCommand(2.0));
+        autoDelay.addOption("3.0", new WaitCommand(3.0));
+        autoDelay.addOption("4.0", new WaitCommand(4.0));
+        autoDelay.addOption("5.0", new WaitCommand(5.0));
+        autoDelay.addOption("6.0", new WaitCommand(6.0));
+        autoDelay.addOption("7.0", new WaitCommand(7.0));
+        autoDelay.addOption("8.0", new WaitCommand(8.0));
+        autoDelay.addOption("9.0", new WaitCommand(9.0));
+        autoDelay.addOption("10.0", new WaitCommand(10.0));
+
+        SmartDashboard.putData(autoDelay);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
