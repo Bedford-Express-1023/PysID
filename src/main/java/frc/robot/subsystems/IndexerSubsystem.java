@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,12 +16,15 @@ public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); 
   private final CANSparkMax indexerFrontMotor = new CANSparkMax(30, MotorType.kBrushless); 
   private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); 
+  private final TalonSRX indexerBallOutBack = new TalonSRX(1001);
+ 
 
   //private final DigitalInput indexerBeamBreak = new DigitalInput(9);
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
   private final double indexingSpeed = 0.9;
+  
 
   boolean shooterBeamBreakState;
   boolean indexerBeamBreakState;
@@ -27,13 +32,18 @@ public class IndexerSubsystem extends SubsystemBase {
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
+    indexerTopMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    indexerFrontMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    indexerBackMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
   }
+  
 
   public void indexBalls(){
     if (shooterBeamBreakState == true) {
     indexerFrontMotor.set(indexingSpeed);
     indexerTopMotor.set(indexingSpeed);
     indexerBackMotor.stopMotor();
+    
     }
     else if (indexerBeamBreakState == true && shooterBeamBreakState == false) {
       indexerFrontMotor.set(indexingSpeed);
