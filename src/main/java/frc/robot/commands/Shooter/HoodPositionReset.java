@@ -7,14 +7,13 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterRunAtCloseVelocity extends CommandBase {
+public class HoodPositionReset extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
-
-  /** Creates a new shootClose. */
-  public ShooterRunAtCloseVelocity(ShooterSubsystem shooterSubsystem) {
+  /** Creates a new HoodPosition. */
+  public HoodPositionReset(ShooterSubsystem shooterSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
-    addRequirements(m_ShooterSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +23,12 @@ public class ShooterRunAtCloseVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtCloseVelocity();
+    m_ShooterSubsystem.hoodPositionReset();
   }
+
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_ShooterSubsystem.shootStop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
