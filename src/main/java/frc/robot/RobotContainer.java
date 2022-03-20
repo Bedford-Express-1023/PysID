@@ -111,7 +111,8 @@ public class RobotContainer {
                 m_drivetrain,
                 () -> -modifyAxis(brendanControllerLeftY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
                 () -> -modifyAxis(brendanControllerLeftX.calculate(brendanController.getLeftX())),
-                () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
+                () -> -modifyAxis(brendanController.getRightX()),
+                () -> -modifyAxis(brendanController.getRightY()),
                 () -> brendanController.getLeftBumper(), //RobotCentric
                 () -> brendanController.getRightBumper(), //lowPower
                 () -> !(brendanController.getLeftTriggerAxis() > 0.5) //slowTurn
