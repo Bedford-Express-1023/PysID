@@ -28,8 +28,6 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Shooter.HoodPosition;
-import frc.robot.commands.Shooter.HoodPositionReset;
 import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.CameraSubsystem;
@@ -62,8 +60,6 @@ public class RobotContainer {
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final ShootStop shootStop = new ShootStop(m_shooter);
-    private final HoodPosition hoodPosition = new HoodPosition(m_shooter);
-    private final HoodPositionReset hoodPositionReset = new HoodPositionReset(m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
@@ -140,8 +136,6 @@ public class RobotContainer {
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(shootStop);
-        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
-                .whenReleased(hoodPosition);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested

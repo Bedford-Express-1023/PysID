@@ -5,15 +5,22 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.HoodSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterRunAtFarVelocity extends CommandBase {
+public class ShootAtTarmac extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
+  HoodSubsystem m_HoodSubsystem;
+  IndexerSubsystem m_IndexerSubsystem;
   /** Creates a new ShooterRunAtFarVelocity. */
-  public ShooterRunAtFarVelocity(ShooterSubsystem shooterSubsystem) {
+  public ShootAtTarmac(ShooterSubsystem shooterSubsystem, HoodSubsystem hoodSubsystem, IndexerSubsystem indexerSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
+    m_HoodSubsystem = hoodSubsystem;
+    m_IndexerSubsystem = indexerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_ShooterSubsystem);
+    addRequirements(m_ShooterSubsystem, m_HoodSubsystem, m_IndexerSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -23,13 +30,16 @@ public class ShooterRunAtFarVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtVelocity();
+    m_HoodSubsystem.hoodTarmacShot();
+    m_ShooterSubsystem.shooterRunAtTarmacVelocity();
+    m_IndexerSubsystem.feedShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_ShooterSubsystem.shootStop();
+    m_HoodSubsystem.hoodReturnToZero();
   }
 
   // Returns true when the command should end.
