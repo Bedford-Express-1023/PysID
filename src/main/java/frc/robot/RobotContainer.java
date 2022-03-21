@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
@@ -28,10 +26,10 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Shooter.ShootAtVelocity;
+import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootStop;
-import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -41,6 +39,7 @@ public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+    private final HoodSubsystem m_hood = new HoodSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -50,7 +49,7 @@ public class RobotContainer {
     private final ClimbStop climbStop = new ClimbStop(m_climber);
     private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
     private final ClimbLock climberLock = new ClimbLock(m_climber);
-    private final Gyroscope180 gyroscope180 = new Gyroscope180(m_drivetrain);
+    private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
@@ -58,18 +57,18 @@ public class RobotContainer {
     private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
-    private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final ShootStop shootStop = new ShootStop(m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
-    private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
-    private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer);
+    private final ShootOnce shootOnce = new ShootOnce(m_indexer, null, m_shooter);
+    private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_hood, m_indexer);
     private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
                         m_drivetrain, m_indexer, m_shooter, m_intake);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    private final XboxController programmingController = new XboxController(2);
     
     private double slewDouble = 3.0;
     private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(slewDouble);
@@ -130,8 +129,8 @@ public class RobotContainer {
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
-        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
-                .whileHeld(shootAtVelocity);
+        /*new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
+                .whileHeld(shootAtVelocity);*/
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
@@ -146,6 +145,8 @@ public class RobotContainer {
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
+        new POVButton(programmingController, 0)
+                .whileHeld(shootAtFender);
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
     }
