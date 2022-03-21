@@ -88,11 +88,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean shooterReadyFender(){
   if (shooterBottomTalon.getSelectedSensorVelocity() > 9700 && shooterBottomTalon.getSelectedSensorVelocity() < 10200){
-        return true;}
-  else{
+      return true;
+    }
+  else {
     return false;
+    } 
   }
-}
+
+  public boolean shooterReadyTarmac(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > 10200 && shooterBottomTalon.getSelectedSensorVelocity() < 10700){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean shooterReadyLaunchpad(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > 13700 && shooterBottomTalon.getSelectedSensorVelocity() < 14300){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
   public void shootStop(){
     shooterBottomTalon.stopMotor();

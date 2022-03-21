@@ -27,6 +27,8 @@ import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.ShootAtFender;
+import frc.robot.commands.Shooter.ShootAtLaunchpad;
+import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
@@ -50,6 +52,8 @@ public class RobotContainer {
     private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
     private final ClimbLock climberLock = new ClimbLock(m_climber);
     private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
+    private final ShootAtTarmac shootAtTarmac = new ShootAtTarmac(m_shooter, m_hood, m_indexer);
+    private final ShootAtLaunchpad shootAtLaunchpad = new ShootAtLaunchpad(m_shooter, m_hood, m_indexer);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
@@ -145,10 +149,16 @@ public class RobotContainer {
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
-        new POVButton(programmingController, 0)
-                .whileHeld(shootAtFender);
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
+
+        new POVButton(programmingController, 0)
+                .whileHeld(shootAtFender);
+        new POVButton(programmingController, 90)
+                .whileHeld(shootAtTarmac);
+        new POVButton(programmingController, 180)
+                .whileHeld(shootAtLaunchpad);
+        
     }
 
     private static double deadband(double value, double deadband) {
