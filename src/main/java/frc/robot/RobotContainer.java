@@ -158,6 +158,10 @@ public class RobotContainer {
                 .whileHeld(shootAtTarmac);
         new POVButton(programmingController, 180)
                 .whileHeld(shootAtLaunchpad);
+        new Button(programmingController::getBButton)
+                .whileHeld(deployIntake);
+        new Button(programmingController::getXButton)
+                .whileHeld(indexerUnjam);
         
     }
 

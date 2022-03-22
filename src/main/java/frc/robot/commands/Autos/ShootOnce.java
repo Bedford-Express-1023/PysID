@@ -26,7 +26,7 @@ public class ShootOnce extends SequentialCommandGroup {
     m_hood = hoodSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAtFender(shooterSubsystem, hoodSubsystem, indexerSubsystem).withTimeout(2.0), 
-        new ShootStop(m_shooter));
+    //addCommands(new ShootAtFender(shooterSubsystem, hoodSubsystem, indexerSubsystem).withTimeout(2.0), 
+        //new ShootStop(m_shooter));
   }
 }

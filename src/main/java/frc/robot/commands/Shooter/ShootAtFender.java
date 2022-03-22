@@ -31,7 +31,7 @@ public class ShootAtFender extends CommandBase {
   public void execute() {
     m_HoodSubsystem.hoodFenderShot();
     m_ShooterSubsystem.shooterRunAtFenderVelocity();
-    if (m_ShooterSubsystem.shooterReadyFender() == true){
+    if (m_ShooterSubsystem.shooterReadyFender() == true && m_HoodSubsystem.hoodFenderCheck()){
           m_IndexerSubsystem.feedShooter();
     }
   }

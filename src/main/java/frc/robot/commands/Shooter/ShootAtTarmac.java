@@ -30,7 +30,7 @@ public class ShootAtTarmac extends CommandBase {
   @Override
   public void execute() {
     m_HoodSubsystem.hoodTarmacShot();
-    m_ShooterSubsystem.shooterRunAtTarmacVelocity();
+    //m_ShooterSubsystem.shooterRunAtTarmacVelocity();
     m_IndexerSubsystem.feedShooter();
   }
 

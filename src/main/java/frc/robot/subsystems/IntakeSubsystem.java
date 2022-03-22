@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void deployIntake(){
     //leftCylinder.set(Value.kReverse);
     rightCylinder.set(true);
-    intakeMotor.set(1.0);
+    intakeMotor.set(-1.0);
   }
 
   public void stowIntake(){

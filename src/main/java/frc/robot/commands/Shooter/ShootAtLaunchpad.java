@@ -31,7 +31,7 @@ public class ShootAtLaunchpad extends CommandBase {
   public void execute() {
     m_HoodSubsystem.hoodLaunchpadShot();
     m_ShooterSubsystem.shooterRunAtLaunchpadVelocity();
-    if (m_ShooterSubsystem.shooterReadyLaunchpad() == true){
+    if (m_ShooterSubsystem.shooterReadyLaunchpad() == true && m_HoodSubsystem.hoodLaunchpadCheck() == true){
       m_IndexerSubsystem.feedShooter();
     }
   }

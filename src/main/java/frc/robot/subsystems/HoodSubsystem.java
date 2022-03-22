@@ -28,11 +28,12 @@ public class HoodSubsystem extends SubsystemBase {
   private double kD = 0; 
   private double kIz = 0; 
   private double kFF = 0; 
-  private double kMaxOutput = 0.7; 
-  private double kMinOutput = -0.7;
+  private double kMaxOutput = 1; 
+  private double kMinOutput = -1;
 
   private double hoodPosition;
   private String hoodAngle;
+  private double hoodEncoderPosition;
 
   /** Creates a new HoodSubsystem. */
   public HoodSubsystem() {
@@ -54,7 +55,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void hoodFenderShot(){
-    hoodPIDController.setReference(0, kPosition);
+    hoodPIDController.setReference(1, kPosition);
     hoodAngle = "Fender Angle";
   }
 
@@ -64,8 +65,26 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void hoodLaunchpadShot(){
-    hoodPIDController.setReference(200, kPosition);
+    hoodPIDController.setReference(155, kPosition);
     hoodAngle = "Launchpad Angle";
+  }
+
+  public boolean hoodLaunchpadCheck(){
+    if (hoodEncoder.getPosition() < 156 && hoodEncoder.getPosition() > 153) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean hoodFenderCheck(){
+    if (hoodEncoder.getPosition() < 2 && hoodEncoder.getPosition() > 0){
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   public void hoodPositionReset(){ //use to zero hood as needed

@@ -12,6 +12,8 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,7 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterFenderRPM = 9818;
   double topShooterTarmacRPM = 12000;
   double bottomShooterTarmacRPM = 10500;
-  double topShooterLaunchpadRPM = 15000;
+  double topShooterLaunchpadRPM = 13500;
   double bottomShooterLaunchpadRPM = 14000;
   double RPMToVelocity = 3.57;
   boolean shooterReady;
@@ -87,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyFender(){
-  if (shooterBottomTalon.getSelectedSensorVelocity() > 9700 && shooterBottomTalon.getSelectedSensorVelocity() < 10200){
+  if (shooterBottomTalon.getSelectedSensorVelocity() > 9000 && shooterBottomTalon.getSelectedSensorVelocity() < 10200){
       return true;
     }
   else {
@@ -105,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyLaunchpad(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > 13700 && shooterBottomTalon.getSelectedSensorVelocity() < 14300){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > 11000 && shooterBottomTalon.getSelectedSensorVelocity() < 14500){
       return true;
     }
     else {
@@ -120,6 +122,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter Velocity Bottom", shooterBottomTalon.getSelectedSensorVelocity());
 
     // This method will be called once per scheduler run
   }
