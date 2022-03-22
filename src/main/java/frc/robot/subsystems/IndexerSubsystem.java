@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
@@ -16,8 +15,6 @@ public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); 
   private final CANSparkMax indexerFrontMotor = new CANSparkMax(30, MotorType.kBrushless); 
   private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); 
-  private final TalonSRX indexerBallOutBack = new TalonSRX(1001);
- 
 
   //private final DigitalInput indexerBeamBreak = new DigitalInput(9);
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
