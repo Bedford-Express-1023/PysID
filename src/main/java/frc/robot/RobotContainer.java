@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
@@ -30,7 +28,6 @@ import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.commands.Shooter.ShootStop;
-import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -43,7 +40,6 @@ public class RobotContainer {
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
-    private final CameraSubsystem m_camera = new CameraSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
  
@@ -51,7 +47,6 @@ public class RobotContainer {
     private final ClimbStop climbStop = new ClimbStop(m_climber);
     private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
     private final ClimbLock climberLock = new ClimbLock(m_climber);
-    private final Gyroscope180 gyroscope180 = new Gyroscope180(m_drivetrain);
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
     private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);

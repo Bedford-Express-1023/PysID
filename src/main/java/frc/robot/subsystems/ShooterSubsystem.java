@@ -19,6 +19,8 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
   public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
+    
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
