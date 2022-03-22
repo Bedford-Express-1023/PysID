@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -93,8 +94,7 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Once", shootOnce);
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         SmartDashboard.putData(autoChooser);
-        //SmartDashboard.putNumber("Delay in Seconds", 0.0);
-        
+       
         autoDelay.setDefaultOption("none", new WaitCommand(0.0));
         autoDelay.addOption("1.0", new WaitCommand(1.0));
         autoDelay.addOption("2.0", new WaitCommand(2.0));
@@ -106,7 +106,6 @@ public class RobotContainer {
         autoDelay.addOption("8.0", new WaitCommand(8.0));
         autoDelay.addOption("9.0", new WaitCommand(9.0));
         autoDelay.addOption("10.0", new WaitCommand(10.0));
-
         SmartDashboard.putData(autoDelay);
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
@@ -123,6 +122,7 @@ public class RobotContainer {
         m_indexer.setDefaultCommand(indexBalls);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
+        m_hood.setDefaultCommand(new InstantCommand(m_hood::hoodReturnToZero, m_hood));
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -133,8 +133,6 @@ public class RobotContainer {
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
-        /*new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5) //done differently because the triggers return 0-1 instead of a boolean
-                .whileHeld(shootAtVelocity);*/
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
@@ -162,7 +160,8 @@ public class RobotContainer {
                 .whileHeld(deployIntake);
         new Button(programmingController::getXButton)
                 .whileHeld(indexerUnjam);
-        
+        new Button(programmingController::getYButton)
+                .whenPressed(m_hood::hoodPositionReset);
     }
 
     private static double deadband(double value, double deadband) {

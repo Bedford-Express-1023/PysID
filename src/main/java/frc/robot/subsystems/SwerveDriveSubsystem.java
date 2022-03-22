@@ -52,7 +52,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(0, 0),
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
                 Constants.FRONT_LEFT_MODULE_STEER_MOTOR,
                 Constants.FRONT_LEFT_MODULE_STEER_ENCODER,
@@ -63,7 +63,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(1, 0),
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.FRONT_RIGHT_MODULE_STEER_MOTOR,
                 Constants.FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -74,7 +74,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(2, 0),
-                        Mk4SwerveModuleHelper.GearRatio.L3,
+                        Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_LEFT_MODULE_STEER_MOTOR,
                 Constants.BACK_LEFT_MODULE_STEER_ENCODER,
@@ -85,7 +85,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(3, 0),
-                        Mk4SwerveModuleHelper.GearRatio.L3,
+                        Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_RIGHT_MODULE_STEER_MOTOR,
                 Constants.BACK_RIGHT_MODULE_STEER_ENCODER,

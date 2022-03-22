@@ -8,13 +8,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
-
 import static com.revrobotics.CANSparkMax.SoftLimitDirection.*;
-
 import static com.revrobotics.CANSparkMax.ControlType.*;
-
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -33,13 +29,10 @@ public class HoodSubsystem extends SubsystemBase {
 
   private double hoodPosition;
   private String hoodAngle;
-  private double hoodEncoderPosition;
 
   /** Creates a new HoodSubsystem. */
   public HoodSubsystem() {
     hoodEncoder = hood.getEncoder();
-
-    hoodAngle = "Bottom Limit";
 
     hoodPIDController = hood.getPIDController();
     hoodPIDController.setP(kP);
