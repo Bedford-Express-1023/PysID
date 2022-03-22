@@ -13,8 +13,10 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -31,22 +33,21 @@ public class ShooterSubsystem extends SubsystemBase {
   public SparkMaxPIDController hoodPIDController;
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry ty = table.getEntry("ty");
-  double closePosition = 0.1; //FIXME hood angle for close shot
-  double farPosition = 0.9; //FIXME hood angle for far shot
-  double closeTy = 7.8; //FIXME y coordinate of target on limelight cam for close shot
+  double closePosition = 10; //FIXME hood angle for close shot
+  double farPosition = 200; //FIXME hood angle for far shot
+  double closeTy = 8.8; //FIXME y coordinate of target on limelight cam for close shot
   double farTy = -8.8; //FIXME y coordinate of target on limelight cam for far shot
   double currentPosition;
   double targetPosition;
   RelativeEncoder hoodEncoder = hood.getEncoder();
-  double positionAllowedError = 0.003;
+  double positionAllowedError = 1;
   double velocityAllowedError = 50;
-  double testSpeed = 0.5;
-  double kP = 2; 
+  double kP = 50; 
   double kI = 0;
   double kD = 0; 
   double kIz = 0; 
-  double kFF = 0; 
-  double kMaxOutput = 1; 
+  double kFF = 5; 
+  double kMaxOutput = 50; 
   double kMinOutput = -1;
   double topShooterTargetRPM;
   double bottomShooterTargetRPM;
@@ -61,17 +62,18 @@ public class ShooterSubsystem extends SubsystemBase {
   double RPMToVelocity = 3.57;
   boolean shooterReady;
   double currentTy;
-  double gearRatioMultiplier = 100;
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-
     hoodPIDController = hood.getPIDController();
     hoodPIDController.setP(kP);
     hoodPIDController.setI(kI);
     hoodPIDController.setD(kD);
     hoodPIDController.setIZone(kIz);
     hoodPIDController.setFF(kFF);
-    hoodPIDController.setOutputRange(kMinOutput, kMaxOutput);
+
+    hood.setSoftLimit(SoftLimitDirection.kForward, 238);
+    hood.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    //hood.setSmartCurrentLimit(20);
 
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
     shooterBottomTalon.configAllSettings(flywheelTalonConfig);
@@ -130,12 +132,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   
   public void hoodPosition(){
-    if (currentPosition < 0 && currentPosition > 238){
     hoodPIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);//sets the hood encoder position
-    }
-    else {
-    hoodPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
-    }
   }
 
   public void hoodPositionReset(){ //use in initialization
@@ -146,7 +143,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {
     hoodPosition();//set current hood position to target hood position
     currentTy = ty.getDouble(0.0);
-    currentPosition = gearRatioMultiplier * hoodEncoder.getPosition();
+    currentPosition = hoodEncoder.getPosition();
     //PID stuff 
     /*hoodPIDController = hood.getPIDController();
     hoodPIDController.setP(kP);
@@ -156,7 +153,7 @@ public class ShooterSubsystem extends SubsystemBase {
     hoodPIDController.setFF(kFF);
     hoodPIDController.setOutputRange(kMinOutput, kMaxOutput);*/
     //interpolation: finding the shooter RPMs based on min, max, and current values of limelight, hood position, and shooter RPM's
-    targetPosition = gearRatioMultiplier * (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
+    targetPosition = (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
     topShooterTargetRPM = topShooterCloseRPM + ((targetPosition - closePosition) * ((topShooterFarRPM - topShooterCloseRPM) / (farPosition - closePosition)));//interpolation for top shooter wheel RPM
     bottomShooterTargetRPM = bottomShooterCloseRPM + ((targetPosition - closePosition) * ((bottomShooterFarRPM - bottomShooterCloseRPM) / (farPosition - closePosition)));//interpolation for bottom shooter wheel RPM
     //converts RPM to velocity
@@ -173,7 +170,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("Current Hood Position", currentPosition);
     SmartDashboard.putNumber("Target Hood Position", targetPosition);
-    SmartDashboard.getNumber("Target Hood Position", targetPosition);
     SmartDashboard.putNumber("LimelightY", currentTy);
     // This method will be called once per scheduler run
   }

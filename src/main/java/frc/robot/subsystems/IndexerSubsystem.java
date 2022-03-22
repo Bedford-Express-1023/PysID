@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +28,9 @@ public class IndexerSubsystem extends SubsystemBase {
 
   /** Creates a new IndexerSubsystem. */
   public IndexerSubsystem() {
+    indexerTopMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    indexerFrontMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    indexerBackMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
   }
 
   public void indexBalls(){
