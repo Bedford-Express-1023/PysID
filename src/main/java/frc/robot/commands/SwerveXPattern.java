@@ -15,15 +15,11 @@ public class SwerveXPattern extends CommandBase {
 
     @Override
     public void execute() {
-            drivetrain.frontLeftModule.set(0, (Constants.FRONT_LEFT_MODULE_STEER_OFFSET     - 135) % 360);
-            drivetrain.frontRightModule.set(0, (Constants.FRONT_RIGHT_MODULE_STEER_OFFSET   + 135) % 360);
-            drivetrain.backLeftModule.set(0, (Constants.BACK_LEFT_MODULE_DRIVE_MOTOR        - 45) % 360);
-            drivetrain.backRightModule.set(0, (Constants.BACK_RIGHT_MODULE_STEER_OFFSET     + 45) % 360);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return true;
+        drivetrain.CommandVariable = "Swerve X";
+            drivetrain.frontLeftModule.set(0, (Constants.FRONT_LEFT_MODULE_STEER_OFFSET     - 135));
+            drivetrain.frontRightModule.set(0, (Constants.FRONT_RIGHT_MODULE_STEER_OFFSET   + 135));
+            drivetrain.backLeftModule.set(0, (Constants.BACK_LEFT_MODULE_DRIVE_MOTOR        - 45));
+            drivetrain.backRightModule.set(0, (Constants.BACK_RIGHT_MODULE_STEER_OFFSET     + 45));
     }
 
     @Override

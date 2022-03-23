@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Gyroscope180;
+import frc.robot.commands.PointTowardsHub;
+
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
@@ -71,16 +74,12 @@ public class RobotContainer {
     private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
                         m_drivetrain, m_indexer, m_shooter, m_intake);
+    private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
     private final XboxController programmingController = new XboxController(2);
     
-    private double slewDouble = 3.0;
-    private final SlewRateLimiter brendanControllerLeftY = new SlewRateLimiter(slewDouble);
-    private final SlewRateLimiter brendanControllerLeftX = new SlewRateLimiter(slewDouble);
-    private final SlewRateLimiter brendanControllerRightX = new SlewRateLimiter(slewDouble);
-
     public RobotContainer() {
         m_drivetrain.register();
         m_intake.register();
@@ -111,16 +110,16 @@ public class RobotContainer {
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
-                () -> -modifyAxis(brendanControllerLeftY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
-                () -> -modifyAxis(brendanControllerLeftX.calculate(brendanController.getLeftX())),
-                () -> -modifyAxis(brendanControllerRightX.calculate(brendanController.getRightX())),
+                () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
+                () -> -modifyAxis(brendanController.getLeftX()),
+                () -> -modifyAxis(brendanController.getRightX()),
                 () -> brendanController.getLeftBumper(), //RobotCentric
                 () -> brendanController.getRightBumper(), //lowPower
                 () -> !(brendanController.getLeftTriggerAxis() > 0.5) //slowTurn
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-        m_indexer.setDefaultCommand(indexBalls);
+        //m_indexer.setDefaultCommand(indexBalls);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
         m_hood.setDefaultCommand(new InstantCommand(m_hood::hoodReturnToZero, m_hood));
@@ -131,6 +130,8 @@ public class RobotContainer {
                 .whileHeld(swerveXPattern);
         new Button(brendanController::getAButton)
                 .whileHeld(deployIntake);
+        new Button(brendanController::getYButton)
+                .whileHeld(pointTowardsHub);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
