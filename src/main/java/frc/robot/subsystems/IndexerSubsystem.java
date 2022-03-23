@@ -81,6 +81,11 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerFrontMotor.set(indexingSpeed);
   }
 
+  public void feedShooterSlow(){
+    indexerTopMotor.set(0.6);
+    indexerFrontMotor.set(0.6);
+  }
+
   public void indexerUnjam(){
     indexerTopMotor.set(-indexingSpeed);
     indexerFrontMotor.set(-indexingSpeed);

@@ -53,7 +53,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void hoodTarmacShot(){
-    hoodPIDController.setReference(120, kPosition);
+    hoodPIDController.setReference(100, kPosition);
     hoodAngle = "Tarmac Angle";
   }
 
@@ -64,6 +64,15 @@ public class HoodSubsystem extends SubsystemBase {
 
   public boolean hoodLaunchpadCheck(){
     if (hoodEncoder.getPosition() < 156 && hoodEncoder.getPosition() > 153) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean hoodTarmacCheck(){
+    if (hoodEncoder.getPosition() < 101 && hoodEncoder.getPosition() > 99) {
       return true;
     }
     else {
@@ -92,8 +101,6 @@ public class HoodSubsystem extends SubsystemBase {
   public void periodic() {
     hoodPosition = hoodEncoder.getPosition();
     SmartDashboard.putNumber("Current Hood Position", hoodPosition);
-    SmartDashboard.putString("Current Hood Angle", hoodAngle);
-
     // This method will be called once per scheduler run
   }
 }

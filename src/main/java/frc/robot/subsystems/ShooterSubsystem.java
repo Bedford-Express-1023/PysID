@@ -24,16 +24,14 @@ public class ShooterSubsystem extends SubsystemBase {
   double topShooterTargetRPM;
   double bottomShooterTargetRPM;
   double bottomShooterCurrentVelocity;
-  double topShooterFenderRPM = 10710;
-  double bottomShooterFenderRPM = 9818;
-  double topShooterTarmacRPM = 12000;
-  double bottomShooterTarmacRPM = 10500;
-  double topShooterLaunchpadRPM = 13500;
-  double bottomShooterLaunchpadRPM = 14000;
+  double topShooterFenderRPM = 3818;
+  double bottomShooterFenderRPM = 9710;
+  double topShooterTarmacRPM = 11200;
+  double bottomShooterTarmacRPM = 10200;
+  double topShooterLaunchpadRPM = 12000;
+  double bottomShooterLaunchpadRPM = 13000;
   double RPMToVelocity = 3.57;
   boolean shooterReady;
-  public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
-  public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {

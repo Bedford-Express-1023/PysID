@@ -5,14 +5,18 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.PointTowardsHub;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
 
 public class ShootAtLaunchpad extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
   HoodSubsystem m_HoodSubsystem;
   IndexerSubsystem m_IndexerSubsystem;
+  SwerveDriveSubsystem m_SwerveDriveSubsystem;
+  PointTowardsHub pointTowardsHub = new PointTowardsHub(m_SwerveDriveSubsystem);
   /** Creates a new ShootAtLaunchpad. */
   public ShootAtLaunchpad(ShooterSubsystem shooterSubsystem, HoodSubsystem hoodSubsystem, IndexerSubsystem indexerSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;

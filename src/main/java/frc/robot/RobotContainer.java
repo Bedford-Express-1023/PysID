@@ -119,17 +119,14 @@ public class RobotContainer {
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-        //m_indexer.setDefaultCommand(indexBalls);
+        m_indexer.setDefaultCommand(indexBalls);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
-        m_hood.setDefaultCommand(new InstantCommand(m_hood::hoodReturnToZero, m_hood));
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
                 .whileHeld(swerveXPattern);
-        new Button(brendanController::getAButton)
-                .whileHeld(deployIntake);
         new Button(brendanController::getYButton)
                 .whileHeld(pointTowardsHub);
      
@@ -152,18 +149,22 @@ public class RobotContainer {
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
 
-        new POVButton(programmingController, 0)
+        new POVButton(brendanController, 0)
                 .whileHeld(shootAtFender);
-        new POVButton(programmingController, 90)
+        new POVButton(brendanController, 90)
                 .whileHeld(shootAtTarmac);
-        new POVButton(programmingController, 180)
+        new POVButton(brendanController, 90)
+                .whileHeld(pointTowardsHub);
+        new POVButton(brendanController, 180)
                 .whileHeld(shootAtLaunchpad);
-        new Button(programmingController::getBButton)
+        new POVButton(brendanController, 180)
+                .whileHeld(pointTowardsHub);
+        /*new Button(brendanController::getBButton)
                 .whileHeld(deployIntake);
         new Button(programmingController::getXButton)
                 .whileHeld(indexerUnjam);
         new Button(programmingController::getYButton)
-                .whenPressed(m_hood::hoodPositionReset);
+                .whenPressed(m_hood::hoodPositionReset);*/
     }
 
     private static double deadband(double value, double deadband) {

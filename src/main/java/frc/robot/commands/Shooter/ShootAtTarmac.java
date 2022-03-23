@@ -30,8 +30,10 @@ public class ShootAtTarmac extends CommandBase {
   @Override
   public void execute() {
     m_HoodSubsystem.hoodTarmacShot();
-    //m_ShooterSubsystem.shooterRunAtTarmacVelocity();
-    m_IndexerSubsystem.feedShooter();
+    m_ShooterSubsystem.shooterRunAtTarmacVelocity();
+    if (m_ShooterSubsystem.shooterReadyTarmac() == true && m_HoodSubsystem.hoodTarmacCheck() == true){
+      m_IndexerSubsystem.feedShooter();
+    }
   }
 
   // Called once the command ends or is interrupted.
