@@ -5,42 +5,42 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootAtVelocity extends CommandBase {
-  IndexerSubsystem m_IndexerSubsystem;
+public class ShootAtLaunchpad extends CommandBase {
   ShooterSubsystem m_ShooterSubsystem;
-  /** Creates a new ShootAtVelocity. */
-  public ShootAtVelocity(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
-    m_IndexerSubsystem = indexerSubsystem;
+  HoodSubsystem m_HoodSubsystem;
+  IndexerSubsystem m_IndexerSubsystem;
+  /** Creates a new ShootAtLaunchpad. */
+  public ShootAtLaunchpad(ShooterSubsystem shooterSubsystem, HoodSubsystem hoodSubsystem, IndexerSubsystem indexerSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
+    m_HoodSubsystem = hoodSubsystem;
+    m_IndexerSubsystem = indexerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_ShooterSubsystem, m_IndexerSubsystem);
+    addRequirements(m_ShooterSubsystem, m_HoodSubsystem, m_IndexerSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtVelocity(9818, 10710);
-    if (m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) > 9700.0 
-      && m_ShooterSubsystem.getShooterVelocity(m_ShooterSubsystem) < 10500){
-          m_IndexerSubsystem.feedShooter();
-    }
-    else {
-      return;
+    m_HoodSubsystem.hoodLaunchpadShot();
+    m_ShooterSubsystem.shooterRunAtLaunchpadVelocity();
+    if (m_ShooterSubsystem.shooterReadyLaunchpad() == true && m_HoodSubsystem.hoodLaunchpadCheck() == true){
+      m_IndexerSubsystem.feedShooter();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_ShooterSubsystem.shootStop();
+    m_HoodSubsystem.hoodReturnToZero();
   }
 
   // Returns true when the command should end.

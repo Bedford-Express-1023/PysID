@@ -5,8 +5,9 @@
 package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Shooter.ShootAtVelocity;
+import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootStop;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -16,14 +17,16 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootOnce extends SequentialCommandGroup {
   IndexerSubsystem m_indexer;
   ShooterSubsystem m_shooter;
+  HoodSubsystem m_hood;
 
   /** Creates a new ShootOnce. */
-  public ShootOnce(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
+  public ShootOnce(IndexerSubsystem indexerSubsystem, HoodSubsystem hoodSubsystem, ShooterSubsystem shooterSubsystem) {
     m_indexer = indexerSubsystem;
     m_shooter = shooterSubsystem;
+    m_hood = hoodSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAtVelocity(m_indexer, m_shooter).withTimeout(2.0), 
-        new ShootStop(m_shooter));
+    //addCommands(new ShootAtFender(shooterSubsystem, hoodSubsystem, indexerSubsystem).withTimeout(2.0), 
+        //new ShootStop(m_shooter));
   }
 }

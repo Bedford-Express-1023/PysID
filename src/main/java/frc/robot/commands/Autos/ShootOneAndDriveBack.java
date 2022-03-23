@@ -24,7 +24,7 @@ public class ShootOneAndDriveBack extends SequentialCommandGroup {
     m_shooter = shooterSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(3.0),
-    new DriveBack(m_drivetrain).withTimeout(3.0), new Gyroscope180(m_drivetrain));
+    /*addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(3.0),
+    new DriveBack(m_drivetrain).withTimeout(3.0), new Gyroscope180(m_drivetrain));*/
   }
 }

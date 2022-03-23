@@ -13,12 +13,28 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSubsystem extends SubsystemBase {
+  private final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
+  private final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
+
+  double topShooterTargetRPM;
+  double bottomShooterTargetRPM;
+  double bottomShooterCurrentVelocity;
+  double topShooterFenderRPM = 10710;
+  double bottomShooterFenderRPM = 9818;
+  double topShooterTarmacRPM = 12000;
+  double bottomShooterTarmacRPM = 10500;
+  double topShooterLaunchpadRPM = 13500;
+  double bottomShooterLaunchpadRPM = 14000;
+  double RPMToVelocity = 3.57;
+  boolean shooterReady;
   public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
   public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
@@ -28,11 +44,11 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterBottomTalon.configSupplyCurrentLimit(
       new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
-      shooterTopTalon.configAllSettings(flywheelTalonConfig);
-      shooterTopTalon.setNeutralMode(NeutralMode.Coast);
-      shooterTopTalon.setInverted(true);
-      shooterTopTalon.configSupplyCurrentLimit(
-        new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
+    shooterTopTalon.configAllSettings(flywheelTalonConfig);
+    shooterTopTalon.setNeutralMode(NeutralMode.Coast);
+    shooterTopTalon.setInverted(true);
+    shooterTopTalon.configSupplyCurrentLimit(
+      new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
     shooterBottomTalon.configSelectedFeedbackSensor(
       TalonFXFeedbackDevice.IntegratedSensor, // Sensor Type 
@@ -52,19 +68,55 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopTalon.setInverted(TalonFXInvertType.OpposeMaster);
   }
 
-  public void shooterRunAtVelocity(int bottomShooterVelocity, int topShooterVelocity2){
-    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterVelocity);
-    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterVelocity2);
+  public void shooterRunAtFenderVelocity(){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterFenderRPM);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterFenderRPM);
   }
 
-
-  public double getShooterVelocity(ShooterSubsystem shooterSubsystem){
-    double velocity = shooterBottomTalon.getSelectedSensorVelocity();
-    shooterTopTalon.getSelectedSensorVelocity();
-    return velocity;
+  public void shooterRunAtTarmacVelocity(){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterTarmacRPM);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterTarmacRPM);
   }
 
+  public void shooterRunAtLaunchpadVelocity(){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterLaunchpadRPM);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterLaunchpadRPM);
+  }
 
+  public double getBottomShooterVelocity(ShooterSubsystem shooterSubsystem){
+    bottomShooterCurrentVelocity = shooterBottomTalon.getSelectedSensorVelocity();
+    return bottomShooterCurrentVelocity;
+  }
+
+  public boolean shooterReadyFender(){
+  if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterFenderRPM - 250 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterFenderRPM + 250){
+      return true;
+    }
+  else {
+    return false;
+    } 
+  }
+
+  public boolean shooterReadyTarmac(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterTarmacRPM - 250 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterTarmacRPM + 250){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean shooterReadyLaunchpad(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 250 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 250){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
   public void shootStop(){
     shooterBottomTalon.stopMotor();
@@ -73,6 +125,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter Velocity Bottom", shooterBottomTalon.getSelectedSensorVelocity());
     // This method will be called once per scheduler run
   }
-}
+} 
