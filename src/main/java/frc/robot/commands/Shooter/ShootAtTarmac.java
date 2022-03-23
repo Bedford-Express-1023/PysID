@@ -32,7 +32,7 @@ public class ShootAtTarmac extends CommandBase {
     m_HoodSubsystem.hoodTarmacShot();
     m_ShooterSubsystem.shooterRunAtTarmacVelocity();
     if (m_ShooterSubsystem.shooterReadyTarmac() == true && m_HoodSubsystem.hoodTarmacCheck() == true){
-      m_IndexerSubsystem.feedShooter();
+      m_IndexerSubsystem.feedShooterSlow();
     }
   }
 

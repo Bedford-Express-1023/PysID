@@ -30,6 +30,7 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
+import frc.robot.commands.Intake.UnjamIntake;
 import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootAtLaunchpad;
 import frc.robot.commands.Shooter.ShootAtTarmac;
@@ -65,6 +66,7 @@ public class RobotContainer {
     private final BallSpitter ballSpitter = new BallSpitter(m_indexer);
     private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
+    private final UnjamIntake unjamIntake = new UnjamIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootStop shootStop = new ShootStop(m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
@@ -129,6 +131,8 @@ public class RobotContainer {
                 .whileHeld(swerveXPattern);
         new Button(brendanController::getYButton)
                 .whileHeld(pointTowardsHub);
+        new Button(brendanController::getAButton)
+                .whileHeld(deployIntake);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
@@ -159,6 +163,8 @@ public class RobotContainer {
                 .whileHeld(shootAtLaunchpad);
         new POVButton(brendanController, 180)
                 .whileHeld(pointTowardsHub);
+        new POVButton(brendanController, 270)
+                .whileHeld(indexerUnjam);
         /*new Button(brendanController::getBButton)
                 .whileHeld(deployIntake);
         new Button(programmingController::getXButton)
