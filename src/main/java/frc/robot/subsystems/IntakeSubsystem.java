@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(20);
   //private final DoubleSolenoid leftCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, 14, 15);
-  private final Solenoid rightCylinder = new Solenoid(PneumaticsModuleType.REVPH, 15);
+  private final Solenoid rightCylinder = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
   }

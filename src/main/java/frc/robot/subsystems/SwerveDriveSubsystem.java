@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -28,11 +29,13 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public final SwerveModule backLeftModule;
     public final SwerveModule backRightModule;
     public ChassisSpeeds previousSpeeds = new ChassisSpeeds(0,0,0);
+    public String CommandVariable = "None";
 
     public final Pigeon2 gyroscope = new Pigeon2(Constants.DRIVETRAIN_PIGEON_ID);
     public final SimpleMotorFeedforward feedForward = new SimpleMotorFeedforward(0.45, 1.85, 0.000037994);
     public final PIDController pid = new PIDController(0.25, 0.0, 0.0);
     public final HolonomicDriveController driveController = new HolonomicDriveController(new PIDController(0.25, 0.0, 0.0), new PIDController(0.25, 0.0, 0.0), new ProfiledPIDController(0.2, 0.0, 0.1, new TrapezoidProfile.Constraints(5.0,10.0)));
+    public final ProfiledPIDController rotationPID = new ProfiledPIDController(9.25, 5.0, 0, new TrapezoidProfile.Constraints(100, 5));
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             new Translation2d(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -46,13 +49,14 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public boolean RobotCentric = false;
 
     public SwerveDriveSubsystem() {
+        rotationPID.enableContinuousInput(0, 2*Math.PI);
         ShuffleboardTab shuffleboardTab = Shuffleboard.getTab("Drivetrain");
 
         frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
                 shuffleboardTab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(0, 0),
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.FRONT_LEFT_MODULE_DRIVE_MOTOR,
                 Constants.FRONT_LEFT_MODULE_STEER_MOTOR,
                 Constants.FRONT_LEFT_MODULE_STEER_ENCODER,
@@ -63,7 +67,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(1, 0),
-                Mk4SwerveModuleHelper.GearRatio.L3,
+                Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.FRONT_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.FRONT_RIGHT_MODULE_STEER_MOTOR,
                 Constants.FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -74,7 +78,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(2, 0),
-                        Mk4SwerveModuleHelper.GearRatio.L3,
+                        Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.BACK_LEFT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_LEFT_MODULE_STEER_MOTOR,
                 Constants.BACK_LEFT_MODULE_STEER_ENCODER,
@@ -85,7 +89,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 shuffleboardTab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withSize(1, 4)
                         .withPosition(3, 0),
-                        Mk4SwerveModuleHelper.GearRatio.L3,
+                        Mk4SwerveModuleHelper.GearRatio.L2,
                 Constants.BACK_RIGHT_MODULE_DRIVE_MOTOR,
                 Constants.BACK_RIGHT_MODULE_STEER_MOTOR,
                 Constants.BACK_RIGHT_MODULE_STEER_ENCODER,
@@ -126,6 +130,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putString("Drivetrain command", CommandVariable);
         odometry.update(Rotation2d.fromDegrees(gyroscope.getYaw()),
                         new SwerveModuleState(frontLeftModule.getDriveVelocity()*2.025, new Rotation2d(frontLeftModule.getSteerAngle())),
                         new SwerveModuleState(frontRightModule.getDriveVelocity()*2.025, new Rotation2d(frontRightModule.getSteerAngle())),
