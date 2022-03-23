@@ -15,7 +15,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private final WPI_TalonFX climberRightMotor = new WPI_TalonFX(55);
   private final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
-  private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.REVPH, 4);
+  private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
   /** Creates a new climberSubsytem. */
   public ClimberSubsystem() {
   }
