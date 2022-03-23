@@ -32,6 +32,9 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterLaunchpadRPM = 14000;
   double RPMToVelocity = 3.57;
   boolean shooterReady;
+  public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
+  public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
