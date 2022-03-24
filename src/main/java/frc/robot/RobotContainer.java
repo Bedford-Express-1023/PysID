@@ -123,8 +123,8 @@ public class RobotContainer {
                 () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
                 () -> -modifyAxis(brendanController.getLeftX()),
                 () -> -modifyAxis(brendanController.getRightX()),
-                () -> brendanController.getLeftBumper(), //RobotCentric
-                () -> brendanController.getRightBumper(), //lowPower
+                () -> false, //brendanController.getLeftBumper(), //RobotCentric
+                () -> brendanController.getLeftBumper(), //lowPower
                 () -> !(brendanController.getLeftTriggerAxis() > 0.5) //slowTurn
         ));
         
@@ -137,10 +137,9 @@ public class RobotContainer {
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
                 .whileHeld(swerveXPattern);
-        new Button(brendanController::getYButton)
-                .whileHeld(pointTowardsHub);
         new Button(brendanController::getAButton)
-                .whileHeld(gyroscope180);
+                .whileHeld(pointTowardsHub);
+                //low goal dump on Y
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
@@ -163,14 +162,12 @@ public class RobotContainer {
 
         new POVButton(brendanController, 0)
                 .whileHeld(shootAtFender);
-        new POVButton(brendanController, 90)
-                .whileHeld(shootAtTarmac);
-        new POVButton(brendanController, 90)
-                .whileHeld(pointTowardsHub);
-        new POVButton(brendanController, 180)
-                .whileHeld(shootAtLaunchpad);
-        new POVButton(brendanController, 180)
-                .whileHeld(pointTowardsHub);
+        new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
+                .whileHeld(shootAtFender.alongWith(pointTowardsHub));
+        new Button(() -> brendanController.getRightBumper())
+                .whileHeld(shootAtLaunchpad.alongWith(pointTowardsHub));
+        new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
+                .whileHeld(shootAtTarmac.alongWith(pointTowardsHub));
         new POVButton(brendanController, 270)
                 .whileHeld(indexerUnjam);
         /*new Button(brendanController::getBButton)
