@@ -30,6 +30,8 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterTarmacRPM = 10200;
   double topShooterLaunchpadRPM = 12000;
   double bottomShooterLaunchpadRPM = 12000;
+  double topShooterLowGoalRPM = 2000;
+  double bottomShooterLowGoalRPM = 4000;
   double RPMToVelocity = 3.57;
   boolean shooterReady;
 
@@ -81,6 +83,11 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterLaunchpadRPM);
   }
 
+  public void shooterRunAtLowGoalVelocity(){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterLowGoalRPM);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterLowGoalRPM);
+  }
+
   public double getBottomShooterVelocity(ShooterSubsystem shooterSubsystem){
     bottomShooterCurrentVelocity = shooterBottomTalon.getSelectedSensorVelocity();
     return bottomShooterCurrentVelocity;
@@ -109,6 +116,16 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean shooterReadyLaunchpad(){
     if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 500 && 
             shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 500){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean shooterReadyLowGoal(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLowGoalRPM - 500 &&
+          shooterBottomTalon.getSelectedSensorVelocity() < topShooterLowGoalRPM + 500){
       return true;
     }
     else {

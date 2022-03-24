@@ -27,7 +27,10 @@ public class HoodSubsystem extends SubsystemBase {
   private double kMaxOutput = 1; 
   private double kMinOutput = -1;
 
-  private double hoodPosition;
+  private double hoodPositionFender = 1;
+  private double hoodPositionTarmac = 100;
+  private double hoodPositionLaunchpad = 155;
+  private double hoodPositionLowGoal = 100;
   private String hoodAngle;
 
   /** Creates a new HoodSubsystem. */
@@ -48,22 +51,27 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void hoodFenderShot(){
-    hoodPIDController.setReference(1, kPosition);
+    hoodPIDController.setReference(hoodPositionFender, kPosition);
     hoodAngle = "Fender Angle";
   }
 
   public void hoodTarmacShot(){
-    hoodPIDController.setReference(100, kPosition);
+    hoodPIDController.setReference(hoodPositionTarmac, kPosition);
     hoodAngle = "Tarmac Angle";
   }
 
   public void hoodLaunchpadShot(){
-    hoodPIDController.setReference(155, kPosition);
+    hoodPIDController.setReference(hoodPositionLaunchpad, kPosition);
     hoodAngle = "Launchpad Angle";
   }
 
+  public void hoodLowGoalShot(){
+    hoodPIDController.setReference(hoodPositionLowGoal, kPosition);
+    hoodAngle = "Low Goal Angle";
+  }
+
   public boolean hoodLaunchpadCheck(){
-    if (hoodEncoder.getPosition() < 156 && hoodEncoder.getPosition() > 153) {
+    if (hoodEncoder.getPosition() < (hoodPositionLaunchpad + 3) && hoodEncoder.getPosition() > (hoodPositionLaunchpad - 3)) {
       return true;
     }
     else {
@@ -72,7 +80,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public boolean hoodTarmacCheck(){
-    if (hoodEncoder.getPosition() < 101 && hoodEncoder.getPosition() > 99) {
+    if (hoodEncoder.getPosition() < (hoodPositionTarmac + 2) && hoodEncoder.getPosition() > (hoodPositionTarmac - 2)) {
       return true;
     }
     else {
@@ -81,7 +89,16 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public boolean hoodFenderCheck(){
-    if (hoodEncoder.getPosition() < 2 && hoodEncoder.getPosition() > 0){
+    if (hoodEncoder.getPosition() < (hoodPositionFender + 2) && hoodEncoder.getPosition() > (hoodPositionFender - 2)){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean hoodLowGoalCheck(){
+    if (hoodEncoder.getPosition() < (hoodPositionLowGoal + 2) && hoodEncoder.getPosition() > (hoodPositionLowGoal - 2)){
       return true;
     }
     else {
@@ -99,8 +116,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    hoodPosition = hoodEncoder.getPosition();
-    SmartDashboard.putNumber("Current Hood Position", hoodPosition);
+    SmartDashboard.putNumber("Current Hood Position", hoodEncoder.getPosition());
     // This method will be called once per scheduler run
   }
 }
