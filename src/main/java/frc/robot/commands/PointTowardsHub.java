@@ -26,10 +26,9 @@ public class PointTowardsHub extends CommandBase {
     public void execute() {
         drivetrain.CommandVariable = "TowardsHub";
         if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
-            SmartDashboard.putString("sucess?", "Yes");
             double toRotate = LimeLightRotationPID.calculate(0, -NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) * Math.PI/180);
             drivetrain.drive(new ChassisSpeeds(0, 0, toRotate + 0.2 * Math.signum(toRotate)));
-        } else {SmartDashboard.putString("sucess?", "No");}
+        }
     }
 
     @Override

@@ -114,7 +114,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public void Gyroscope180() {
         odometry.resetPosition(
-                new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(180.0)),
+                new Pose2d(odometry.getPoseMeters().getTranslation(), Rotation2d.fromDegrees(150)),
                 Rotation2d.fromDegrees(gyroscope.getYaw())
         );
     }
@@ -130,7 +130,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putString("Drivetrain command", CommandVariable);
+        //SmartDashboard.putString("Drivetrain command", CommandVariable);
         odometry.update(Rotation2d.fromDegrees(gyroscope.getYaw()),
                         new SwerveModuleState(frontLeftModule.getDriveVelocity()*2.025, new Rotation2d(frontLeftModule.getSteerAngle())),
                         new SwerveModuleState(frontRightModule.getDriveVelocity()*2.025, new Rotation2d(frontRightModule.getSteerAngle())),

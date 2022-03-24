@@ -16,10 +16,13 @@ import frc.robot.commands.PointTowardsHub;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
+import frc.robot.commands.Autos.DriveBackFromTarmac;
 import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
+import frc.robot.commands.Autos.Turn90;
+import frc.robot.commands.Autos.TwoBallAtTarmac;
 import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
@@ -59,6 +62,7 @@ public class RobotContainer {
     private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
     private final ShootAtTarmac shootAtTarmac = new ShootAtTarmac(m_shooter, m_hood, m_indexer);
     private final ShootAtLaunchpad shootAtLaunchpad = new ShootAtLaunchpad(m_shooter, m_hood, m_indexer);
+    private final TwoBallAtTarmac twoBallAtTarmac = new TwoBallAtTarmac(m_drivetrain, m_intake, m_shooter, m_hood, m_indexer);
 
     private final StowIntake stowIntake = new StowIntake(m_intake);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
@@ -77,6 +81,7 @@ public class RobotContainer {
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
+    private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -95,6 +100,9 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Once and Drive Back", shootOneAndDriveBack);
         autoChooser.addOption("Shoot Once", shootOnce);
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
+        autoChooser.addOption("2-ball drive back test", twoBallAtTarmac);
+        autoChooser.addOption("turn90", new Turn90(m_drivetrain));
+
         SmartDashboard.putData(autoChooser);
        
         autoDelay.setDefaultOption("none", new WaitCommand(0.0));
@@ -132,7 +140,7 @@ public class RobotContainer {
         new Button(brendanController::getYButton)
                 .whileHeld(pointTowardsHub);
         new Button(brendanController::getAButton)
-                .whileHeld(deployIntake);
+                .whileHeld(gyroscope180);
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
