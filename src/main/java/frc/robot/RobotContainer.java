@@ -163,11 +163,17 @@ public class RobotContainer {
         new POVButton(brendanController, 0)
                 .whileHeld(shootAtFender);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
-                .whileHeld(shootAtFender.alongWith(pointTowardsHub));
+                .whileHeld(shootAtFender);
+        new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
+                .whileHeld(pointTowardsHub);
         new Button(() -> brendanController.getRightBumper())
-                .whileHeld(shootAtLaunchpad.alongWith(pointTowardsHub));
+                .whileHeld(shootAtLaunchpad);
+        new Button(() -> brendanController.getRightBumper())
+                .whileHeld(pointTowardsHub);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
-                .whileHeld(shootAtTarmac.alongWith(pointTowardsHub));
+                .whileHeld(shootAtTarmac);
+        new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
+                .whileHeld(pointTowardsHub);
         new POVButton(brendanController, 270)
                 .whileHeld(indexerUnjam);
         /*new Button(brendanController::getBButton)
