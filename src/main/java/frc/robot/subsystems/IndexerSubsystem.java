@@ -88,7 +88,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
   public void indexerUnjam(){
     indexerTopMotor.set(-indexingSpeed);
-    indexerFrontMotor.set(-indexingSpeed);
+    indexerFrontMotor.set(indexingSpeed);
     indexerBackMotor.set(-indexingSpeed);
   }
 

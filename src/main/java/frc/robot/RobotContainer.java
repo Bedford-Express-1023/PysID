@@ -1,11 +1,9 @@
 package frc.robot;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -150,7 +148,7 @@ public class RobotContainer {
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
-                .whenReleased(ballSpitterStop);
+                .whenReleased(indexBalls);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
         new POVButton(oliviaController, 0)
@@ -160,6 +158,7 @@ public class RobotContainer {
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
 
+                
         new POVButton(brendanController, 0)
                 .whileHeld(shootAtFender);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)

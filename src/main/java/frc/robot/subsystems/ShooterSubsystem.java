@@ -94,8 +94,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyFender(){
-  if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterFenderRPM - 250 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterFenderRPM + 250){
+  if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterFenderRPM - 400 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterFenderRPM + 400){
       return true;
     }
   else {
@@ -104,8 +104,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyTarmac(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterTarmacRPM - 250 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterTarmacRPM + 250){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterTarmacRPM - 400 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterTarmacRPM + 400){
       return true;
     }
     else {
@@ -114,8 +114,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyLaunchpad(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 250 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 250){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 400 && 
+            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 400){
       return true;
     }
     else {
@@ -124,8 +124,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReadyLowGoal(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLowGoalRPM - 250 &&
-          shooterBottomTalon.getSelectedSensorVelocity() < topShooterLowGoalRPM + 250){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLowGoalRPM - 400 &&
+          shooterBottomTalon.getSelectedSensorVelocity() < topShooterLowGoalRPM + 400){
       return true;
     }
     else {
