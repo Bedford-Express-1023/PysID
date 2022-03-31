@@ -1,5 +1,13 @@
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,6 +23,7 @@ import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
 import frc.robot.commands.Autos.DriveBackFromTarmac;
+import frc.robot.commands.Autos.ForwardFour;
 import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
@@ -80,6 +89,7 @@ public class RobotContainer {
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
+    private final PPSwerveControllerCommand swerveCommand = new ForwardFour(m_drivetrain);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -100,6 +110,8 @@ public class RobotContainer {
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         autoChooser.addOption("2-ball drive back test", twoBallAtTarmac);
         autoChooser.addOption("turn90", new Turn90(m_drivetrain));
+        autoChooser.addOption("New path", new ForwardFour(m_drivetrain));
+
 
         SmartDashboard.putData(autoChooser);
        
