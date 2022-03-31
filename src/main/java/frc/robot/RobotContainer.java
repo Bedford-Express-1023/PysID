@@ -29,7 +29,9 @@ import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Climber.ClimberUnlock;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
+import frc.robot.commands.Indexer.ColorPicker;
 import frc.robot.commands.Indexer.IndexBalls;
+import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
@@ -54,6 +56,7 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
+    public final SendableChooser<Command> teamColorChooser = new SendableChooser<Command>();
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
@@ -82,6 +85,7 @@ public class RobotContainer {
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
+    private final Command colorPicker = new ColorPicker(m_indexer);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -104,7 +108,9 @@ public class RobotContainer {
         autoChooser.addOption("turn90", new Turn90(m_drivetrain));
 
         SmartDashboard.putData(autoChooser);
-       
+
+      
+
         autoDelay.setDefaultOption("none", new WaitCommand(0.0));
         autoDelay.addOption("1.0", new WaitCommand(1.0));
         autoDelay.addOption("2.0", new WaitCommand(2.0));
@@ -176,6 +182,10 @@ public class RobotContainer {
                 .whileHeld(indexerUnjam);
         new Button(programmingController::getYButton)
                 .whenPressed(m_hood::hoodPositionReset);*/
+        new Button(programmingController::getXButton)
+                .whileHeld(colorPicker);
+        new Button(programmingController::getBButton)
+                .whileHeld(deployIntake);
     }
 
     private static double deadband(double value, double deadband) {
