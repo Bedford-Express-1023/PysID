@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Gyroscope180;
+import frc.robot.commands.HoodPosition;
+import frc.robot.commands.HoodPositionReset;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
@@ -28,12 +30,11 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Shooter.HoodPosition;
-import frc.robot.commands.Shooter.HoodPositionReset;
 import frc.robot.commands.Shooter.ShootAtVelocity;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -43,6 +44,7 @@ public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+    private final HoodSubsystem m_hood = new HoodSubsystem();
     private final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -62,8 +64,8 @@ public class RobotContainer {
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
     private final ShootStop shootStop = new ShootStop(m_shooter);
-    private final HoodPosition hoodPosition = new HoodPosition(m_shooter);
-    private final HoodPositionReset hoodPositionReset = new HoodPositionReset(m_shooter);
+    private final HoodPosition hoodPosition = new HoodPosition(m_hood);
+    private final HoodPositionReset hoodPositionReset = new HoodPositionReset(m_hood);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
@@ -124,6 +126,7 @@ public class RobotContainer {
         m_indexer.setDefaultCommand(indexBalls);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
+        m_hood.setDefaultCommand(hoodPosition);
 
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);

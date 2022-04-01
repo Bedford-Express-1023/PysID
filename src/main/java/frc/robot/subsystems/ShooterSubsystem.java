@@ -18,7 +18,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import java.lang.Boolean;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -29,52 +29,30 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   public final WPI_TalonFX shooterBottomTalon = new WPI_TalonFX(41);
   public final WPI_TalonFX shooterTopTalon = new WPI_TalonFX(40);
-  public final CANSparkMax hood = new CANSparkMax(34, MotorType.kBrushless); //FIXME motor ID
-  public SparkMaxPIDController hoodPIDController;
-  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry ty = table.getEntry("ty");
-  double closePosition = 10; //FIXME hood angle for close shot
-  double farPosition = 200; //FIXME hood angle for far shot
-  double closeTy = 8.8; //FIXME y coordinate of target on limelight cam for close shot
-  double farTy = -8.8; //FIXME y coordinate of target on limelight cam for far shot
-  double currentPosition;
-  double targetPosition;
-  RelativeEncoder hoodEncoder = hood.getEncoder();
-  double positionAllowedError = 1;
-  double velocityAllowedError = 50;
-  double kP = 50; 
-  double kI = 0;
-  double kD = 0; 
-  double kIz = 0; 
-  double kFF = 5; 
-  double kMaxOutput = 50; 
-  double kMinOutput = -1;
+  
   double topShooterTargetRPM;
   double bottomShooterTargetRPM;
-  double topShooterCloseRPM = 10710;
-  double bottomShooterCloseRPM = 9818;
-  double topShooterFarRPM = 12810;
-  double bottomShooterFarRPM = 10500;
+  double topShooterFenderRPM = 1825.77;
+  double bottomShooterFenderRPM = 3000;
+  double topShooterLaunchpadRPM = 3361.35;
+  double bottomShooterLaunchpadRPM = 3361.35;
+
   double topShooterTargetVelocity;
   double bottomShooterTargetVelocity;
   double bottomShooterCurrentVelocity;
   double topShooterCurrentVelocity;
   double RPMToVelocity = 3.57;
+  double velocityAllowedError = 400;
   boolean shooterReady;
   double currentTy;
+
+  double topShooterFenderVelocity = topShooterFenderRPM * RPMToVelocity;
+  double bottomShooterFenderVelocity = bottomShooterFenderRPM * RPMToVelocity;
+  double topShooterLaunchpadVelocity = topShooterLaunchpadRPM * RPMToVelocity;
+  double bottomShooterLaunchpadVelocity = bottomShooterLaunchpadRPM * RPMToVelocity;
+
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
-    hoodPIDController = hood.getPIDController();
-    hoodPIDController.setP(kP);
-    hoodPIDController.setI(kI);
-    hoodPIDController.setD(kD);
-    hoodPIDController.setIZone(kIz);
-    hoodPIDController.setFF(kFF);
-
-    hood.setSoftLimit(SoftLimitDirection.kForward, 238);
-    hood.setSoftLimit(SoftLimitDirection.kReverse, 0);
-    //hood.setSmartCurrentLimit(20);
-
     TalonFXConfiguration flywheelTalonConfig = new TalonFXConfiguration();
     shooterBottomTalon.configAllSettings(flywheelTalonConfig);
     shooterBottomTalon.setNeutralMode(NeutralMode.Coast);
@@ -106,14 +84,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopTalon.setInverted(TalonFXInvertType.OpposeMaster);
   }
 
-  public void shooterRunAtCloseVelocity(){
-    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterCloseRPM*RPMToVelocity);
-    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterCloseRPM*RPMToVelocity);
-  }
-
   public void shooterRunAtVelocity(){
-    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterTargetVelocity);
-    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterTargetVelocity);
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterTargetRPM);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterTargetRPM);
   }
 
   public double getBottomShooterVelocity(ShooterSubsystem shooterSubsystem){
@@ -123,54 +96,23 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean shooterReady(){
-  return shooterReady;
-}
+  if (bottomShooterCurrentVelocity > bottomShooterTargetVelocity - velocityAllowedError &&
+    bottomShooterCurrentVelocity < bottomShooterTargetVelocity + velocityAllowedError){
+      return true;
+      }
+    else {
+      return false;
+    }
+  }
 
   public void shootStop(){
     shooterBottomTalon.stopMotor();
     shooterTopTalon.stopMotor();
   }
-  
-  public void hoodPosition(){
-    hoodPIDController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);//sets the hood encoder position
-  }
 
-  public void hoodPositionReset(){ //use in initialization
-    hoodEncoder.setPosition(0);
-  }
-  
   @Override
   public void periodic() {
-    hoodPosition();//set current hood position to target hood position
-    currentTy = ty.getDouble(0.0);
-    currentPosition = hoodEncoder.getPosition();
-    //PID stuff 
-    /*hoodPIDController = hood.getPIDController();
-    hoodPIDController.setP(kP);
-    hoodPIDController.setI(kI);
-    hoodPIDController.setD(kD);
-    hoodPIDController.setIZone(kIz);
-    hoodPIDController.setFF(kFF);
-    hoodPIDController.setOutputRange(kMinOutput, kMaxOutput);*/
-    //interpolation: finding the shooter RPMs based on min, max, and current values of limelight, hood position, and shooter RPM's
-    targetPosition = (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
-    topShooterTargetRPM = topShooterCloseRPM + ((targetPosition - closePosition) * ((topShooterFarRPM - topShooterCloseRPM) / (farPosition - closePosition)));//interpolation for top shooter wheel RPM
-    bottomShooterTargetRPM = bottomShooterCloseRPM + ((targetPosition - closePosition) * ((bottomShooterFarRPM - bottomShooterCloseRPM) / (farPosition - closePosition)));//interpolation for bottom shooter wheel RPM
-    //converts RPM to velocity
-    topShooterTargetVelocity = topShooterTargetRPM * RPMToVelocity;
-    topShooterTargetVelocity = topShooterTargetRPM * RPMToVelocity;
-    //determine if shooter is up to velocity
-    shooterReady = (topShooterCurrentVelocity < (topShooterTargetVelocity + velocityAllowedError) || (topShooterCurrentVelocity > topShooterTargetVelocity - velocityAllowedError));
     //display values to dashboard
-    if ((currentPosition <= (targetPosition - positionAllowedError)) || (currentPosition >= (targetPosition + positionAllowedError))) {
-      SmartDashboard.putString("Hood Status", "Waiting for motor to reach target");
-    }
-    else {
-      SmartDashboard.putString("Hood Status", "at target");
-    }
-    SmartDashboard.putNumber("Current Hood Position", currentPosition);
-    SmartDashboard.putNumber("Target Hood Position", targetPosition);
-    SmartDashboard.putNumber("LimelightY", currentTy);
     // This method will be called once per scheduler run
   }
 } 

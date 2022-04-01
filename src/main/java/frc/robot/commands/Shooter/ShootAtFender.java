@@ -5,32 +5,38 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class HoodPosition extends CommandBase {
+public class ShootAtFender extends CommandBase {
+  IndexerSubsystem m_IndexerSubsystem;
   ShooterSubsystem m_ShooterSubsystem;
-  /** Creates a new HoodPosition. */
-  public HoodPosition(ShooterSubsystem shooterSubsystem) {
+  /** Creates a new ShootAtVelocity. */
+  public ShootAtFender(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
+    m_IndexerSubsystem = indexerSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(m_ShooterSubsystem, m_IndexerSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_ShooterSubsystem.hoodPositionReset();
+    m_ShooterSubsystem.getBottomShooterVelocity(m_ShooterSubsystem);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.hoodPosition();
+    if (m_ShooterSubsystem.shooterReady()){
+          m_IndexerSubsystem.feedShooter();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

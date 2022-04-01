@@ -2,35 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 
-public class ShooterRunAtFarVelocity extends CommandBase {
-  ShooterSubsystem m_ShooterSubsystem;
-  /** Creates a new ShooterRunAtFarVelocity. */
-  public ShooterRunAtFarVelocity(ShooterSubsystem shooterSubsystem) {
-    m_ShooterSubsystem = shooterSubsystem;
+public class HoodPosition extends CommandBase {
+  HoodSubsystem m_HoodSubsystem;
+  /** Creates a new HoodPosition. */
+  public HoodPosition(HoodSubsystem hoodSubsystem) {
+    m_HoodSubsystem = hoodSubsystem;
+    addRequirements(m_HoodSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_ShooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.shooterRunAtVelocity();
+    m_HoodSubsystem.setHoodPosition();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_ShooterSubsystem.shootStop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
