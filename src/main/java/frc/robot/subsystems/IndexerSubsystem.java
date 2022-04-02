@@ -18,6 +18,10 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Indexer.BallSpitter;
+import frc.robot.commands.Indexer.BallSpitter2Sec;
+import frc.robot.commands.Indexer.IndexerStop;
 
 public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); 
@@ -33,19 +37,22 @@ public class IndexerSubsystem extends SubsystemBase {
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
 
   
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+  private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
 
  
   private final ColorMatch m_colorMatcher = new ColorMatch();
 
 
-  private final Color kBlueTarget = new Color(0.198, 0.458, 0.343);
-  private final Color kRedTarget =  new Color(0.324, 0.438, 0.238);
+  private final Color kBlueTarget = new Color(0.253, 0.475, 0.271);
+  private final Color kRedTarget =  new Color(0.380, 0.423, 0.196);
+  private final Color kGreenTarget = new Color(0.197, 0.561, 0.240);
   Color detectedColor = m_colorSensor.getColor();
   
   ColorMatchResult match = m_colorMatcher.matchClosestColor(detectedColor);
-  String colorString;
-  String ColorAlliance;
+  String colorString = "";
+  String ColorAlliance = "";
+  int blue;
+  int red;
 
 
   boolean shooterBeamBreakState;
@@ -57,6 +64,9 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerTopMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
     indexerFrontMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
     indexerBackMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+    m_colorMatcher.addColorMatch(kRedTarget);
+    m_colorMatcher.addColorMatch(kBlueTarget);
+    allianceColorCheck();
   }
   
   public void ballToShooter(){
@@ -68,6 +78,32 @@ public class IndexerSubsystem extends SubsystemBase {
         indexerFrontMotor.set(indexingSpeed);
         indexerTopMotor.set(indexingSpeed);
       }
+    }
+
+    public void dealy(){
+
+    }
+    
+    public boolean colorSensorAliveCheck(){
+      int proximity = m_colorSensor.getProximity();
+      blue = m_colorSensor.getBlue();
+      red = m_colorSensor.getRed();
+  
+      
+      if((proximity == 0 && blue == 0 && red == 0)){
+        m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+        return true;
+      }
+      else { //do nothing
+        return false;
+      }
+    }
+  
+    public void ballSpitter2(){
+      indexerBackMotor.set(-indexingSpeed);
+      new WaitCommand(2);
+      indexerFrontMotor.set(indexingSpeed);
+      new WaitCommand(2);
     }
 
   public void indexBalls(){
@@ -98,6 +134,7 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerBackMotor.set(-indexingSpeed);
   }
 
+  
   public void ballSpitterStop(){
     indexerBackMotor.stopMotor();
   }
@@ -163,19 +200,21 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public void ballSorter(){
-    if (colorString == ColorAlliance && shooterBeamBreakState == true){
+    if (colorString == ColorAlliance && indexerBeamBreakState == false && spitterBeamBreakState == false && shooterBeamBreakState == true){
       ballToShooter();
+      ballSpitterStop();
     }
-    else if (colorString == ColorAlliance && shooterBeamBreakState == false){
-      indexerStop();
-    }
-    else
-    ballSpitter();
+    else if (colorString != ColorAlliance)
+    ballSpitter2();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    colorSensorAliveCheck();
+    detectedColor = m_colorSensor.getColor();
+    match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (shooterBeamBreak.get()){
       shooterBeamBreakState = true;
@@ -199,7 +238,11 @@ public class IndexerSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putString("Color", colorString);
     SmartDashboard.putString(("AllianceColor"), ColorAlliance);
+    SmartDashboard.putNumber("Confidence", match.confidence);
+    SmartDashboard.putNumber("Proximity", m_colorSensor.getProximity());
+    SmartDashboard.putBoolean("Color Sensor Alive?", colorSensorAliveCheck());
   }
 }
