@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -20,7 +21,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.9;
+  private final double indexingSpeed = 0.4;
   
 
   boolean shooterBeamBreakState;
@@ -122,5 +123,6 @@ public class IndexerSubsystem extends SubsystemBase {
     else {
       spitterBeamBreakState = false;
     }
+
   }
 }

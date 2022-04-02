@@ -1,5 +1,13 @@
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +29,8 @@ import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
 import frc.robot.commands.Autos.Turn90;
 import frc.robot.commands.Autos.TwoBallAtTarmac;
+import frc.robot.commands.Autos.fourBall;
+import frc.robot.commands.Autos.threeBall;
 import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
@@ -80,6 +90,7 @@ public class RobotContainer {
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
+    private final Command threeBallTesting = new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -99,7 +110,9 @@ public class RobotContainer {
         autoChooser.addOption("Shoot Once", shootOnce);
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         autoChooser.addOption("2-ball drive back test", twoBallAtTarmac);
-        autoChooser.addOption("turn90", new Turn90(m_drivetrain));
+        autoChooser.addOption("3-ball testing", new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+        autoChooser.addOption("4-ball testing", new fourBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+
 
         SmartDashboard.putData(autoChooser);
        
@@ -153,6 +166,8 @@ public class RobotContainer {
                 .whileHeld(deployIntake);
         new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
+        new POVButton(oliviaController, 0)
+                .whileHeld(m_hood::hoodReturnToZero);
         new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
         new Button(oliviaController::getStartButton)
