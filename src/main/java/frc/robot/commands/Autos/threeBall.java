@@ -26,7 +26,10 @@ public class threeBall extends SequentialCommandGroup {
   public threeBall(IntakeSubsystem intake, IndexerSubsystem indexer, SwerveDriveSubsystem drivetrain, 
         ShooterSubsystem shooter, HoodSubsystem hood) {
     addCommands(
-      new threeBall1(drivetrain).deadlineWith(new DeployIntake(intake)), 
-      new ShootAtTarmac(shooter, hood, indexer).deadlineWith(new PointTowardsHub(drivetrain), new DeployIntake(intake)));
+      new threeBall1(drivetrain).deadlineWith(
+        new DeployIntake(intake)), 
+      new ShootAtTarmac(shooter, hood, indexer).deadlineWith(
+        new PointTowardsHub(drivetrain), 
+        new DeployIntake(intake).withTimeout(2)));
   }
 }

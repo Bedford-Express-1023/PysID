@@ -166,6 +166,8 @@ public class RobotContainer {
         new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
+                .whileHeld(m_hood::hoodReturnToZero);
+        new POVButton(oliviaController, 0)
                 .whenReleased(climbStop);
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
