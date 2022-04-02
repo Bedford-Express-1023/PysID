@@ -11,6 +11,7 @@ import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.ShootStop;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -24,19 +25,21 @@ public class ShootOneDriveBackAndGetOne extends SequentialCommandGroup {
   private final IndexerSubsystem m_indexer;
   private final ShooterSubsystem m_shooter;
   private final IntakeSubsystem m_intake;
+  private final HoodSubsystem m_hood;
   /** Creates a new ShootOneAndDriveBack. */
-  public ShootOneDriveBackAndGetOne(SwerveDriveSubsystem drivetrain, IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
+  public ShootOneDriveBackAndGetOne(SwerveDriveSubsystem drivetrain, IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, HoodSubsystem hoodSubsystem) {
     m_drivetrain = drivetrain;
     m_indexer = indexerSubsystem;
     m_shooter = shooterSubsystem;
     m_intake = intakeSubsystem;
+    m_hood = hoodSubsystem;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new ShootAndDoNothing(m_shooter, m_indexer).withTimeout(1.0), 
+    addCommands(new ShootAndDoNothing(m_shooter, m_indexer, null).withTimeout(1.0), 
           new ShootStop(m_shooter).withTimeout(0.1), new DeployIntake(m_intake).alongWith(
           new DriveBack(m_drivetrain)).alongWith(new IndexBalls(m_indexer)).withTimeout(3.0),
           new StowIntake(m_intake).alongWith(new DriveForward(m_drivetrain)).withTimeout(3.0), 
-          new ShootAndDoNothing(m_shooter, m_indexer), new ShootStop(m_shooter).withTimeout(0.1),
+          new ShootAndDoNothing(m_shooter, m_indexer, null), new ShootStop(m_shooter).withTimeout(0.1),
           new Gyroscope180(m_drivetrain));
   }
 }

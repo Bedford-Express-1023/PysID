@@ -34,8 +34,8 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterTargetRPM;
   double topShooterFenderRPM = 1825.77;
   double bottomShooterFenderRPM = 3000;
-  double topShooterLaunchpadRPM = 3361.35;
-  double bottomShooterLaunchpadRPM = 3361.35;
+  double topShooterLaunchpadRPM = 3100;
+  double bottomShooterLaunchpadRPM = 3100;
 
   double topShooterTargetVelocity;
   double bottomShooterTargetVelocity;
@@ -50,6 +50,13 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterFenderVelocity = bottomShooterFenderRPM * RPMToVelocity;
   double topShooterLaunchpadVelocity = topShooterLaunchpadRPM * RPMToVelocity;
   double bottomShooterLaunchpadVelocity = bottomShooterLaunchpadRPM * RPMToVelocity;
+
+  double closePosition = 1; //FIXME hood angle for close shot
+  double farPosition = 155; //FIXME hood angle for far shot
+  double closeTy = 8.8; //FIXME y coordinate of target on limelight cam for close shot
+  double farTy = -8.8; //FIXME y coordinate of target on limelight cam for far shot
+
+  double targetPosition;
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -112,6 +119,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    targetPosition = (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
+    topShooterTargetVelocity = topShooterFenderVelocity + ((targetPosition - closePosition) * ((topShooterLaunchpadVelocity - topShooterFenderVelocity) / (farPosition - closePosition)));//interpolation for top shooter wheel RPM
+    bottomShooterTargetVelocity = bottomShooterFenderVelocity + ((targetPosition - closePosition) * ((bottomShooterLaunchpadVelocity - bottomShooterFenderVelocity) / (farPosition - closePosition)));//interpolation for bottom shooter wheel RPM
     //display values to dashboard
     // This method will be called once per scheduler run
   }

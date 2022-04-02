@@ -25,11 +25,12 @@ public class HoodSubsystem extends SubsystemBase {
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry ty = limelightTable.getEntry("ty");
   NetworkTableEntry tv = limelightTable.getEntry("tv");
+  NetworkTableEntry tx = limelightTable.getEntry("tx");
 
   double topShooterFenderRPM = 1825.77;
   double bottomShooterFenderRPM = 3000;
-  double topShooterLaunchpadRPM = 3361.35;
-  double bottomShooterLaunchpadRPM = 3361.35;
+  double topShooterLaunchpadRPM = 3100;
+  double bottomShooterLaunchpadRPM = 3100;
 
   double topShooterTargetVelocity;
   double bottomShooterTargetVelocity;
@@ -39,6 +40,7 @@ public class HoodSubsystem extends SubsystemBase {
   boolean shooterReady;
   double currentTy;
   boolean currentTv;
+  double currentTx;
 
   double topShooterFenderVelocity = topShooterFenderRPM * RPMToVelocity;
   double bottomShooterFenderVelocity = bottomShooterFenderRPM * RPMToVelocity;
@@ -63,7 +65,8 @@ public class HoodSubsystem extends SubsystemBase {
   double currentPosition;
   double targetPosition;
   double positionAllowedError = 5;
-  double velocityAllowedError = 50;
+  double rotationAllowedError = 0.5;
+  double velocityAllowedError = 400;
 
   /** Creates a new HoodSubsystem. */
   public HoodSubsystem() {
@@ -82,8 +85,25 @@ public class HoodSubsystem extends SubsystemBase {
     hood.setSmartCurrentLimit(20);
   }
 
+public boolean hoodCheck(){
+  if (currentPosition > (targetPosition - positionAllowedError) && currentPosition < (targetPosition + positionAllowedError)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+public boolean centeredCheck(){
+  if (currentTx < rotationAllowedError && currentTx > -rotationAllowedError) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 public void setHoodPosition(){
-  targetPosition = (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
   hoodPIDController.setReference(targetPosition, kPosition);
 }
 
@@ -95,14 +115,18 @@ public void hoodReturnToZero(){
   hoodPIDController.setReference(0, kPosition);
 }
 
+public void hoodReturnToMiddle(){
+  hoodPIDController.setReference(farPosition-closePosition, kPosition);
+}
+
 @Override
 public void periodic() {
   currentTy = ty.getDouble(0.0);
   currentTv = tv.getBoolean(false);
   currentPosition = hoodEncoder.getPosition();
+  currentTx = tx.getDouble(0.0);
   //interpolation: finding the shooter RPMs based on min, max, and current values of limelight, hood position, and shooter velocity
-  topShooterTargetVelocity = topShooterFenderVelocity + ((targetPosition - closePosition) * ((topShooterLaunchpadVelocity - topShooterFenderVelocity) / (farPosition - closePosition)));//interpolation for top shooter wheel RPM
-  bottomShooterTargetVelocity = bottomShooterFenderVelocity + ((targetPosition - closePosition) * ((bottomShooterLaunchpadVelocity - bottomShooterFenderVelocity) / (farPosition - closePosition)));//interpolation for bottom shooter wheel RPM
+  targetPosition = (closePosition + ((currentTy - closeTy) * ((farPosition - closePosition) / (farTy - closeTy))));//interpolation for hood position
   //display values to dashboard
   if ((currentPosition > (targetPosition - positionAllowedError)) && (currentPosition < (targetPosition + positionAllowedError))) {
     SmartDashboard.putString("Hood Status", "at target");

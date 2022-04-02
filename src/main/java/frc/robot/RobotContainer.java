@@ -62,17 +62,17 @@ public class RobotContainer {
     private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
-    private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter);
+    private final ShootAtVelocity shootAtVelocity = new ShootAtVelocity(m_indexer, m_shooter, m_hood);
     private final ShootStop shootStop = new ShootStop(m_shooter);
     private final HoodPosition hoodPosition = new HoodPosition(m_hood);
     private final HoodPositionReset hoodPositionReset = new HoodPositionReset(m_hood);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
-    private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter);
-    private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer);
-    private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
+    private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_shooter, m_hood);
+    private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_indexer, m_hood);
+    private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter, m_hood);
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
-                        m_drivetrain, m_indexer, m_shooter, m_intake);
+                        m_drivetrain, m_indexer, m_shooter, m_intake, m_hood);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);

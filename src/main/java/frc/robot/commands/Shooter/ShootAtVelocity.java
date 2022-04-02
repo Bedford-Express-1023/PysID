@@ -5,18 +5,21 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootAtVelocity extends CommandBase {
   IndexerSubsystem m_IndexerSubsystem;
   ShooterSubsystem m_ShooterSubsystem;
+  HoodSubsystem m_HoodSubsystem;
   /** Creates a new ShootAtVelocity. */
-  public ShootAtVelocity(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem) {
+  public ShootAtVelocity(IndexerSubsystem indexerSubsystem, ShooterSubsystem shooterSubsystem, HoodSubsystem hoodSubsystem) {
     m_IndexerSubsystem = indexerSubsystem;
     m_ShooterSubsystem = shooterSubsystem;
+    m_HoodSubsystem = hoodSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_ShooterSubsystem, m_IndexerSubsystem);
+    addRequirements(m_ShooterSubsystem, m_IndexerSubsystem, m_HoodSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -28,7 +31,7 @@ public class ShootAtVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_ShooterSubsystem.shooterReady()){
+    if (m_HoodSubsystem.hoodCheck() == true && m_HoodSubsystem.centeredCheck() == true && m_ShooterSubsystem.shooterReady() == true){
           m_IndexerSubsystem.feedShooter();
     }
   }
