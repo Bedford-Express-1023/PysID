@@ -23,13 +23,13 @@ import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
 import frc.robot.commands.Autos.DriveBackFromTarmac;
-import frc.robot.commands.Autos.ForwardFour;
 import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
 import frc.robot.commands.Autos.Turn90;
 import frc.robot.commands.Autos.TwoBallAtTarmac;
+import frc.robot.commands.Autos.threeBall;
 import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
@@ -89,7 +89,7 @@ public class RobotContainer {
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
-    private final PPSwerveControllerCommand swerveCommand = new ForwardFour(m_drivetrain);
+    private final Command threeBallTesting = new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -110,7 +110,7 @@ public class RobotContainer {
         autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
         autoChooser.addOption("2-ball drive back test", twoBallAtTarmac);
         autoChooser.addOption("turn90", new Turn90(m_drivetrain));
-        autoChooser.addOption("New path", new ForwardFour(m_drivetrain));
+        autoChooser.addOption("3-ball testing", threeBallTesting);
 
 
         SmartDashboard.putData(autoChooser);

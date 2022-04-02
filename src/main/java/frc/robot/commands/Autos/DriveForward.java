@@ -24,7 +24,7 @@ public class DriveForward extends CommandBase {
 
     @Override
     public void execute() {
-    drivetrain.drive(drivetrain.driveController.calculate(drivetrain.odometry.getPoseMeters(), driveTrajectory.sample(timer), driveTrajectory.sample(timer).poseMeters.getRotation()));
+    drivetrain.drive(drivetrain.driveController.calculate(drivetrain.getRealOdometry(), driveTrajectory.sample(timer), driveTrajectory.sample(timer).poseMeters.getRotation()));
     timer += 0.02;
     }
 

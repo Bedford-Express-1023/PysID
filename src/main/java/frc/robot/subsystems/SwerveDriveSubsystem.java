@@ -98,8 +98,10 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 Constants.BACK_RIGHT_MODULE_STEER_OFFSET
         );
         ShuffleboardLayout orientationLayout = shuffleboardTab.getLayout("Orientation", BuiltInLayouts.kList).withSize(1, 3).withPosition(4,0);
-        orientationLayout.addNumber("Pose X", () -> odometry.getPoseMeters().getX());
-        orientationLayout.addNumber("Pose Y", () -> odometry.getPoseMeters().getY());
+        orientationLayout.addNumber("Pose X", () -> getRealOdometry().getX());
+        orientationLayout.addNumber("Pose Y", () -> getRealOdometry().getY());
+        orientationLayout.addNumber("Rotation", () -> getRotation().getDegrees());
+
         
         ShuffleboardLayout PigeonInfo = shuffleboardTab.getLayout("Pigeon Gyroscope", BuiltInLayouts.kList).withPosition(5, 0).withSize(1, 3);
         PigeonInfo.addNumber("Yaw", () -> gyroscope.getYaw());
@@ -139,10 +141,21 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         );
     }
 
+        public Pose2d getRealOdometry() {
+                double centerToWheel = Math.hypot(Constants.DRIVETRAIN_WHEELBASE_METERS / 2, Constants.DRIVETRAIN_TRACKWIDTH_METERS / 2);
+                return new Pose2d(
+                                odometry.getPoseMeters().getX() - centerToWheel*Math.cos(Math.toDegrees(-135 + 90) + getRotation().getRadians()),
+                                odometry.getPoseMeters().getY() - centerToWheel*Math.sin(Math.toDegrees(-135 + 90) + getRotation().getRadians()),
+                                getRotation()
+                );
+        }
+
     @Override
     public void periodic() {
         //SmartDashboard.putString("Drivetrain command", CommandVariable);
+        updateOdometry();
         if (!DriverStation.isAutonomousEnabled()) {
+        updateOdometry();
         frontLeftModule.set((feedForward.calculate(states[0].speedMetersPerSecond) + pid.calculate(states[0].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
         frontRightModule.set((feedForward.calculate(states[1].speedMetersPerSecond) + pid.calculate(states[1].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
         backLeftModule.set((feedForward.calculate(states[2].speedMetersPerSecond) + pid.calculate(states[2].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians()); 

@@ -33,7 +33,7 @@ public class DriveBackFromTarmac extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(drivetrain.driveController.calculate(drivetrain.odometry.getPoseMeters(), driveTrajectory.sample(timer), driveTrajectory.sample(timer).poseMeters.getRotation()));
+    drivetrain.drive(drivetrain.driveController.calculate(drivetrain.getRealOdometry(), driveTrajectory.sample(timer), driveTrajectory.sample(timer).poseMeters.getRotation()));
     timer += 0.02;
   }
 

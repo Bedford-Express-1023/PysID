@@ -26,19 +26,19 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import java.util.function.Consumer;
 
 /** Add your docs here. */
-public class ForwardFour extends PPSwerveControllerCommand {
+public class threeBall1 extends PPSwerveControllerCommand {
     public SwerveDriveSubsystem drivetrain;
-    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("2 ball from Hangar", 3, 4);
+    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("3 ball", 3, 4);
 
-    private ForwardFour(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
+    private threeBall1(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
             PIDController xController, PIDController yController, ProfiledPIDController thetaController,
             Consumer<SwerveModuleState[]> outputModuleStates, Subsystem[] requirements) {
         super(trajectory, pose, kinematics, xController, yController, thetaController, outputModuleStates, requirements);
     }
-    public ForwardFour(SwerveDriveSubsystem drivetrain) {
+    public threeBall1(SwerveDriveSubsystem drivetrain) {
         super(
             trajectory, 
-            drivetrain.odometry::getPoseMeters, 
+            drivetrain::getRealOdometry, 
             drivetrain.kinematics, 
             new PIDController(8, 0, 0.0), 
             new PIDController(8, 0.0, 0.0), 
