@@ -26,16 +26,16 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import java.util.function.Consumer;
 
 /** Add your docs here. */
-public class threeBall3 extends PPSwerveControllerCommand {
+public class fourBall2 extends PPSwerveControllerCommand {
     public SwerveDriveSubsystem drivetrain;
-    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("3 ball right 3", 3, 4);
+    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("4 ball 2", 3, 4);
 
-    private threeBall3(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
+    private fourBall2(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
             PIDController xController, PIDController yController, ProfiledPIDController thetaController,
             Consumer<SwerveModuleState[]> outputModuleStates, Subsystem[] requirements) {
         super(trajectory, pose, kinematics, xController, yController, thetaController, outputModuleStates, requirements);
     }
-    public threeBall3(SwerveDriveSubsystem drivetrain) {
+    public fourBall2(SwerveDriveSubsystem drivetrain) {
         super(
             trajectory, 
             drivetrain::getRealOdometry, 
@@ -52,11 +52,6 @@ public class threeBall3 extends PPSwerveControllerCommand {
             }, 
             drivetrain);
             this.drivetrain = drivetrain;
-    }
-    @Override
-    public void initialize() {
-        super.initialize();
-        //drivetrain.odometry.resetPosition(trajectory.getInitialPose(), Rotation2d.fromDegrees(drivetrain.gyroscope.getYaw()));
     }
 
     @Override
