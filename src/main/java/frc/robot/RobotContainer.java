@@ -150,8 +150,8 @@ public class RobotContainer {
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
                 .whileHeld(swerveXPattern);
-        new Button(brendanController::getAButton)
-                .whileHeld(pointTowardsHub);
+        //new Button(brendanController::getAButton)
+               // .whileHeld(pointTowardsHub);
                 //low goal dump on Y
      
         new Button(oliviaController::getXButton)
