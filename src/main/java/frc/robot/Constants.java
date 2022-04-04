@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.Utils.Gains;
+import frc.robot.Utils.LinearInterpolator;
 
 public class Constants {
     //////////////////////
@@ -52,4 +53,40 @@ public class Constants {
     public final static int ShooterLowRPM = 10000;
     public final static int ShooterHighRPM = 10000;
 
+    public static final class TargetConstants{
+		public static final double[][] HOOD_ARRAY = {
+				{-13,140},
+				{-12,140},
+				{-2,140},
+				{0,140},
+				{4.5, 140},
+				{5,140},
+				{7,140},
+				{11,140}
+			};
+
+		public static final double[][] SHOOTER_TOP_ARRAY = {
+			{9.6,12000},
+			{4,10200},
+			{-0.3,8120},
+			{-3,7220},
+			{-6.3,6300},
+			{-9,3440},
+			{-13,3540}
+		};
+
+        public static final double[][] SHOOTER_BOTTOM_ARRAY = {
+			{9.6,12000},
+			{4,10200},
+			{-0.3,8120},
+			{-3,7220},
+			{-6.3,6300},
+			{-9,3440},
+			{-13,3540}
+        };
+
+		public static final LinearInterpolator HOOD_INTERPOLATOR = new LinearInterpolator(HOOD_ARRAY);
+		public static final LinearInterpolator SHOOTER_TOP_SPEED_INTERPOLATOR = new LinearInterpolator(SHOOTER_TOP_ARRAY);
+        public static final LinearInterpolator SHOOTER_BOTTOM_SPEED_INTERPOLATOR = new LinearInterpolator(SHOOTER_BOTTOM_ARRAY);
+    }
 }

@@ -11,8 +11,11 @@ import com.revrobotics.CANSparkMax.ControlType;
 import static com.revrobotics.CANSparkMax.SoftLimitDirection.*;
 import static com.revrobotics.CANSparkMax.ControlType.*;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
+
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class HoodSubsystem extends SubsystemBase {
   private final CANSparkMax hood = new CANSparkMax(34, kBrushless);
@@ -31,7 +34,9 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodPositionTarmac = 100;
   private double hoodPositionLaunchpad = 155;
   private double hoodPositionLowGoal = 100;
-  private String hoodAngle;
+  double limelightY;
+  double hoodTargetPosition;
+  double hoodPositionAuto;
 
   /** Creates a new HoodSubsystem. */
   public HoodSubsystem() {
@@ -52,22 +57,18 @@ public class HoodSubsystem extends SubsystemBase {
 
   public void hoodFenderShot(){
     hoodPIDController.setReference(hoodPositionFender, kPosition);
-    hoodAngle = "Fender Angle";
   }
 
   public void hoodTarmacShot(){
     hoodPIDController.setReference(hoodPositionTarmac, kPosition);
-    hoodAngle = "Tarmac Angle";
   }
 
   public void hoodLaunchpadShot(){
     hoodPIDController.setReference(hoodPositionLaunchpad, kPosition);
-    hoodAngle = "Launchpad Angle";
   }
 
   public void hoodLowGoalShot(){
     hoodPIDController.setReference(hoodPositionLowGoal, kPosition);
-    hoodAngle = "Low Goal Angle";
   }
 
   public boolean hoodLaunchpadCheck(){
@@ -114,9 +115,24 @@ public class HoodSubsystem extends SubsystemBase {
     hoodPIDController.setReference(0, ControlType.kPosition);
   }
 
+  public double limelightGetY(){
+    limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    return limelightY;
+  }
+
+  public void setHoodPositionAuto(){
+    hoodPositionAuto = Constants.TargetConstants.HOOD_INTERPOLATOR.getInterpolatedValue(limelightY);
+    hoodPIDController.setReference(hoodPositionAuto, ControlType.kPosition);
+  }
+
+  public void hoodTuningPosition(){
+    hoodPIDController.setReference(hoodTargetPosition, ControlType.kPosition);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Current Hood Position", hoodEncoder.getPosition());
+    hoodTargetPosition = SmartDashboard.getNumber("Hood Position (Tuning, range 0-238)", 0);
     // This method will be called once per scheduler run
   }
 }

@@ -36,6 +36,7 @@ import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootAtLaunchpad;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.commands.Shooter.ShootStop;
+import frc.robot.commands.Shooter.ShooterTuningCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -81,6 +82,7 @@ public class RobotContainer {
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
     private final Command threeBallTesting = new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood);
+    private final ShooterTuningCommand shooterTuningCommand = new ShooterTuningCommand(m_shooter, m_hood);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -124,14 +126,14 @@ public class RobotContainer {
                 () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
                 () -> -modifyAxis(brendanController.getLeftX()),
                 () -> -modifyAxis(brendanController.getRightX()),
-                () -> false, //brendanController.getLeftBumper(), //RobotCentric
-                () -> brendanController.getLeftBumper(), //lowPower
+                () -> brendanController.getLeftBumper(), //RobotCentric
+                () -> brendanController.getRightBumper(), //lowPower
                 () -> !(brendanController.getLeftTriggerAxis() > 0.5) //slowTurn
         ));
         
         m_intake.setDefaultCommand(stowIntake);
         m_indexer.setDefaultCommand(indexBalls);
-        m_shooter.setDefaultCommand(shootStop);
+        m_shooter.setDefaultCommand(shooterTuningCommand);
         m_climber.setDefaultCommand(climberLock);
 
         new Button(brendanController::getBButtonPressed)
@@ -167,8 +169,7 @@ public class RobotContainer {
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
 
-                
-        new POVButton(brendanController, 0)
+        /*new POVButton(brendanController, 0)
                 .whileHeld(shootAtFender);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
                 .whileHeld(shootAtFender);
@@ -183,13 +184,27 @@ public class RobotContainer {
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
         new POVButton(brendanController, 270)
-                .whileHeld(indexerUnjam);
+                .whileHeld(indexerUnjam);*/
         /*new Button(brendanController::getBButton)
                 .whileHeld(deployIntake);
         new Button(programmingController::getXButton)
                 .whileHeld(indexerUnjam);
         new Button(programmingController::getYButton)
                 .whenPressed(m_hood::hoodPositionReset);*/
+        new Button(programmingController::getXButton)
+                .whileHeld(shooterTuningCommand);
+        new Button(programmingController::getAButton)
+                .whileHeld(deployIntake);
+        new Button(programmingController::getAButton)
+                .whenReleased(stowIntake);
+        new Button(programmingController::getBButton)
+                .whileHeld(indexerUnjam);
+        new Button(programmingController::getLeftBumper)
+                .whileHeld(pointTowardsHub);
+        new Button(programmingController::getRightBumper)
+                .whileHeld(m_indexer::feedShooter);
+        new Button(programmingController::getRightBumper)
+                .whenReleased(m_indexer::indexerStop);
     }
 
     private static double deadband(double value, double deadband) {

@@ -1,8 +1,7 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-// 2800
-//
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -13,6 +12,9 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -34,6 +36,13 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterLowGoalRPM = 4000;
   double RPMToVelocity = 3.57;
   boolean shooterReady;
+
+  double limelightY;
+  double limelightHasTarget;
+  double shooterTopTargetVelocity;
+  double shooterBottomTargetVelocity;
+  double bottomTarget;
+  double topTarget;
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -137,10 +146,40 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterBottomTalon.stopMotor();
     shooterTopTalon.stopMotor();
   }
+
+  public double limelightGetY(){
+    limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+    return limelightY;
+  }
+
+  public double limelightHasTarget(){
+    limelightHasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    return limelightHasTarget;
+  }
+
+  public void setShooterSpeedsAuto(){
+    shooterTopTargetVelocity = Constants.TargetConstants.SHOOTER_TOP_SPEED_INTERPOLATOR.getInterpolatedValue(limelightY);
+    shooterBottomTargetVelocity = Constants.TargetConstants.SHOOTER_BOTTOM_SPEED_INTERPOLATOR.getInterpolatedValue(limelightY);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, shooterTopTargetVelocity);
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, shooterBottomTargetVelocity);
+  }
+
+  public void shooterTuningSpeeds(){
+    shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomTarget);
+    shooterTopTalon.set(TalonFXControlMode.Velocity, topTarget);
+  }
   
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter Velocity Bottom", shooterBottomTalon.getSelectedSensorVelocity());
+    //SmartDashboard.putNumber("Shooter Velocity Bottom", shooterBottomTalon.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Limelight Y", limelightGetY());
+    /*SmartDashboard.putNumber("Shooter Top Target Speed", shooterTopTargetVelocity);
+    SmartDashboard.putNumber("Shooter Top Actual Speed", shooterTopTalon.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter Bottom Target Speed", shooterBottomTargetVelocity);
+    SmartDashboard.putNumber("Shooter Bottom Actual Speed", shooterBottomTalon.getSelectedSensorVelocity());*/
+    SmartDashboard.putNumber("Limelight has target", limelightHasTarget());
+    bottomTarget = SmartDashboard.getNumber("Shooter Bottom Speed (Tuning)", 0);
+    topTarget = SmartDashboard.getNumber("Shooter Top Speed (Tuning)", 0);
     // This method will be called once per scheduler run
   }
 } 
