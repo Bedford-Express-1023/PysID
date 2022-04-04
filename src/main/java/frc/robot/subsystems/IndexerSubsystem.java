@@ -21,8 +21,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.4;
-  
+  private final double indexingSpeed = 0.9;
 
   boolean shooterBeamBreakState;
   boolean indexerBeamBreakState;
