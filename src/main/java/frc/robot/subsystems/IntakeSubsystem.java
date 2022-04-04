@@ -12,27 +12,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
   private final WPI_TalonSRX intakeMotor = new WPI_TalonSRX(20);
-  //private final DoubleSolenoid leftCylinder = new DoubleSolenoid(PneumaticsModuleType.REVPH, 14, 15);
-  private final Solenoid rightCylinder = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
+  private final Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 3);
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
   }
 
   public void deployIntake(){
-    //leftCylinder.set(Value.kReverse);
-    rightCylinder.set(true);
+    intakeSolenoid.set(true);
     intakeMotor.set(-1.0);
   }
 
   public void stowIntake(){
-    //leftCylinder.set(Value.kForward);
-    rightCylinder.set(false);
+    intakeSolenoid.set(false);
     intakeMotor.set(0.0);
   }
 
   public void unjamIntake(){
-    //leftCylinder.set(Value.kForward);
-    rightCylinder.set(true);
+    intakeSolenoid.set(true);
     intakeMotor.set(-0.4);
   }
 

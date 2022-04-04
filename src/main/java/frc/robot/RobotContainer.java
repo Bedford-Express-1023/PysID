@@ -1,13 +1,5 @@
 package frc.robot;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,12 +14,10 @@ import frc.robot.commands.PointTowardsHub;
 import frc.robot.commands.SwerveXPattern;
 import frc.robot.commands.Autos.DoNothing;
 import frc.robot.commands.Autos.DriveBack;
-import frc.robot.commands.Autos.DriveBackFromTarmac;
 import frc.robot.commands.Autos.ShootAndDoNothing;
 import frc.robot.commands.Autos.ShootOnce;
 import frc.robot.commands.Autos.ShootOneAndDriveBack;
 import frc.robot.commands.Autos.ShootOneDriveBackAndGetOne;
-import frc.robot.commands.Autos.Turn90;
 import frc.robot.commands.Autos.TwoBallAtTarmac;
 import frc.robot.commands.Autos.fourBall;
 import frc.robot.commands.Autos.threeBall;
@@ -147,13 +137,17 @@ public class RobotContainer {
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
-                .whileHeld(swerveXPattern);
+                .whileHeld(indexerUnjam);
+        new Button(brendanController::getXButton)
+                .whileHeld(unjamIntake);
         new Button(brendanController::getAButton)
                 .whileHeld(pointTowardsHub);
                 //low goal dump on Y
      
         new Button(oliviaController::getXButton)
                 .whileHeld(indexerUnjam);
+        new Button(oliviaController::getXButton)
+                .whileHeld(unjamIntake);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
