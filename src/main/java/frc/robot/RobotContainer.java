@@ -107,11 +107,9 @@ public class RobotContainer {
         autoChooser.addOption("Drive Back", driveBack);
         autoChooser.addOption("Shoot Once and Do Nothing", shootAndDoNothing);
         autoChooser.addOption("Shoot Once and Drive Back", shootOneAndDriveBack);
-        autoChooser.addOption("Shoot Once", shootOnce);
-        autoChooser.addOption("2-Ball", shootOneDriveBackAndGetOne);
-        autoChooser.addOption("2-ball drive back test", twoBallAtTarmac);
-        autoChooser.addOption("3-ball testing", new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
-        autoChooser.addOption("4-ball testing", new fourBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+        autoChooser.addOption("2-ball", twoBallAtTarmac);
+        autoChooser.addOption("3-ball", new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+        autoChooser.addOption("4-ball", new fourBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
 
 
         SmartDashboard.putData(autoChooser);
@@ -159,8 +157,6 @@ public class RobotContainer {
 
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
-        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
-                .whenReleased(shootStop);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
