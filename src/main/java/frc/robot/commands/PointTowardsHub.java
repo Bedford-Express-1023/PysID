@@ -18,7 +18,7 @@ public class PointTowardsHub extends CommandBase {
     }
     @Override
     public void initialize() {
-        LimeLightRotationPID = new PIDController(5, 0, 0);
+        LimeLightRotationPID = new PIDController(3.5, 0, 0.5);
         LimeLightRotationPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 

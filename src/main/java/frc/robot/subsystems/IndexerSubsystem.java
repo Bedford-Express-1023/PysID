@@ -27,7 +27,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.9;
+  private final double indexingSpeed = 0.4;
   
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -133,7 +133,7 @@ public class IndexerSubsystem extends SubsystemBase {
 
   public void indexerUnjam(){
     indexerTopMotor.set(-indexingSpeed);
-    indexerFrontMotor.set(-indexingSpeed);
+    indexerFrontMotor.set(indexingSpeed);
     indexerBackMotor.set(-indexingSpeed);
   }
 
@@ -238,12 +238,12 @@ public class IndexerSubsystem extends SubsystemBase {
     else {
       spitterBeamBreakState = false;
     }
-
     SmartDashboard.putString("Color", colorString);
     SmartDashboard.putString(("AllianceColor"), ColorAlliance);
     SmartDashboard.putBoolean("Color Sensor Alive?", colorSensorAliveCheck());
     SmartDashboard.putBoolean("Indexer Beam Break", indexerBeamBreakState);
     SmartDashboard.putBoolean("Spitter Beam Break", spitterBeamBreakState);
     SmartDashboard.putBoolean("Shooter Beam Break", shooterBeamBreakState);
+
   }
 }

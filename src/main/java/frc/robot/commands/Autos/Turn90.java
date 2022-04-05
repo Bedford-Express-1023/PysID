@@ -29,7 +29,7 @@ public class Turn90 extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rotationTarget = m_drivetrain.odometry.getPoseMeters().getRotation().getRadians() + Math.PI/2;
+    rotationTarget = m_drivetrain.getRealOdometry().getRotation().getRadians() + Math.PI/2;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
