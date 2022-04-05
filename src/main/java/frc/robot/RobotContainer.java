@@ -35,6 +35,7 @@ import frc.robot.commands.Indexer.ColorSorter;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Indexer.IndexerUnjam;
+import frc.robot.commands.Indexer.ReactToColor;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Intake.UnjamIntake;
@@ -81,6 +82,7 @@ public class RobotContainer {
     private final ShootStop shootStop = new ShootStop(m_shooter);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
+    private final IndexerStop indexerStop = new IndexerStop(m_indexer);
     private final BallSpitter ballSpitter2 = new BallSpitter(m_indexer);
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, null, m_shooter);
     private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_hood, m_indexer);
@@ -89,7 +91,7 @@ public class RobotContainer {
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
-   
+   private final ReactToColor reactToColor = new ReactToColor(m_indexer);
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -139,8 +141,10 @@ public class RobotContainer {
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-        m_indexer.setDefaultCommand(colorSorter);
+        m_indexer.setDefaultCommand(indexerStop);
+        m_indexer.setDefaultCommand(reactToColor);
        // m_indexer.setDefaultCommand(indexBalls);
+       //m_indexer.setDefaultCommand();
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
 
@@ -149,7 +153,11 @@ public class RobotContainer {
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
-                .whileHeld(swerveXPattern);
+                .whileHeld(m_indexer::feedShooter);
+        new Button(brendanController::getAButton)
+                .whileHeld(deployIntake);
+        new Button(brendanController::getYButton)
+                .whileHeld(reactToColor);
         //new Button(brendanController::getAButton)
                // .whileHeld(pointTowardsHub);
                 //low goal dump on Y
@@ -185,8 +193,6 @@ public class RobotContainer {
                 .whileHeld(indexerUnjam);
         new POVButton(brendanController, 90)
                 .whileHeld(ballSpitter2);
-        new Button(brendanController::getYButton)
-                .whileHeld(deployIntake);
         /*new Button(brendanController::getBButton)
                 .whileHeld(deployIntake);
         new Button(programmingController::getXButton)
