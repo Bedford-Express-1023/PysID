@@ -26,9 +26,16 @@ import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Climber.ClimberUnlock;
 import frc.robot.commands.Indexer.BallSpitter;
+import frc.robot.commands.Indexer.BallSpitter2Sec;
 import frc.robot.commands.Indexer.BallSpitterStop;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.IndexBalls;
+import frc.robot.commands.Indexer.ColorPicker;
+import frc.robot.commands.Indexer.ColorSorter;
+import frc.robot.commands.Indexer.IndexBalls;
+import frc.robot.commands.Indexer.IndexerStop;
+import frc.robot.commands.Indexer.IndexerUnjam;
+import frc.robot.commands.Indexer.ReactToColor;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Intake.UnjamIntake;
@@ -57,6 +64,7 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
+    public final SendableChooser<Command> teamColorChooser = new SendableChooser<Command>();
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
     private final ClimbStop climbStop = new ClimbStop(m_climber);
@@ -76,20 +84,25 @@ public class RobotContainer {
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final AutoShootCommand autoShootCommand = new AutoShootCommand(m_hood, m_shooter, m_indexer);
     private final UnjamIntake unjamIntake = new UnjamIntake(m_intake);
+    private final ColorSorter colorSorter = new ColorSorter(m_indexer);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootStop shootStop = new ShootStop(m_shooter);
     private final SetHoodPositionAuto setHoodPositionAuto = new SetHoodPositionAuto(m_hood);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
     private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_hood, m_shooter);
+    private final IndexerStop indexerStop = new IndexerStop(m_indexer);
+    private final ShootOnce shootOnce = new ShootOnce(m_indexer, null, m_shooter);
     private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_hood, m_indexer);
     private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
                         m_drivetrain, m_indexer, m_shooter, m_intake);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final Command gyroscope180 = new Gyroscope180(m_drivetrain);
+    private final ReactToColor reactToColor = new ReactToColor(m_indexer);
     private final Command threeBallTesting = new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood);
     private final ShooterTuningCommand shooterTuningCommand = new ShooterTuningCommand(m_shooter, m_hood);
+
 
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
@@ -113,7 +126,9 @@ public class RobotContainer {
 
 
         SmartDashboard.putData(autoChooser);
-       
+
+      
+
         autoDelay.setDefaultOption("none", new WaitCommand(0.0));
         autoDelay.addOption("1.0", new WaitCommand(1.0));
         autoDelay.addOption("2.0", new WaitCommand(2.0));
@@ -138,23 +153,16 @@ public class RobotContainer {
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-        m_indexer.setDefaultCommand(indexBalls);
+        m_indexer.setDefaultCommand(indexerStop);
+        m_indexer.setDefaultCommand(reactToColor);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
         m_hood.setDefaultCommand(setHoodPositionAuto);
-
-        new Button(brendanController::getBButton)
-                .whileHeld(deployIntake);
+      
+        new Button(brendanController::getBButtonPressed)
+                .whenPressed(m_drivetrain::zeroGyroscope);
         new Button(brendanController::getXButton)
-                .whileHeld(m_indexer::feedShooter);
-        new Button(brendanController::getAButton)
-                .whileHeld(pointTowardsHub);
-        new Button(brendanController::getYButton)
-                .whileHeld(autoShootCommand);
-        //new Button(brendanController::getYButton)
-        //      .whileHeld(shooterTuningCommand);
-                //low goal dump on Y
-
+                .whileHeld(indexerUnjam);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
@@ -172,42 +180,10 @@ public class RobotContainer {
         new Button(oliviaController::getStartButton)
                 .toggleWhenPressed(climberUnlock, true);
 
-        /*new POVButton(brendanController, 0)
-                .whileHeld(shootAtFender);
-        new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
-                .whileHeld(shootAtFender);
-        new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
-                .whileHeld(pointTowardsHub);
-        new Button(() -> brendanController.getRightBumper())
-                .whileHeld(shootAtLaunchpad);
-        new Button(() -> brendanController.getRightBumper())
-                .whileHeld(pointTowardsHub);*/
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(autoShootCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
-        /*new POVButton(brendanController, 270)
-                .whileHeld(indexerUnjam);
-        new Button(brendanController::getBButton)
-                .whileHeld(deployIntake);
-        new Button(programmingController::getXButton)
-                .whileHeld(indexerUnjam);
-        new Button(programmingController::getYButton)
-                .whenPressed(m_hood::hoodPositionReset);*/
-        new Button(programmingController::getXButton)
-                .whileHeld(shooterTuningCommand);
-        new Button(programmingController::getAButton)
-                .whileHeld(deployIntake);
-        new Button(programmingController::getAButton)
-                .whenReleased(stowIntake);
-        new Button(programmingController::getBButton)
-                .whileHeld(m_indexer::indexerUnjam);
-        new Button(programmingController::getLeftBumper)
-                .whileHeld(pointTowardsHub);
-        new Button(programmingController::getRightBumper)
-                .whileHeld(m_indexer::feedShooter);
-        new Button(programmingController::getRightBumper)
-                .whenReleased(m_indexer::indexerStop);
     }
 
     private static double deadband(double value, double deadband) {
