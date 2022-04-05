@@ -35,7 +35,7 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodPositionLaunchpad = 155;
   private double hoodPositionLowGoal = 100;
   double limelightY;
-  double hoodTargetPosition;
+  double hoodTargetPosition = 75;
   double hoodPositionAuto;
 
   /** Creates a new HoodSubsystem. */
@@ -121,6 +121,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   public void setHoodPositionAuto(){
+    limelightGetY();
     hoodPositionAuto = Constants.TargetConstants.HOOD_INTERPOLATOR.getInterpolatedValue(limelightY);
     hoodPIDController.setReference(hoodPositionAuto, ControlType.kPosition);
   }
@@ -132,7 +133,7 @@ public class HoodSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Current Hood Position", hoodEncoder.getPosition());
-    hoodTargetPosition = SmartDashboard.getNumber("Hood Position (Tuning, range 0-238)", 0);
+    SmartDashboard.getNumber("Hood Position (Tuning, range 0-238)", 0);
     // This method will be called once per scheduler run
   }
 }

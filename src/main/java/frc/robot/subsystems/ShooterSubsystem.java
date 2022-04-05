@@ -41,8 +41,8 @@ public class ShooterSubsystem extends SubsystemBase {
   double limelightHasTarget;
   double shooterTopTargetVelocity;
   double shooterBottomTargetVelocity;
-  double bottomTarget;
-  double topTarget;
+  double bottomTarget = 10000;
+  double topTarget = 7800;
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -51,135 +51,140 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterBottomTalon.setNeutralMode(NeutralMode.Coast);
     shooterBottomTalon.setInverted(false);
     shooterBottomTalon.configSupplyCurrentLimit(
-      new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
+        new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
     shooterTopTalon.configAllSettings(flywheelTalonConfig);
     shooterTopTalon.setNeutralMode(NeutralMode.Coast);
     shooterTopTalon.setInverted(true);
     shooterTopTalon.configSupplyCurrentLimit(
-      new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
+        new SupplyCurrentLimitConfiguration(true, 30, 35, 0.5));
 
     shooterBottomTalon.configSelectedFeedbackSensor(
-      TalonFXFeedbackDevice.IntegratedSensor, // Sensor Type 
-      Constants.shooterPID,      // PID Index
-      Constants.shooterTimeout);      // Config Timeout
+        TalonFXFeedbackDevice.IntegratedSensor, // Sensor Type
+        Constants.shooterPID, // PID Index
+        Constants.shooterTimeout); // Config Timeout
 
     shooterBottomTalon.config_kP(Constants.SLOT_0, Constants.kBottomGains.kP, Constants.shooterTimeout);
-		shooterBottomTalon.config_kI(Constants.SLOT_0, Constants.kBottomGains.kI, Constants.shooterTimeout);
-		shooterBottomTalon.config_kD(Constants.SLOT_0, Constants.kBottomGains.kD, Constants.shooterTimeout);
-		shooterBottomTalon.config_kF(Constants.SLOT_0, Constants.kBottomGains.kF, Constants.shooterTimeout);
+    shooterBottomTalon.config_kI(Constants.SLOT_0, Constants.kBottomGains.kI, Constants.shooterTimeout);
+    shooterBottomTalon.config_kD(Constants.SLOT_0, Constants.kBottomGains.kD, Constants.shooterTimeout);
+    shooterBottomTalon.config_kF(Constants.SLOT_0, Constants.kBottomGains.kF, Constants.shooterTimeout);
 
     shooterTopTalon.config_kP(Constants.SLOT_0, Constants.kTopGains.kP, Constants.shooterTimeout);
-		shooterTopTalon.config_kI(Constants.SLOT_0, Constants.kTopGains.kI, Constants.shooterTimeout);
-		shooterTopTalon.config_kD(Constants.SLOT_0, Constants.kTopGains.kD, Constants.shooterTimeout);
-		shooterTopTalon.config_kF(Constants.SLOT_0, Constants.kTopGains.kF, Constants.shooterTimeout);
-    
+    shooterTopTalon.config_kI(Constants.SLOT_0, Constants.kTopGains.kI, Constants.shooterTimeout);
+    shooterTopTalon.config_kD(Constants.SLOT_0, Constants.kTopGains.kD, Constants.shooterTimeout);
+    shooterTopTalon.config_kF(Constants.SLOT_0, Constants.kTopGains.kF, Constants.shooterTimeout);
+
     shooterTopTalon.setInverted(TalonFXInvertType.OpposeMaster);
   }
 
-  public void shooterRunAtFenderVelocity(){
+  public void shooterRunAtFenderVelocity() {
     shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterFenderRPM);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterFenderRPM);
   }
 
-  public void shooterRunAtTarmacVelocity(){
+  public void shooterRunAtTarmacVelocity() {
     shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterTarmacRPM);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterTarmacRPM);
   }
 
-  public void shooterRunAtLaunchpadVelocity(){
+  public void shooterRunAtLaunchpadVelocity() {
     shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterLaunchpadRPM);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterLaunchpadRPM);
   }
 
-  public void shooterRunAtLowGoalVelocity(){
+  public void shooterRunAtLowGoalVelocity() {
     shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomShooterLowGoalRPM);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topShooterLowGoalRPM);
   }
 
-  public double getBottomShooterVelocity(ShooterSubsystem shooterSubsystem){
+  public double getBottomShooterVelocity(ShooterSubsystem shooterSubsystem) {
     bottomShooterCurrentVelocity = shooterBottomTalon.getSelectedSensorVelocity();
     return bottomShooterCurrentVelocity;
   }
 
-  public boolean shooterReadyFender(){
-  if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterFenderRPM - 400 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterFenderRPM + 400){
+  public boolean shooterReadyFender() {
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterFenderRPM - 400 &&
+        shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterFenderRPM + 400) {
       return true;
-    }
-  else {
-    return false;
-    } 
-  }
-
-  public boolean shooterReadyTarmac(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterTarmacRPM - 400 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterTarmacRPM + 400){
-      return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
-  public boolean shooterReadyLaunchpad(){
-    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 400 && 
-            shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 400){
+  public boolean shooterReadyTarmac() {
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterTarmacRPM - 400 &&
+        shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterTarmacRPM + 400) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
-  public boolean shooterReadyLowGoal(){
+  public boolean shooterReadyLaunchpad() {
+    if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLaunchpadRPM - 400 &&
+        shooterBottomTalon.getSelectedSensorVelocity() < bottomShooterLaunchpadRPM + 400) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean shooterReadyLowGoal() {
     if (shooterBottomTalon.getSelectedSensorVelocity() > bottomShooterLowGoalRPM - 400 &&
-          shooterBottomTalon.getSelectedSensorVelocity() < topShooterLowGoalRPM + 400){
+        shooterBottomTalon.getSelectedSensorVelocity() < topShooterLowGoalRPM + 400) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
-  public void shootStop(){
+  public void shootStop() {
     shooterBottomTalon.stopMotor();
     shooterTopTalon.stopMotor();
   }
 
-  public double limelightGetY(){
+  public double limelightGetY() {
     limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     return limelightY;
   }
 
-  public double limelightHasTarget(){
+  public double limelightHasTarget() {
     limelightHasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     return limelightHasTarget;
   }
 
-  public void setShooterSpeedsAuto(){
-    shooterTopTargetVelocity = Constants.TargetConstants.SHOOTER_TOP_SPEED_INTERPOLATOR.getInterpolatedValue(limelightY);
-    shooterBottomTargetVelocity = Constants.TargetConstants.SHOOTER_BOTTOM_SPEED_INTERPOLATOR.getInterpolatedValue(limelightY);
+  public void setShooterSpeedsAuto() {
+    shooterTopTargetVelocity = Constants.TargetConstants.SHOOTER_TOP_SPEED_INTERPOLATOR
+        .getInterpolatedValue(limelightY);
+    shooterBottomTargetVelocity = Constants.TargetConstants.SHOOTER_BOTTOM_SPEED_INTERPOLATOR
+        .getInterpolatedValue(limelightY);
     shooterTopTalon.set(TalonFXControlMode.Velocity, shooterTopTargetVelocity);
     shooterBottomTalon.set(TalonFXControlMode.Velocity, shooterBottomTargetVelocity);
   }
 
-  public void shooterTuningSpeeds(){
+  public void shooterTuningSpeeds() {
     shooterBottomTalon.set(TalonFXControlMode.Velocity, bottomTarget);
     shooterTopTalon.set(TalonFXControlMode.Velocity, topTarget);
   }
-  
+
   @Override
   public void periodic() {
-    //SmartDashboard.putNumber("Shooter Velocity Bottom", shooterBottomTalon.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("Shooter Velocity Bottom",
+    // shooterBottomTalon.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Limelight Y", limelightGetY());
-    /*SmartDashboard.putNumber("Shooter Top Target Speed", shooterTopTargetVelocity);
-    SmartDashboard.putNumber("Shooter Top Actual Speed", shooterTopTalon.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Shooter Bottom Target Speed", shooterBottomTargetVelocity);
-    SmartDashboard.putNumber("Shooter Bottom Actual Speed", shooterBottomTalon.getSelectedSensorVelocity());*/
+    /*
+     * SmartDashboard.putNumber("Shooter Top Target Speed",
+     * shooterTopTargetVelocity);
+     * SmartDashboard.putNumber("Shooter Top Actual Speed",
+     * shooterTopTalon.getSelectedSensorVelocity());
+     * SmartDashboard.putNumber("Shooter Bottom Target Speed",
+     * shooterBottomTargetVelocity);
+     * SmartDashboard.putNumber("Shooter Bottom Actual Speed",
+     * shooterBottomTalon.getSelectedSensorVelocity());
+     */
     SmartDashboard.putNumber("Limelight has target", limelightHasTarget());
-    bottomTarget = SmartDashboard.getNumber("Shooter Bottom Speed (Tuning)", 0);
-    topTarget = SmartDashboard.getNumber("Shooter Top Speed (Tuning)", 0);
+    SmartDashboard.getNumber("Shooter Bottom Speed (Tuning)", 0);
+    SmartDashboard.getNumber("Shooter Top Speed (Tuning)", 0);
     // This method will be called once per scheduler run
   }
-} 
+}

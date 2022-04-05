@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,14 +29,18 @@ import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Climber.ClimberUnlock;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.BallSpitterStop;
+import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Indexer.IndexerUnjam;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Intake.UnjamIntake;
+import frc.robot.commands.Shooter.AutoShootTime;
+import frc.robot.commands.Shooter.HoodReturnToZero;
 import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootAtLaunchpad;
 import frc.robot.commands.Shooter.ShootAtTarmac;
+import frc.robot.commands.Shooter.ShootAuto;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.commands.Shooter.ShooterTuningCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -62,19 +68,21 @@ public class RobotContainer {
     private final ShootAtTarmac shootAtTarmac = new ShootAtTarmac(m_shooter, m_hood, m_indexer);
     private final ShootAtLaunchpad shootAtLaunchpad = new ShootAtLaunchpad(m_shooter, m_hood, m_indexer);
     private final TwoBallAtTarmac twoBallAtTarmac = new TwoBallAtTarmac(m_drivetrain, m_intake, m_shooter, m_hood, m_indexer);
-
+    private final HoodReturnToZero hoodReturnToZero = new HoodReturnToZero(m_hood);
     private final StowIntake stowIntake = new StowIntake(m_intake);
+    private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final IndexBalls indexBalls = new IndexBalls(m_indexer);
-    private final IndexerUnjam indexerUnjam = new IndexerUnjam(m_indexer);
+    private final ShootAuto shootAuto = new ShootAuto(m_hood, m_shooter);
     private final BallSpitter ballSpitter = new BallSpitter(m_indexer);
     private final BallSpitterStop ballSpitterStop = new BallSpitterStop(m_indexer);
     private final DeployIntake deployIntake = new DeployIntake(m_intake);
     private final UnjamIntake unjamIntake = new UnjamIntake(m_intake);
     private final SwerveXPattern swerveXPattern = new SwerveXPattern(m_drivetrain);
     private final ShootStop shootStop = new ShootStop(m_shooter);
+    private final AutoShootTime autoShoot = new AutoShootTime(m_hood, m_shooter, m_indexer);
     private final DriveBack driveBack= new DriveBack(m_drivetrain);
     private final DoNothing doNothing = new DoNothing();
-    private final ShootOnce shootOnce = new ShootOnce(m_indexer, null, m_shooter);
+    private final ShootOnce shootOnce = new ShootOnce(m_indexer, m_hood, m_shooter);
     private final ShootAndDoNothing shootAndDoNothing = new ShootAndDoNothing(m_shooter, m_hood, m_indexer);
     private final ShootOneAndDriveBack shootOneAndDriveBack = new ShootOneAndDriveBack(m_drivetrain, m_indexer, m_shooter);
     private final ShootOneDriveBackAndGetOne shootOneDriveBackAndGetOne = new ShootOneDriveBackAndGetOne(
@@ -133,23 +141,23 @@ public class RobotContainer {
         
         m_intake.setDefaultCommand(stowIntake);
         m_indexer.setDefaultCommand(indexBalls);
-        m_shooter.setDefaultCommand(shooterTuningCommand);
+        m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
+        m_hood.setDefaultCommand(hoodReturnToZero);
 
-        new Button(brendanController::getBButtonPressed)
-                .whenPressed(m_drivetrain::zeroGyroscope);
+        new Button(brendanController::getBButton)
+                .whileHeld(deployIntake);
         new Button(brendanController::getXButton)
-                .whileHeld(indexerUnjam);
-        new Button(brendanController::getXButton)
-                .whileHeld(unjamIntake);
+                .whileHeld(m_indexer::feedShooter);
         new Button(brendanController::getAButton)
                 .whileHeld(pointTowardsHub);
+        new Button(brendanController::getYButton)
+                .whileHeld(autoShoot);
                 //low goal dump on Y
      
         new Button(oliviaController::getXButton)
-                .whileHeld(indexerUnjam);
-        new Button(oliviaController::getXButton)
-                .whileHeld(unjamIntake);
+                .whileHeld(feedShooter);
+
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
                 .whenReleased(indexBalls);
         new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
@@ -198,7 +206,7 @@ public class RobotContainer {
         new Button(programmingController::getAButton)
                 .whenReleased(stowIntake);
         new Button(programmingController::getBButton)
-                .whileHeld(indexerUnjam);
+                .whileHeld(m_indexer::indexerUnjam);
         new Button(programmingController::getLeftBumper)
                 .whileHeld(pointTowardsHub);
         new Button(programmingController::getRightBumper)
