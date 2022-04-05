@@ -8,9 +8,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+
+import org.decimal4j.util.DoubleRounder;
+
 import static com.revrobotics.CANSparkMax.SoftLimitDirection.*;
 import static com.revrobotics.CANSparkMax.ControlType.*;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.*;
+
+import java.text.DecimalFormat;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +26,8 @@ public class HoodSubsystem extends SubsystemBase {
   private final CANSparkMax hood = new CANSparkMax(34, kBrushless);
   private RelativeEncoder hoodEncoder;
   private SparkMaxPIDController hoodPIDController;
+
+  DecimalFormat decimalFormat = new DecimalFormat("#.#");
 
   private double kP = 2; 
   private double kI = 0;
@@ -35,6 +42,7 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodPositionLaunchpad = 155;
   private double hoodPositionLowGoal = 100;
   double limelightY;
+  double roundLimelightY;
   double hoodTargetPosition = 75;
   double hoodPositionAuto;
 
@@ -117,12 +125,13 @@ public class HoodSubsystem extends SubsystemBase {
 
   public double limelightGetY(){
     limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-    return limelightY;
+    roundLimelightY = DoubleRounder.round(limelightY, 1);
+    return roundLimelightY;
   }
 
   public void setHoodPositionAuto(){
     limelightGetY();
-    hoodPositionAuto = Constants.TargetConstants.HOOD_INTERPOLATOR.getInterpolatedValue(limelightY);
+    hoodPositionAuto = Constants.TargetConstants.HOOD_INTERPOLATOR.getInterpolatedValue(roundLimelightY);
     hoodPIDController.setReference(hoodPositionAuto, ControlType.kPosition);
   }
 

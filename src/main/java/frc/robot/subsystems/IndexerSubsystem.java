@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -122,6 +123,7 @@ public class IndexerSubsystem extends SubsystemBase {
     else {
       spitterBeamBreakState = false;
     }
+    SmartDashboard.putBoolean("Top Beam Break State", shooterBeamBreakState);
 
   }
 }

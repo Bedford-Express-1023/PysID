@@ -12,6 +12,9 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import org.decimal4j.truncate.DecimalRounding;
+import org.decimal4j.util.DoubleRounder;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,6 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
   double shooterBottomTargetVelocity;
   double bottomTarget = 10000;
   double topTarget = 7800;
+  double roundLimelightY;
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -138,6 +142,16 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public boolean shooterReadyAuto(){
+    if (shooterBottomTalon.getSelectedSensorVelocity() > shooterBottomTargetVelocity - 400
+        && shooterBottomTalon.getSelectedSensorVelocity() < shooterBottomTargetVelocity + 400){
+          return true;
+        }
+    else {
+      return false;
+    }
+  }
+
   public void shootStop() {
     shooterBottomTalon.stopMotor();
     shooterTopTalon.stopMotor();
@@ -145,7 +159,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double limelightGetY() {
     limelightY = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-    return limelightY;
+    roundLimelightY = DoubleRounder.round(limelightY, 1);
+    return roundLimelightY;
   }
 
   public double limelightHasTarget() {
@@ -155,9 +170,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setShooterSpeedsAuto() {
     shooterTopTargetVelocity = Constants.TargetConstants.SHOOTER_TOP_SPEED_INTERPOLATOR
-        .getInterpolatedValue(limelightY);
+        .getInterpolatedValue(roundLimelightY);
     shooterBottomTargetVelocity = Constants.TargetConstants.SHOOTER_BOTTOM_SPEED_INTERPOLATOR
-        .getInterpolatedValue(limelightY);
+        .getInterpolatedValue(roundLimelightY);
     shooterTopTalon.set(TalonFXControlMode.Velocity, shooterTopTargetVelocity);
     shooterBottomTalon.set(TalonFXControlMode.Velocity, shooterBottomTargetVelocity);
   }
@@ -169,19 +184,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Shooter Velocity Bottom",
-    // shooterBottomTalon.getSelectedSensorVelocity());
     SmartDashboard.putNumber("Limelight Y", limelightGetY());
-    /*
-     * SmartDashboard.putNumber("Shooter Top Target Speed",
-     * shooterTopTargetVelocity);
-     * SmartDashboard.putNumber("Shooter Top Actual Speed",
-     * shooterTopTalon.getSelectedSensorVelocity());
-     * SmartDashboard.putNumber("Shooter Bottom Target Speed",
-     * shooterBottomTargetVelocity);
-     * SmartDashboard.putNumber("Shooter Bottom Actual Speed",
-     * shooterBottomTalon.getSelectedSensorVelocity());
-     */
+    SmartDashboard.putNumber("Shooter Top Target Speed",
+      shooterTopTargetVelocity);
+    SmartDashboard.putNumber("Shooter Top Actual Speed",
+      shooterTopTalon.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter Bottom Target Speed",
+      shooterBottomTargetVelocity);
+    SmartDashboard.putNumber("Shooter Bottom Actual Speed",
+      shooterBottomTalon.getSelectedSensorVelocity());
+     
     SmartDashboard.putNumber("Limelight has target", limelightHasTarget());
     SmartDashboard.getNumber("Shooter Bottom Speed (Tuning)", 0);
     SmartDashboard.getNumber("Shooter Top Speed (Tuning)", 0);
