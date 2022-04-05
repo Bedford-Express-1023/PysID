@@ -145,8 +145,6 @@ public class RobotContainer {
         m_intake.setDefaultCommand(stowIntake);
         m_indexer.setDefaultCommand(indexerStop);
         m_indexer.setDefaultCommand(reactToColor);
-       // m_indexer.setDefaultCommand(indexBalls);
-       //m_indexer.setDefaultCommand();
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
 
