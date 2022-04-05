@@ -181,9 +181,9 @@ public class RobotContainer {
         new Button(() -> brendanController.getRightBumper())
                 .whileHeld(shootAtLaunchpad);
         new Button(() -> brendanController.getRightBumper())
-                .whileHeld(pointTowardsHub);
+                .whileHeld(pointTowardsHub);*/
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
-                .whileHeld(shootAtTarmac);*/
+                .whileHeld(autoShootCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
         /*new POVButton(brendanController, 270)
