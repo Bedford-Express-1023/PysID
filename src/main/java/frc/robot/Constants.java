@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.Utils.Gains;
+import frc.robot.Utils.LinearInterpolator;
 
 public class Constants {
     //////////////////////
@@ -52,4 +53,52 @@ public class Constants {
     public final static int ShooterLowRPM = 10000;
     public final static int ShooterHighRPM = 10000;
 
+    public static final class TargetConstants{
+		public static final double[][] HOOD_ARRAY = {
+				{-13,140},
+                {-8.5,165},
+                {-7.2, 150},
+				{-5.8,140},
+                {-4.2,120},
+				{-1.1,110},
+				{0,100},
+				{4.5, 97},
+				{5,90},
+				{7,80},
+				{10.7,75},
+                {17.6,50}
+			};
+
+		public static final double[][] SHOOTER_TOP_ARRAY = {
+            {17.6,7200},
+			{10.7,7800},
+			{4,10200},
+			{0.0,7800},
+			{-1.1,8300},
+			{-2.8,8700},
+            {-4.2,8200},
+			{-5.8,8400},
+            {-7.2, 8900},
+            {-8.5, 9200},
+			{-13,3540}
+		};
+
+        public static final double[][] SHOOTER_BOTTOM_ARRAY = {
+            {17.6,9800},
+			{10.7,10000},
+			{4,10200},
+			{0.0,10800},
+			{-1.1,12400},
+			{-2.8,13080},
+            {-4.2, 11900},
+			{-5.8,11500},
+            {-7.2, 11200},
+            {-8.5, 10800},
+			{-13,3540}
+        };
+
+		public static final LinearInterpolator HOOD_INTERPOLATOR = new LinearInterpolator(HOOD_ARRAY);
+		public static final LinearInterpolator SHOOTER_TOP_SPEED_INTERPOLATOR = new LinearInterpolator(SHOOTER_TOP_ARRAY);
+        public static final LinearInterpolator SHOOTER_BOTTOM_SPEED_INTERPOLATOR = new LinearInterpolator(SHOOTER_BOTTOM_ARRAY);
+    }
 }

@@ -5,7 +5,6 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class PointTowardsHub extends CommandBase {
@@ -18,7 +17,7 @@ public class PointTowardsHub extends CommandBase {
     }
     @Override
     public void initialize() {
-        LimeLightRotationPID = new PIDController(3.5, 0, 0.5);
+        LimeLightRotationPID = new PIDController(4.5, 0.1, 0.0001);
         LimeLightRotationPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 

@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -238,12 +239,12 @@ public class IndexerSubsystem extends SubsystemBase {
     else {
       spitterBeamBreakState = false;
     }
+    SmartDashboard.putBoolean("Top Beam Break State", shooterBeamBreakState);
     SmartDashboard.putString("Color", colorString);
     SmartDashboard.putString(("AllianceColor"), ColorAlliance);
     SmartDashboard.putBoolean("Color Sensor Alive?", colorSensorAliveCheck());
     SmartDashboard.putBoolean("Indexer Beam Break", indexerBeamBreakState);
     SmartDashboard.putBoolean("Spitter Beam Break", spitterBeamBreakState);
     SmartDashboard.putBoolean("Shooter Beam Break", shooterBeamBreakState);
-
   }
 }

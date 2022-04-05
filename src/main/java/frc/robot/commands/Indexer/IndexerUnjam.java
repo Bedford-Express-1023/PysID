@@ -10,8 +10,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 public class IndexerUnjam extends CommandBase {
   IndexerSubsystem m_IndexerSubsystem;
   /** Creates a new IndexerUnjam. */
-  public IndexerUnjam(IndexerSubsystem indexerSubsystem) {
-    m_IndexerSubsystem = indexerSubsystem;
+  public IndexerUnjam() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_IndexerSubsystem);
   }
