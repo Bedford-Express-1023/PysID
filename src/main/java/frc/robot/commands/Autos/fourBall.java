@@ -6,12 +6,8 @@ package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.commands.PointTowardsHub;
 import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Intake.DeployIntake;
-import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Shooter.ShootAtLaunchpad;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;

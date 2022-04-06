@@ -12,12 +12,9 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import org.decimal4j.truncate.DecimalRounding;
 import org.decimal4j.util.DoubleRounder;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,6 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
   boolean shooterReady;
 
   double limelightY;
+  double limelightX;
   double limelightHasTarget;
   double shooterTopTargetVelocity;
   double shooterBottomTargetVelocity;
@@ -144,7 +142,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean shooterReadyAuto(){
     if (shooterBottomTalon.getSelectedSensorVelocity() > shooterBottomTargetVelocity - 400
-        && shooterBottomTalon.getSelectedSensorVelocity() < shooterBottomTargetVelocity + 400){
+        && shooterBottomTalon.getSelectedSensorVelocity() < shooterBottomTargetVelocity + 400 && limelightAimReady() == true){
           return true;
         }
     else {
@@ -155,6 +153,16 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shootStop() {
     shooterBottomTalon.stopMotor();
     shooterTopTalon.stopMotor();
+  }
+
+  public boolean limelightAimReady(){
+    limelightX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    if (limelightX < 0.5 && limelightX > -0.5){
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   public double limelightGetY() {

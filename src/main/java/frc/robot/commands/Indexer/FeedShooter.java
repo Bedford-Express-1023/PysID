@@ -6,7 +6,6 @@ package frc.robot.commands.Indexer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 
 public class FeedShooter extends CommandBase {
   IndexerSubsystem m_IndexerSubsystem;

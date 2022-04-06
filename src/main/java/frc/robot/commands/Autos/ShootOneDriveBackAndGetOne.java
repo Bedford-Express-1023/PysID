@@ -4,13 +4,7 @@
 
 package frc.robot.commands.Autos;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.Gyroscope180;
-import frc.robot.commands.Indexer.IndexBalls;
-import frc.robot.commands.Intake.DeployIntake;
-import frc.robot.commands.Intake.StowIntake;
-import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;

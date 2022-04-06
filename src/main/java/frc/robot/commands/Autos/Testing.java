@@ -6,7 +6,6 @@ package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.PointTowardsHub;
-import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.subsystems.HoodSubsystem;
@@ -33,7 +32,7 @@ public class Testing extends SequentialCommandGroup {
     addCommands(
       new DriveBackFromTarmac(drivetrain).alongWith(
           new DeployIntake(intakeSubsystem).withTimeout(2.0)), 
-      new PointTowardsHub(drivetrain)/*.alongWith(
-          new ShootAtTarmac(m_shooter, m_hood, m_indexer))*/);
+      new PointTowardsHub(drivetrain).alongWith(
+          new ShootAtTarmac(m_shooter, m_hood, m_indexer)));
   }
 }

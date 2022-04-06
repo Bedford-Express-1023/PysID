@@ -28,7 +28,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.9;
+  private final double indexingSpeed = 0.8;
   
   private final I2C.Port i2cPort = I2C.Port.kOnboard;
   private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);

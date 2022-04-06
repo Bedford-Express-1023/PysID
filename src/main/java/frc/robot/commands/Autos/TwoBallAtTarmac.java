@@ -7,7 +7,6 @@ package frc.robot.commands.Autos;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.PointTowardsHub;
-import frc.robot.commands.Indexer.IndexBalls;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.subsystems.HoodSubsystem;
