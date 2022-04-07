@@ -19,6 +19,8 @@ import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
 import frc.robot.commands.Climber.ClimberUnlock;
 import frc.robot.commands.Indexer.BallSpitter;
+import frc.robot.commands.Indexer.FeedShooter;
+import frc.robot.commands.Indexer.StupidIndexer;
 import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Indexer.ReactToColor;
 import frc.robot.commands.Intake.DeployIntake;
@@ -47,6 +49,7 @@ public class RobotContainer {
     public final SendableChooser<Command> teamColorChooser = new SendableChooser<Command>();
  
     private final ClimbUp climbUp = new ClimbUp(m_climber);
+    
     private final ClimbStop climbStop = new ClimbStop(m_climber);
     private final ClimberUnlock climberUnlock = new ClimberUnlock(m_climber);
     private final ClimbLock climberLock = new ClimbLock(m_climber);
@@ -63,7 +66,8 @@ public class RobotContainer {
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
     private final ReactToColor reactToColor = new ReactToColor(m_indexer);
     private final ShooterTuningCommand shooterTuningCommand = new ShooterTuningCommand(m_shooter, m_hood);
-
+    private final StupidIndexer stupidIndexer = new StupidIndexer(m_indexer);
+    private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
     
@@ -139,6 +143,8 @@ public class RobotContainer {
                 //.whileHeld(shooterTuningCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
+        new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
+       .whileHeld(feedShooter);
     }
 
     private static double deadband(double value, double deadband) {

@@ -7,10 +7,10 @@ package frc.robot.commands.Indexer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IndexerSubsystem;
 
-public class IndexBalls extends CommandBase {
+public class StupidIndexer extends CommandBase {
   IndexerSubsystem m_IndexerSubsystem;
   /** Creates a new IndexBalls. */
-  public IndexBalls(IndexerSubsystem indexerSubsystem) {
+  public StupidIndexer(IndexerSubsystem indexerSubsystem) {
     m_IndexerSubsystem = indexerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(indexerSubsystem);

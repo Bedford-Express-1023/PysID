@@ -42,8 +42,8 @@ public class ShooterSubsystem extends SubsystemBase {
   double limelightHasTarget;
   double shooterTopTargetVelocity;
   double shooterBottomTargetVelocity;
-  double bottomTarget = 10000;
-  double topTarget = 7800;
+  double bottomTarget = 13485;
+  double topTarget = 10658;
   double roundLimelightY;
 
   /** Creates a new ShooterSubsystem. */

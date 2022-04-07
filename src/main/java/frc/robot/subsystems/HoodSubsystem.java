@@ -43,7 +43,7 @@ public class HoodSubsystem extends SubsystemBase {
   private double hoodPositionLowGoal = 100;
   double limelightY;
   double roundLimelightY;
-  double hoodTargetPosition = 75;
+double hoodTargetPosition = 180;
   double hoodPositionAuto;
 
   /** Creates a new HoodSubsystem. */
