@@ -157,7 +157,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean limelightAimReady(){
     limelightX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    if (limelightX < 0.5 && limelightX > -0.5){
+    if (limelightX < 2 && limelightX > -2){
       return true;
     }
     else {

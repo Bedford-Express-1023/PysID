@@ -28,13 +28,13 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.8;
+  private final double indexingSpeed = 0.80;
   
-  private final I2C.Port i2cPort = I2C.Port.kOnboard;
-  private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-  private final ColorMatch m_colorMatcher = new ColorMatch();
-  private final Color kBlueTarget = new Color(0.253, 0.475, 0.271);
-  private final Color kRedTarget =  new Color(0.380, 0.423, 0.196);
+ // private final I2C.Port i2cPort = I2C.Port.kOnboard;
+ // private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+ // private final ColorMatch m_colorMatcher = new ColorMatch();
+//  private final Color kBlueTarget = new Color(0.253, 0.475, 0.271);
+ // private final Color kRedTarget =  new Color(0.380, 0.423, 0.196);
 
   Color detectedColor;
   ColorMatchResult match;
@@ -52,9 +52,9 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerTopMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
     indexerFrontMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
     indexerBackMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
-    m_colorMatcher.addColorMatch(kRedTarget);
-    m_colorMatcher.addColorMatch(kBlueTarget);
-    allianceColorCheck();
+  //  m_colorMatcher.addColorMatch(kRedTarget);
+   // m_colorMatcher.addColorMatch(kBlueTarget);
+   // allianceColorCheck();
   }
   
   public void ballToShooter(){
@@ -68,20 +68,20 @@ public class IndexerSubsystem extends SubsystemBase {
       }
     }
     
-    public boolean colorSensorAliveCheck(){
-      int proximity = m_colorSensor.getProximity();
-      blue = m_colorSensor.getBlue();
-      red = m_colorSensor.getRed();
+    //public boolean colorSensorAliveCheck(){
+    //  int proximity = m_colorSensor.getProximity();
+    //  blue = m_colorSensor.getBlue();
+    //  red = m_colorSensor.getRed();
   
       
-      if((proximity == 0 && blue == 0 && red == 0)){
-        m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-        return true;
-      }
-      else { //do nothing
-        return false;
-      }
-    }
+     // if((proximity == 0 && blue == 0 && red == 0)){
+      //  m_colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+       // return true;
+    //  }
+     // else { //do nothing
+      //  return false;
+    //  }
+   // }
   
     public void ballSpitter2(){
       indexerBackMotor.set(-indexingSpeed);
@@ -91,26 +91,34 @@ public class IndexerSubsystem extends SubsystemBase {
     }
 
   public void indexBalls(){
-    if (shooterBeamBreakState == true) {
-    indexerFrontMotor.set(indexingSpeed);
-    indexerTopMotor.set(indexingSpeed);
-    indexerBackMotor.stopMotor();
-    
-    }
-    else if (indexerBeamBreakState == true && shooterBeamBreakState == false) {
+    if ( shooterBeamBreakState == true && spitterBeamBreakState == false){
       indexerFrontMotor.set(indexingSpeed);
-      indexerTopMotor.stopMotor();
+      indexerTopMotor.set(indexingSpeed);
       indexerBackMotor.stopMotor();
     }
-    else if (indexerBeamBreakState == false && shooterBeamBreakState == false) {
+    else if ( shooterBeamBreakState == true && spitterBeamBreakState == true){
+      indexerFrontMotor.set(indexingSpeed);
+      indexerTopMotor.set(indexingSpeed);
+      indexerBackMotor.stopMotor();
+    }
+    else if (shooterBeamBreakState == false && spitterBeamBreakState == true){
+      indexerFrontMotor.set(indexingSpeed);
+      indexerTopMotor.stopMotor();
+      indexerBackMotor.set(-indexingSpeed);
+    }
+    else if ( shooterBeamBreakState == false && spitterBeamBreakState == false){
       indexerFrontMotor.stopMotor();
       indexerTopMotor.stopMotor();
       indexerBackMotor.stopMotor();
     }
-    else {
-      indexerStop();
+    else if ( shooterBeamBreakState == false && spitterBeamBreakState == false && indexerBeamBreakState == false){
+      indexerFrontMotor.stopMotor();
+      indexerTopMotor.stopMotor();
+      indexerBackMotor.stopMotor();
     }
-  }
+    
+    }
+  
 
   public void ballSpitter(){
     indexerFrontMotor.set(indexingSpeed);
@@ -143,7 +151,7 @@ public class IndexerSubsystem extends SubsystemBase {
     indexerFrontMotor.stopMotor();
     indexerBackMotor.stopMotor();
   }
-
+ /*
   public void getColor(){
     if (indexerBeamBreakState == false){
       detectedColor = m_colorSensor.getColor();
@@ -182,6 +190,11 @@ public class IndexerSubsystem extends SubsystemBase {
       indexerTopMotor.stopMotor();
       indexerBackMotor.stopMotor();
     }
+    else if (colorString == ColorAlliance && shooterBeamBreakState == false && spitterBeamBreakState == false && indexerBeamBreakState == false){
+      indexerFrontMotor.stopMotor();
+      indexerTopMotor.stopMotor();
+      indexerBackMotor.stopMotor();
+    }
     else if (colorString != ColorAlliance){
       indexerTopMotor.stopMotor();
       indexerFrontMotor.set(indexingSpeed);
@@ -210,14 +223,15 @@ public class IndexerSubsystem extends SubsystemBase {
     ballSpitter2();
   }
 
+  */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    getColor();
-    colorSensorAliveCheck();
-    detectedColor = m_colorSensor.getColor();
-    match = m_colorMatcher.matchClosestColor(detectedColor);
+    //getColor();
+    //colorSensorAliveCheck();
+   // detectedColor = m_colorSensor.getColor();
+   // match = m_colorMatcher.matchClosestColor(detectedColor);
 
     if (shooterBeamBreak.get()){
       shooterBeamBreakState = true;
@@ -240,9 +254,9 @@ public class IndexerSubsystem extends SubsystemBase {
       spitterBeamBreakState = false;
     }
     SmartDashboard.putBoolean("Top Beam Break State", shooterBeamBreakState);
-    SmartDashboard.putString("Color", colorString);
-    SmartDashboard.putString(("AllianceColor"), ColorAlliance);
-    SmartDashboard.putBoolean("Color Sensor Alive?", colorSensorAliveCheck());
+   // SmartDashboard.putString("Color", colorString);
+   // SmartDashboard.putString(("AllianceColor"), ColorAlliance);
+   // SmartDashboard.putBoolean("Color Sensor Alive?", colorSensorAliveCheck());
     SmartDashboard.putBoolean("Indexer Beam Break", indexerBeamBreakState);
     SmartDashboard.putBoolean("Spitter Beam Break", spitterBeamBreakState);
     SmartDashboard.putBoolean("Shooter Beam Break", shooterBeamBreakState);

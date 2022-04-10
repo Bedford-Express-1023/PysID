@@ -24,7 +24,7 @@ public class ColorPicker extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IndexerSubsystem.getColor();
+   // m_IndexerSubsystem.getColor();
   
 
   

@@ -7,8 +7,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -16,14 +18,29 @@ public class ClimberSubsystem extends SubsystemBase {
   private final WPI_TalonFX climberRightMotor = new WPI_TalonFX(55);
   private final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
   private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
+  private final DigitalInput MotorSwitch = new DigitalInput(0);
+ 
+
+  boolean MotorSwitchState;
+  
   /** Creates a new climberSubsytem. */
   public ClimberSubsystem() {
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if (MotorSwitch.get()){
+    MotorSwitchState = false;
+    }
+  else {
+    MotorSwitchState = true;
   }
+
+  
+  SmartDashboard.putBoolean("Motor Switch", MotorSwitchState);
+ 
+  }
+   
 
   public void climberUnlock(){
     climberSolenoid.set(true);
@@ -39,8 +56,14 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void climberUp(){
     climberUnlock();
-    climberLeftMotor.set(ControlMode.PercentOutput, -0.85);
-    climberRightMotor.set(ControlMode.PercentOutput, 0.85);
+    if (MotorSwitchState == true  ){
+      climberLeftMotor.set(ControlMode.PercentOutput, -0.85);
+      climberRightMotor.set(ControlMode.PercentOutput, 0.85);
+    }
+    else if (MotorSwitchState == false ){
+      climberLeftMotor.set(ControlMode.PercentOutput, 0);
+      climberRightMotor.set(ControlMode.PercentOutput, 0);
+    }
   }
 
   public void climberDown(){
@@ -53,4 +76,9 @@ public class ClimberSubsystem extends SubsystemBase {
     climberLeftMotor.set(ControlMode.PercentOutput, 0);
     climberRightMotor.set(ControlMode.PercentOutput, 0);
   }
+
+  
+    
+  
 }
+

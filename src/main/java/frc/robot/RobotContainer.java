@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +23,7 @@ import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.StupidIndexer;
 import frc.robot.commands.Indexer.IndexerStop;
-import frc.robot.commands.Indexer.ReactToColor;
+//import frc.robot.commands.Indexer.ReactToColor;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.AutoShootCommand;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import edu.wpi.first.cameraserver.CameraServer;
 
 public class RobotContainer {
     private final SwerveDriveSubsystem m_drivetrain = new SwerveDriveSubsystem();
@@ -64,12 +66,14 @@ public class RobotContainer {
     private final DoNothing doNothing = new DoNothing();
     private final IndexerStop indexerStop = new IndexerStop(m_indexer);
     private final PointTowardsHub pointTowardsHub = new PointTowardsHub(m_drivetrain);
-    private final ReactToColor reactToColor = new ReactToColor(m_indexer);
+   // private final ReactToColor reactToColor = new ReactToColor(m_indexer);
     private final ShooterTuningCommand shooterTuningCommand = new ShooterTuningCommand(m_shooter, m_hood);
     private final StupidIndexer stupidIndexer = new StupidIndexer(m_indexer);
     private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+
+
     
     public RobotContainer() {
         m_drivetrain.register();
@@ -78,6 +82,8 @@ public class RobotContainer {
         m_indexer.register();
         m_climber.register();
         m_hood.register();
+
+        CameraServer.startAutomaticCapture(0);
 
         autoChooser.setDefaultOption("Do Nothing", doNothing);
         autoChooser.addOption("2-ball", twoBallAtTarmac);
@@ -110,10 +116,11 @@ public class RobotContainer {
         ));
         
         m_intake.setDefaultCommand(stowIntake);
-        m_indexer.setDefaultCommand(reactToColor);
+        m_indexer.setDefaultCommand(stupidIndexer);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
         m_hood.setDefaultCommand(setHoodPositionAuto);
+       
       
         new Button(brendanController::getBButtonPressed)
                 .whenPressed(m_drivetrain::zeroGyroscope);
@@ -140,6 +147,7 @@ public class RobotContainer {
 
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(autoShootCommand);
+               
                 //.whileHeld(shooterTuningCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);

@@ -17,7 +17,7 @@ public class PointTowardsHub extends CommandBase {
     }
     @Override
     public void initialize() {
-        LimeLightRotationPID = new PIDController(4.5, 0.1, 0.0001);
+        LimeLightRotationPID = new PIDController(6.5, 0.0, 0.005);
         LimeLightRotationPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
@@ -27,6 +27,10 @@ public class PointTowardsHub extends CommandBase {
         if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
             double toRotate = LimeLightRotationPID.calculate(0, -NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) * Math.PI/180);
             drivetrain.drive(new ChassisSpeeds(0, 0, toRotate + 0.2 * Math.signum(toRotate)));
+        }
+
+        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) > -1.5 && NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) < 1.5 ) {
+            drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));  
         }
     }
 

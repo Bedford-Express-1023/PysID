@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Intake.DeployIntake;
+import frc.robot.commands.Shooter.AutoShootCommand;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -23,7 +24,7 @@ public class fourBall extends SequentialCommandGroup {
 public fourBall(IntakeSubsystem intake, IndexerSubsystem indexer, SwerveDriveSubsystem drivetrain, 
 ShooterSubsystem shooter, HoodSubsystem hood) {
   addCommands(
-    new threeBall(intake, indexer, drivetrain, shooter, hood),
+    new threeBall(intake, indexer, drivetrain, shooter, hood ),
     new fourBall1(drivetrain).deadlineWith(
       new DeployIntake(intake)),
     new fourBall2(drivetrain).deadlineWith(
@@ -31,7 +32,7 @@ ShooterSubsystem shooter, HoodSubsystem hood) {
     new fourBall3(drivetrain).deadlineWith(
       new DeployIntake(intake).alongWith(new IndexerStop(indexer))), 
     new WaitCommand(0.5),
-    new ShootAtTarmac(shooter, hood, indexer)
+    new AutoShootCommand(hood, shooter, indexer)
   );
 }
 }

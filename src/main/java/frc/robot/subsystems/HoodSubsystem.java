@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
 public class HoodSubsystem extends SubsystemBase {
@@ -106,15 +107,11 @@ double hoodTargetPosition = 180;
     }
   }
 
-  public boolean hoodLowGoalCheck(){
-    if (hoodEncoder.getPosition() < (hoodPositionLowGoal + 2) && hoodEncoder.getPosition() > (hoodPositionLowGoal - 2)){
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
+  
+  
 
+  
+  
   public void hoodPositionReset(){ //use to zero hood as needed
     hoodEncoder.setPosition(0);
   }

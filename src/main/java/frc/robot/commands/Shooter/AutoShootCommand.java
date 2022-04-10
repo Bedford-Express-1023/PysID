@@ -31,7 +31,7 @@ public class AutoShootCommand extends CommandBase {
   public void execute() {
     m_hood.setHoodPositionAuto();
     m_shooter.setShooterSpeedsAuto();
-    if (m_shooter.shooterReadyAuto() == true){
+    if (m_shooter.shooterReadyAuto() == true  ){
       m_indexer.feedShooter();
     }
     else {

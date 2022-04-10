@@ -23,7 +23,7 @@ public class ReactToColor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_indexer.reactToColor();
+  //  m_indexer.reactToColor();
   }
 
   // Called once the command ends or is interrupted.
