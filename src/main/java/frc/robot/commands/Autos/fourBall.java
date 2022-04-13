@@ -21,8 +21,13 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class fourBall extends SequentialCommandGroup {
 /** Creates a new fiveBall. */
+
+
 public fourBall(IntakeSubsystem intake, IndexerSubsystem indexer, SwerveDriveSubsystem drivetrain, 
 ShooterSubsystem shooter, HoodSubsystem hood) {
+  
+  
+
   addCommands(
     new threeBall(intake, indexer, drivetrain, shooter, hood ),
     new fourBall1(drivetrain).deadlineWith(
@@ -33,6 +38,7 @@ ShooterSubsystem shooter, HoodSubsystem hood) {
       new DeployIntake(intake).alongWith(new IndexerStop(indexer))), 
     new WaitCommand(0.5),
     new AutoShootCommand(hood, shooter, indexer)
+  
   );
 }
 }

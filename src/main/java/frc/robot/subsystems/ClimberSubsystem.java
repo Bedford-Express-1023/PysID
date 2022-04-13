@@ -61,8 +61,8 @@ public class ClimberSubsystem extends SubsystemBase {
       climberRightMotor.set(ControlMode.PercentOutput, 0.85);
     }
     else if (MotorSwitchState == false ){
-      climberLeftMotor.set(ControlMode.PercentOutput, 0);
-      climberRightMotor.set(ControlMode.PercentOutput, 0);
+      climberLeftMotor.set(ControlMode.PercentOutput, -0.15);
+      climberRightMotor.set(ControlMode.PercentOutput, 0.15);
     }
   }
 
@@ -72,7 +72,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void climberOff(){
-    climberLock();
+   
     climberLeftMotor.set(ControlMode.PercentOutput, 0);
     climberRightMotor.set(ControlMode.PercentOutput, 0);
   }

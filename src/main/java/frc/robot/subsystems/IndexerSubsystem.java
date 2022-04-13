@@ -28,7 +28,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.80;
+  private final double indexingSpeed = 0.75;
   
  // private final I2C.Port i2cPort = I2C.Port.kOnboard;
  // private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -91,32 +91,57 @@ public class IndexerSubsystem extends SubsystemBase {
     }
 
   public void indexBalls(){
+    indexerFrontMotor.set(indexingSpeed);
     if ( shooterBeamBreakState == true && spitterBeamBreakState == false){
       indexerFrontMotor.set(indexingSpeed);
       indexerTopMotor.set(indexingSpeed);
       indexerBackMotor.stopMotor();
     }
-    else if ( shooterBeamBreakState == true && spitterBeamBreakState == true){
+    else if (  shooterBeamBreakState == true && spitterBeamBreakState == true){
       indexerFrontMotor.set(indexingSpeed);
       indexerTopMotor.set(indexingSpeed);
       indexerBackMotor.stopMotor();
     }
-    else if (shooterBeamBreakState == false && spitterBeamBreakState == true){
-      indexerFrontMotor.set(indexingSpeed);
-      indexerTopMotor.stopMotor();
+    else if (  shooterBeamBreakState == false && spitterBeamBreakState == true){
+     
       indexerBackMotor.set(-indexingSpeed);
+      indexerTopMotor.stopMotor();
+      indexerFrontMotor.set(indexingSpeed);
+      new WaitCommand(1);
     }
-    else if ( shooterBeamBreakState == false && spitterBeamBreakState == false){
+    else if (shooterBeamBreakState == false && spitterBeamBreakState == false){
       indexerFrontMotor.stopMotor();
       indexerTopMotor.stopMotor();
       indexerBackMotor.stopMotor();
-    }
+    }/*
     else if ( shooterBeamBreakState == false && spitterBeamBreakState == false && indexerBeamBreakState == false){
       indexerFrontMotor.stopMotor();
       indexerTopMotor.stopMotor();
       indexerBackMotor.stopMotor();
-    }
+    }*/
     
+  }
+
+  public void indexBallsForAuto(){
+    if (shooterBeamBreakState == true) {
+      indexerFrontMotor.set(indexingSpeed);
+      indexerTopMotor.set(indexingSpeed);
+      indexerBackMotor.stopMotor();
+      
+      }
+      else if (indexerBeamBreakState == true && shooterBeamBreakState == false) {
+        indexerFrontMotor.set(indexingSpeed);
+        indexerTopMotor.stopMotor();
+        indexerBackMotor.stopMotor();
+      }
+      else if (indexerBeamBreakState == false && shooterBeamBreakState == false) {
+        indexerFrontMotor.stopMotor();
+        indexerTopMotor.stopMotor();
+        indexerBackMotor.stopMotor();
+      }
+      else {
+        indexerStop();
+      }
     }
   
 

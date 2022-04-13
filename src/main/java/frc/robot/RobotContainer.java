@@ -44,7 +44,7 @@ public class RobotContainer {
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final HoodSubsystem m_hood = new HoodSubsystem();
-    private final IndexerSubsystem m_indexer = new IndexerSubsystem();
+    final IndexerSubsystem m_indexer = new IndexerSubsystem();
     private final ClimberSubsystem m_climber = new ClimberSubsystem();
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
