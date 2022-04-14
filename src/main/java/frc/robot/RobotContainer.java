@@ -18,7 +18,9 @@ import frc.robot.commands.Autos.threeBall;
 import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
+import frc.robot.commands.Climber.ClimberFall;
 import frc.robot.commands.Climber.ClimberUnlock;
+import frc.robot.commands.Indexer.BallInSpitter;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.StupidIndexer;
@@ -29,6 +31,7 @@ import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.AutoShootCommand;
 import frc.robot.commands.Shooter.HoodReturnToZero;
 import frc.robot.commands.Shooter.SetHoodPositionAuto;
+import frc.robot.commands.Shooter.ShootAtFender;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.commands.Shooter.ShooterTuningCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -45,7 +48,7 @@ public class RobotContainer {
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final HoodSubsystem m_hood = new HoodSubsystem();
     final IndexerSubsystem m_indexer = new IndexerSubsystem();
-    private final ClimberSubsystem m_climber = new ClimberSubsystem();
+    private final ClimberSubsystem m_climber = new ClimberSubsystem(this);
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
     public final SendableChooser<Command> teamColorChooser = new SendableChooser<Command>();
@@ -72,6 +75,9 @@ public class RobotContainer {
     private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
+    private final BallInSpitter ballInSpitter = new BallInSpitter(m_indexer);
+    private final ClimberFall climberFall = new ClimberFall(m_climber);
 
 
     
@@ -83,7 +89,7 @@ public class RobotContainer {
         m_climber.register();
         m_hood.register();
 
-        CameraServer.startAutomaticCapture(0);
+        //CameraServer.startAutomaticCapture(0);
 
         autoChooser.setDefaultOption("Do Nothing", doNothing);
         autoChooser.addOption("2-ball", twoBallAtTarmac);
@@ -130,8 +136,12 @@ public class RobotContainer {
                 .whileHeld(m_intake::unjamIntake);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
+        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
+                .whileHeld(ballInSpitter);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
+        new Button(oliviaController::getLeftBumper)
+                .whileHeld(climberFall);
         new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
@@ -153,6 +163,11 @@ public class RobotContainer {
                 .whileHeld(pointTowardsHub);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
        .whileHeld(feedShooter);
+       new Button(brendanController::getAButton)
+        .whileHeld(deployIntake);
+
+       new POVButton(brendanController, 0)
+       .whileHeld(shootAtFender);
     }
 
     private static double deadband(double value, double deadband) {

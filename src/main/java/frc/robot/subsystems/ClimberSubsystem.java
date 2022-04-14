@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class ClimberSubsystem extends SubsystemBase {
 
@@ -19,12 +20,14 @@ public class ClimberSubsystem extends SubsystemBase {
   private final WPI_TalonFX climberLeftMotor = new WPI_TalonFX(56);
   private final Solenoid climberSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 4);
   private final DigitalInput MotorSwitch = new DigitalInput(0);
+  private final RobotContainer m_robotContainer;
  
 
   boolean MotorSwitchState;
   
   /** Creates a new climberSubsytem. */
-  public ClimberSubsystem() {
+  public ClimberSubsystem(RobotContainer robotContainer) {
+    m_robotContainer = robotContainer;
   }
 
   @Override
@@ -63,8 +66,11 @@ public class ClimberSubsystem extends SubsystemBase {
     else if (MotorSwitchState == false ){
       climberLeftMotor.set(ControlMode.PercentOutput, -0.15);
       climberRightMotor.set(ControlMode.PercentOutput, 0.15);
+
     }
   }
+
+  
 
   public void climberDown(){
     climberLeftMotor.set(ControlMode.PercentOutput, -0.85);

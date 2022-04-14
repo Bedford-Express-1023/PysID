@@ -6,6 +6,7 @@ package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.PointTowardsHub;
+import frc.robot.commands.Indexer.BallInSpitter;
 import frc.robot.commands.Indexer.StupidIndexer;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Shooter.AutoShootCommand;
@@ -27,9 +28,10 @@ public class threeBall extends SequentialCommandGroup {
       new threeBall1(drivetrain).deadlineWith(
         new DeployIntake(intake),
         new StupidIndexer(indexer)), 
-      new AutoShootCommand(hood, shooter, indexer).withTimeout(3).deadlineWith(
+      new ShootAtTarmac(shooter, hood, indexer).withTimeout(3.5).deadlineWith(
         new PointTowardsHub(drivetrain), 
-        new DeployIntake(intake).withTimeout(2)));
-  
+        new DeployIntake(intake).withTimeout(2)),
+      new BallInSpitter(indexer).withTimeout(1),
+      new ShootAtTarmac(shooter, hood, indexer).withTimeout(1.5));
   }
 }

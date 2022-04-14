@@ -9,6 +9,7 @@ import java.util.List;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -33,7 +34,17 @@ public class DriveBackFromTarmac extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(drivetrain.driveController.calculate(drivetrain.getRealOdometry(), driveTrajectory.sample(timer), driveTrajectory.sample(timer).poseMeters.getRotation()));
+    drivetrain.updateOdometry();
+    SwerveModuleState[] states = drivetrain.kinematics.toSwerveModuleStates(
+      drivetrain.driveController.calculate( 
+      drivetrain.getRealOdometry(),
+      driveTrajectory.sample(timer),
+      driveTrajectory.sample(timer).poseMeters.getRotation()));
+    
+      drivetrain.frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
+      drivetrain.frontRightModule.set(states[1].speedMetersPerSecond, states[1].angle.getRadians());
+      drivetrain.backLeftModule.set(states[2].speedMetersPerSecond, states[2].angle.getRadians()); 
+      drivetrain.backRightModule.set(states[3].speedMetersPerSecond, states[3].angle.getRadians()); 
     timer += 0.02;
   }
 
