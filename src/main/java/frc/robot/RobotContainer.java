@@ -77,7 +77,7 @@ public class RobotContainer {
     private final XboxController oliviaController = new XboxController(1);
     private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
     private final BallInSpitter ballInSpitter = new BallInSpitter(m_indexer);
-    private final ClimberFall climberFall = new ClimberFall(m_climber);
+    private final ClimberFall climberFall = new ClimberFall();
 
 
     
