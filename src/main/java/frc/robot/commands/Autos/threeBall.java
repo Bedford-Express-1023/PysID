@@ -31,7 +31,7 @@ public class threeBall extends SequentialCommandGroup {
       new ShootAtTarmac(shooter, hood, indexer).withTimeout(3.5).deadlineWith(
         new PointTowardsHub(drivetrain), 
         new DeployIntake(intake).withTimeout(2)),
-      new BallInSpitter(indexer).withTimeout(1),
-      new ShootAtTarmac(shooter, hood, indexer).withTimeout(1.5));
+      new BallInSpitter(indexer).withTimeout(0.5),
+      new ShootAtTarmac(shooter, hood, indexer).withTimeout(1));
   }
 }

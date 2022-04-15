@@ -7,12 +7,12 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HoodSubsystem;
 
-public class SetHoodPositionAuto extends CommandBase {
-  HoodSubsystem m_hood;
-  /** Creates a new SetHoodPositionAuto. */
-  public SetHoodPositionAuto(HoodSubsystem hoodSubsystem) {
-    m_hood = hoodSubsystem;
-    addRequirements(m_hood);
+public class HoodReturnToDefault extends CommandBase {
+  HoodSubsystem m_HoodSubsystem;
+  /** Creates a new HoodReturnToDefault. */
+  public HoodReturnToDefault(HoodSubsystem hoodSubsystem) {
+     m_HoodSubsystem = hoodSubsystem;
+    addRequirements(m_HoodSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,14 +23,12 @@ public class SetHoodPositionAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_hood.setHoodPositionAuto();
+    m_HoodSubsystem.hoodReturnToDefault();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_hood.hoodReturnToDefault();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

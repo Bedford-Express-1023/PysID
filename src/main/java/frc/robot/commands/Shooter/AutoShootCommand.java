@@ -47,7 +47,7 @@ public class AutoShootCommand extends CommandBase {
     public void end(boolean interrupted) {
       m_indexer.indexBalls();
       m_shooter.shootStop();
-      m_hood.setHoodPositionAuto();
+      m_hood.hoodReturnToDefault();
     }
   
     // Returns true when the command should end.

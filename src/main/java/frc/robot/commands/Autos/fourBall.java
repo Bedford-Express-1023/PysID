@@ -29,7 +29,7 @@ ShooterSubsystem shooter, HoodSubsystem hood) {
   
 
   addCommands(
-    new threeBall(intake, indexer, drivetrain, shooter, hood ),
+    new threeBall(intake, indexer, drivetrain, shooter, hood),
     new fourBall1(drivetrain).deadlineWith(
       new DeployIntake(intake)),
     new fourBall2(drivetrain).deadlineWith(
@@ -38,7 +38,6 @@ ShooterSubsystem shooter, HoodSubsystem hood) {
       new DeployIntake(intake).alongWith(new IndexerStop(indexer))), 
     new WaitCommand(0.5),
     new AutoShootCommand(hood, shooter, indexer)
-  
   );
 }
 }

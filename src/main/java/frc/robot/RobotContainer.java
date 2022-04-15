@@ -125,7 +125,7 @@ public class RobotContainer {
         m_indexer.setDefaultCommand(stupidIndexer);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
-        m_hood.setDefaultCommand(setHoodPositionAuto);
+       
        
       
         new Button(brendanController::getBButtonPressed)
@@ -157,6 +157,7 @@ public class RobotContainer {
 
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(autoShootCommand);
+               
                
                 //.whileHeld(shooterTuningCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
