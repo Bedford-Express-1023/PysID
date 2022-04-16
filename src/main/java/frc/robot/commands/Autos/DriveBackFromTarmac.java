@@ -20,7 +20,7 @@ import frc.robot.subsystems.SwerveDriveSubsystem;
 public class DriveBackFromTarmac extends CommandBase {
   /** Creates a new DriveBackFromTarmac. */
   SwerveDriveSubsystem drivetrain;
-  private final Trajectory driveTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(2.8, 0.5)), new Pose2d(2.8, 0.0, new Rotation2d(0)), new TrajectoryConfig(7, 3));
+  private final Trajectory driveTrajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), List.of(/*new Translation2d(2.8, 0.5)*/), new Pose2d(2.8, 0.0, new Rotation2d(0)), new TrajectoryConfig(7, 3));
   private double timer = 0;
 
   public DriveBackFromTarmac(SwerveDriveSubsystem drivetrain) {
@@ -53,6 +53,11 @@ public class DriveBackFromTarmac extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+    drivetrain.frontLeftModule.set(0,0);
+    drivetrain.frontRightModule.set(0,0);
+    drivetrain.backLeftModule.set(0,0);
+    drivetrain.backRightModule.set(0,0);
+
     timer = 0;
   }
 

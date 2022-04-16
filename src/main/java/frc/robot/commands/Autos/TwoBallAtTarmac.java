@@ -31,7 +31,6 @@ public class TwoBallAtTarmac extends SequentialCommandGroup {
       new DriveBackFromTarmac(drivetrain).alongWith(
         new DeployIntake(intakeSubsystem).withTimeout(2.0)),
       new PointTowardsHub(drivetrain).alongWith(
-        new AutoShootCommand(m_hood, m_shooter, m_indexer)).withTimeout(7),
-      new Gyroscope180(drivetrain));
+        new ShootAtTarmac(m_shooter, m_hood, m_indexer)).withTimeout(7));
   }
 }
