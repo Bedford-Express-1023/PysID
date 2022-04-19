@@ -29,7 +29,7 @@ public class IndexerSubsystem extends SubsystemBase {
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
   private final double indexingSpeed = 0.7;
-  private final double frontIndexingSpeed = 0.6;
+  private final double frontIndexingSpeed = 0.5;
   private final double spitterIndexingSpeed = -0.55;
   
  // private final I2C.Port i2cPort = I2C.Port.kOnboard;

@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -78,6 +79,9 @@ public class RobotContainer {
     private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
     private final BallInSpitter ballInSpitter = new BallInSpitter(m_indexer);
     private final ClimberFall climberFall = new ClimberFall();
+    private final SlewRateLimiter slewX = new SlewRateLimiter(6);
+    private final SlewRateLimiter slewY = new SlewRateLimiter(6);
+
 
 
     
@@ -113,8 +117,8 @@ public class RobotContainer {
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
-                () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
-                () -> -modifyAxis(brendanController.getLeftX()),
+                () -> -modifyAxis(slewY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
+                () -> -modifyAxis(slewX.calculate(brendanController.getLeftX())),
                 () -> -modifyAxis(brendanController.getRightX()),
                 () -> brendanController.getLeftBumper(), //RobotCentric
                 () -> brendanController.getRightBumper(), //lowPower

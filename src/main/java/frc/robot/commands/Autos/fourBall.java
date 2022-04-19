@@ -6,6 +6,8 @@ package frc.robot.commands.Autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Indexer.BallInSpitter;
+import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.IndexerStop;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Shooter.AutoShootCommand;
@@ -31,7 +33,8 @@ ShooterSubsystem shooter, HoodSubsystem hood) {
   addCommands(
     new threeBall(intake, indexer, drivetrain, shooter, hood),
     new fourBall1(drivetrain).deadlineWith(
-      new DeployIntake(intake)),
+      new DeployIntake(intake),
+      new BallInSpitter(indexer)),
     new fourBall2(drivetrain).deadlineWith(
       new DeployIntake(intake)),
     new fourBall3(drivetrain).deadlineWith(
