@@ -116,8 +116,12 @@ double hoodTargetPosition = 180;
     hoodEncoder.setPosition(0);
   }
 
-  public void hoodReturnToZero(){
-    hoodPIDController.setReference(0, ControlType.kPosition);
+public void hoodReturnToZero(){
+  hoodPIDController.setReference(0,ControlType.kPosition);
+}
+
+  public void hoodReturnToDefault(){
+    hoodPIDController.setReference(140, ControlType.kPosition);
   }
 
   public double limelightGetY(){

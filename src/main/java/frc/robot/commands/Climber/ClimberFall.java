@@ -2,17 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.HoodSubsystem;
 
-public class SetHoodPositionAuto extends CommandBase {
-  HoodSubsystem m_hood;
-  /** Creates a new SetHoodPositionAuto. */
-  public SetHoodPositionAuto(HoodSubsystem hoodSubsystem) {
-    m_hood = hoodSubsystem;
-    addRequirements(m_hood);
+public class ClimberFall extends CommandBase {
+  /** Creates a new ClimberFall. */
+  public ClimberFall() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -22,15 +18,11 @@ public class SetHoodPositionAuto extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_hood.setHoodPositionAuto();
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_hood.hoodReturnToDefault();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

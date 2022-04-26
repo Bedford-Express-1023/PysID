@@ -29,9 +29,9 @@ public class ShooterSubsystem extends SubsystemBase {
   double bottomShooterCurrentVelocity;
   double topShooterFenderRPM = 6518;
   double bottomShooterFenderRPM = 10710;
-  double topShooterTarmacRPM = 11200;
-  double bottomShooterTarmacRPM = 10200;
-  double topShooterLaunchpadRPM = 12000;
+  double topShooterTarmacRPM = 11150;
+  double bottomShooterTarmacRPM = 10250;
+  double topShooterLaunchpadRPM = 12100;
   double bottomShooterLaunchpadRPM = 12000;
   double topShooterLowGoalRPM = 2000;
   double bottomShooterLowGoalRPM = 4000;

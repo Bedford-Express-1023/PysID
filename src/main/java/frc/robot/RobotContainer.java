@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,7 +19,9 @@ import frc.robot.commands.Autos.threeBall;
 import frc.robot.commands.Climber.ClimbLock;
 import frc.robot.commands.Climber.ClimbStop;
 import frc.robot.commands.Climber.ClimbUp;
+import frc.robot.commands.Climber.ClimberFall;
 import frc.robot.commands.Climber.ClimberUnlock;
+import frc.robot.commands.Indexer.BallInSpitter;
 import frc.robot.commands.Indexer.BallSpitter;
 import frc.robot.commands.Indexer.FeedShooter;
 import frc.robot.commands.Indexer.StupidIndexer;
@@ -29,6 +32,9 @@ import frc.robot.commands.Intake.StowIntake;
 import frc.robot.commands.Shooter.AutoShootCommand;
 import frc.robot.commands.Shooter.HoodReturnToZero;
 import frc.robot.commands.Shooter.SetHoodPositionAuto;
+import frc.robot.commands.Shooter.ShootAtFender;
+import frc.robot.commands.Shooter.ShootAtLaunchpad;
+import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.commands.Shooter.ShooterTuningCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -45,7 +51,7 @@ public class RobotContainer {
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     private final HoodSubsystem m_hood = new HoodSubsystem();
     final IndexerSubsystem m_indexer = new IndexerSubsystem();
-    private final ClimberSubsystem m_climber = new ClimberSubsystem();
+    private final ClimberSubsystem m_climber = new ClimberSubsystem(this);
     public final SendableChooser<Command> autoChooser = new SendableChooser<Command>();
     public final SendableChooser<Command> autoDelay = new SendableChooser<Command>();
     public final SendableChooser<Command> teamColorChooser = new SendableChooser<Command>();
@@ -72,6 +78,13 @@ public class RobotContainer {
     private final FeedShooter feedShooter = new FeedShooter(m_indexer);
     private final XboxController brendanController = new XboxController(0);
     private final XboxController oliviaController = new XboxController(1);
+    private final ShootAtFender shootAtFender = new ShootAtFender(m_shooter, m_hood, m_indexer);
+    private final BallInSpitter ballInSpitter = new BallInSpitter(m_indexer);
+    private final ClimberFall climberFall = new ClimberFall();
+    private final SlewRateLimiter slewX = new SlewRateLimiter(6);
+    private final SlewRateLimiter slewY = new SlewRateLimiter(6);
+    private final ShootAtTarmac shootAtTarmac = new ShootAtTarmac(m_shooter, m_hood, m_indexer);
+    private final ShootAtLaunchpad shootAtLaunchpad = new ShootAtLaunchpad(m_shooter, m_hood, m_indexer);
 
 
     
@@ -83,7 +96,7 @@ public class RobotContainer {
         m_climber.register();
         m_hood.register();
 
-        CameraServer.startAutomaticCapture(0);
+        //CameraServer.startAutomaticCapture(0);
 
         autoChooser.setDefaultOption("Do Nothing", doNothing);
         autoChooser.addOption("2-ball", twoBallAtTarmac);
@@ -107,8 +120,8 @@ public class RobotContainer {
 
         m_drivetrain.setDefaultCommand(new DriveCommand(
                 m_drivetrain,
-                () -> -modifyAxis(brendanController.getLeftY()), // Axes are flipped here on purpose
-                () -> -modifyAxis(brendanController.getLeftX()),
+                () -> -modifyAxis(slewY.calculate(brendanController.getLeftY())), // Axes are flipped here on purpose
+                () -> -modifyAxis(slewX.calculate(brendanController.getLeftX())),
                 () -> -modifyAxis(brendanController.getRightX()),
                 () -> brendanController.getLeftBumper(), //RobotCentric
                 () -> brendanController.getRightBumper(), //lowPower
@@ -119,7 +132,7 @@ public class RobotContainer {
         m_indexer.setDefaultCommand(stupidIndexer);
         m_shooter.setDefaultCommand(shootStop);
         m_climber.setDefaultCommand(climberLock);
-        m_hood.setDefaultCommand(setHoodPositionAuto);
+       
        
       
         new Button(brendanController::getBButtonPressed)
@@ -130,8 +143,12 @@ public class RobotContainer {
                 .whileHeld(m_intake::unjamIntake);
         new Button(() -> oliviaController.getRightTriggerAxis() > 0.5)//not tested
                 .whileHeld(ballSpitter);
+        new Button(() -> oliviaController.getLeftTriggerAxis() > 0.5)
+                .whileHeld(ballInSpitter);
         new Button(oliviaController::getBButton)
                 .whileHeld(deployIntake);
+        new Button(oliviaController::getLeftBumper)
+                .whileHeld(climberFall);
         new POVButton(oliviaController, 0)
                 .whileHeld(climbUp);
         new POVButton(oliviaController, 0)
@@ -148,11 +165,19 @@ public class RobotContainer {
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(autoShootCommand);
                
+               
                 //.whileHeld(shooterTuningCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
        .whileHeld(feedShooter);
+       new Button(brendanController::getAButton)
+        .whileHeld(deployIntake);
+
+        new POVButton(brendanController, 0)
+        .whileHeld(shootAtTarmac);
+        new POVButton(brendanController, 180)
+        .whileHeld(shootAtLaunchpad);
     }
 
     private static double deadband(double value, double deadband) {

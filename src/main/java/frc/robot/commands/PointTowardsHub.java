@@ -29,7 +29,7 @@ public class PointTowardsHub extends CommandBase {
             drivetrain.drive(new ChassisSpeeds(0, 0, toRotate + 0.2 * Math.signum(toRotate)));
         }
 
-        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) > -1.5 && NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) < 1.5 ) {
+        if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) > -3 && NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) < 3 ) {
             drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));  
         }
     }

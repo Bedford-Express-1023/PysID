@@ -24,11 +24,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class IndexerSubsystem extends SubsystemBase {
   private final CANSparkMax indexerTopMotor = new CANSparkMax(31, MotorType.kBrushless); 
   private final CANSparkMax indexerFrontMotor = new CANSparkMax(30, MotorType.kBrushless); 
-  private final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); 
+  public final CANSparkMax indexerBackMotor = new CANSparkMax(32, MotorType.kBrushless); 
   private final DigitalInput shooterBeamBreak = new DigitalInput(7); 
   private final DigitalInput indexerBeamBreak = new DigitalInput(2);
   private final DigitalInput spitterBeamBreak = new DigitalInput(9);
-  private final double indexingSpeed = 0.75;
+  private final double indexingSpeed = 0.7;
+  private final double frontIndexingSpeed = 0.5;
+  private final double spitterIndexingSpeed = -0.55;
   
  // private final I2C.Port i2cPort = I2C.Port.kOnboard;
  // private ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
@@ -84,9 +86,7 @@ public class IndexerSubsystem extends SubsystemBase {
    // }
   
     public void ballSpitter2(){
-      indexerBackMotor.set(-indexingSpeed);
-      new WaitCommand(2);
-      indexerFrontMotor.set(indexingSpeed);
+      indexerBackMotor.set(indexingSpeed);
       new WaitCommand(2);
     }
 
@@ -104,10 +104,10 @@ public class IndexerSubsystem extends SubsystemBase {
     }
     else if (  shooterBeamBreakState == false && spitterBeamBreakState == true){
      
-      indexerBackMotor.set(-indexingSpeed);
+      indexerBackMotor.set(spitterIndexingSpeed);
       indexerTopMotor.stopMotor();
-      indexerFrontMotor.set(indexingSpeed);
-      new WaitCommand(1);
+      indexerFrontMotor.set(frontIndexingSpeed);
+     
     }
     else if (shooterBeamBreakState == false && spitterBeamBreakState == false){
       indexerFrontMotor.stopMotor();

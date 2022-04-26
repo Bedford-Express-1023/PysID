@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Gyroscope180;
 import frc.robot.commands.PointTowardsHub;
 import frc.robot.commands.Intake.DeployIntake;
+import frc.robot.commands.Shooter.AutoShootCommand;
 import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -30,7 +31,6 @@ public class TwoBallAtTarmac extends SequentialCommandGroup {
       new DriveBackFromTarmac(drivetrain).alongWith(
         new DeployIntake(intakeSubsystem).withTimeout(2.0)),
       new PointTowardsHub(drivetrain).alongWith(
-        new ShootAtTarmac(m_shooter, m_hood, m_indexer)).withTimeout(7),
-      new Gyroscope180(drivetrain));
+        new ShootAtTarmac(m_shooter, m_hood, m_indexer)).withTimeout(7));
   }
 }

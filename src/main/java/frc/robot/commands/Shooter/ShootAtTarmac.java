@@ -40,7 +40,8 @@ public class ShootAtTarmac extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_ShooterSubsystem.shootStop();
-    m_HoodSubsystem.hoodReturnToZero();
+    m_HoodSubsystem.hoodReturnToDefault();
+    
   }
 
   // Returns true when the command should end.
