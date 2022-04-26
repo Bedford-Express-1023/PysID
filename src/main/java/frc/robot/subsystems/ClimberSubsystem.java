@@ -60,8 +60,8 @@ public class ClimberSubsystem extends SubsystemBase {
   public void climberUp(){
     climberUnlock();
   
-      climberLeftMotor.set(ControlMode.PercentOutput, -0.85);
-      climberRightMotor.set(ControlMode.PercentOutput, 0.85);
+      climberLeftMotor.set(ControlMode.PercentOutput, -1);
+      climberRightMotor.set(ControlMode.PercentOutput, 1);
     
   
      

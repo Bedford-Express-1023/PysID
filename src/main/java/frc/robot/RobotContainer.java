@@ -33,6 +33,8 @@ import frc.robot.commands.Shooter.AutoShootCommand;
 import frc.robot.commands.Shooter.HoodReturnToZero;
 import frc.robot.commands.Shooter.SetHoodPositionAuto;
 import frc.robot.commands.Shooter.ShootAtFender;
+import frc.robot.commands.Shooter.ShootAtLaunchpad;
+import frc.robot.commands.Shooter.ShootAtTarmac;
 import frc.robot.commands.Shooter.ShootStop;
 import frc.robot.commands.Shooter.ShooterTuningCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -81,7 +83,8 @@ public class RobotContainer {
     private final ClimberFall climberFall = new ClimberFall();
     private final SlewRateLimiter slewX = new SlewRateLimiter(6);
     private final SlewRateLimiter slewY = new SlewRateLimiter(6);
-
+    private final ShootAtTarmac shootAtTarmac = new ShootAtTarmac(m_shooter, m_hood, m_indexer);
+    private final ShootAtLaunchpad shootAtLaunchpad = new ShootAtLaunchpad(m_shooter, m_hood, m_indexer);
 
 
     
@@ -171,8 +174,10 @@ public class RobotContainer {
        new Button(brendanController::getAButton)
         .whileHeld(deployIntake);
 
-       new POVButton(brendanController, 0)
-       .whileHeld(shootAtFender);
+        new POVButton(brendanController, 0)
+        .whileHeld(shootAtTarmac);
+        new POVButton(brendanController, 180)
+        .whileHeld(shootAtLaunchpad);
     }
 
     private static double deadband(double value, double deadband) {
