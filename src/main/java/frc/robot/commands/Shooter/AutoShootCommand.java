@@ -34,7 +34,7 @@ public class AutoShootCommand extends CommandBase {
     public void execute() {
       m_hood.setHoodPositionAuto();
       m_shooter.setShooterSpeedsAuto();
-      if (m_shooter.shooterReadyAuto() == true  ){
+      if (m_shooter.shooterReadyAuto() && m_shooter.limelightAimReady()){
         m_indexer.feedShooter();
       }
       else {

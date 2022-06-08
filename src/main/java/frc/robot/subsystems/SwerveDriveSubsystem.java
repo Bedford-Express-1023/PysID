@@ -154,18 +154,12 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         //SmartDashboard.putString("Drivetrain command", CommandVariable);
         updateOdometry();
         if (!DriverStation.isAutonomousEnabled()) {
-        updateOdometry();
-        frontLeftModule.set((feedForward.calculate(states[0].speedMetersPerSecond) + pid.calculate(states[0].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()); //not sure why the Math.pi is there but don't remove it because it works
-        frontRightModule.set((feedForward.calculate(states[1].speedMetersPerSecond) + pid.calculate(states[1].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
-        backLeftModule.set((feedForward.calculate(states[2].speedMetersPerSecond) + pid.calculate(states[2].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians()); 
-        backRightModule.set((feedForward.calculate(states[3].speedMetersPerSecond) + pid.calculate(states[3].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians()); 
+                updateOdometry();
+                frontLeftModule.set((feedForward.calculate(states[0].speedMetersPerSecond) + pid.calculate(states[0].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians());
+                frontRightModule.set((feedForward.calculate(states[1].speedMetersPerSecond) + pid.calculate(states[1].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
+                backLeftModule.set((feedForward.calculate(states[2].speedMetersPerSecond) + pid.calculate(states[2].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians()); 
+                backRightModule.set((feedForward.calculate(states[3].speedMetersPerSecond) + pid.calculate(states[3].speedMetersPerSecond)) * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians()); 
         }
-        /*
-        frontLeftModule.set(states[0].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
-        frontRightModule.set(states[1].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond / Constants.MAX_VELOCITY_METERS_PER_SECOND * Constants.SWERVE_MAX_VOLTAGE * Math.min(Constants.SWERVE_SPEED_MULTIPLIER, 1), states[3].angle.getRadians());
-        */
     }
 }
 //Eric Koenemann was here!

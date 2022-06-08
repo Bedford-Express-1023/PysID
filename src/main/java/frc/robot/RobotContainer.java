@@ -165,14 +165,12 @@ public class RobotContainer {
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(autoShootCommand);
                
-               
-                //.whileHeld(shooterTuningCommand);
         new Button(() -> brendanController.getRightTriggerAxis() > 0.5)
                 .whileHeld(pointTowardsHub);
         new Button(() -> brendanController.getLeftTriggerAxis() > 0.5)
                 .whileHeld(feedShooter);
-        new Button(brendanController::getAButton)
-                .whileHeld(deployIntake);
+        /*new Button(brendanController::getAButton)
+                .whileHeld(deployIntake);*/
         new Button(brendanController::getStartButton)
                 .whenPressed(hoodReturnToZero);
         new POVButton(brendanController, 0)
