@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -21,16 +22,16 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
 /** Add your docs here. */
-public class fourBall3 extends PPSwerveControllerCommand {
+public class GiveToGavin2 extends PPSwerveControllerCommand {
     public SwerveDriveSubsystem drivetrain;
-    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("4 ball 3", 3, 4);
+    public static final PathPlannerTrajectory trajectory = PathPlanner.loadPath("Secret2", 3, 4);
 
-    private fourBall3(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
+    private GiveToGavin2(PathPlannerTrajectory trajectory, Supplier<Pose2d> pose, SwerveDriveKinematics kinematics,
             PIDController xController, PIDController yController, ProfiledPIDController thetaController,
             Consumer<SwerveModuleState[]> outputModuleStates, Subsystem[] requirements) {
         super(trajectory, pose, kinematics, xController, yController, thetaController, outputModuleStates, requirements);
     }
-    public fourBall3(SwerveDriveSubsystem drivetrain) {
+    public GiveToGavin2(SwerveDriveSubsystem drivetrain) {
         super(
             trajectory, 
             drivetrain::getRealOdometry, 
@@ -40,13 +41,18 @@ public class fourBall3 extends PPSwerveControllerCommand {
             new ProfiledPIDController(8, 0.0, 0.0, new TrapezoidProfile.Constraints(5.0,6.0)), 
             (states) -> {
                     drivetrain.updateOdometry();
-                    drivetrain.frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians()); //not sure why the Math.pi is there but don't remove it because it works
+                    drivetrain.frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
                     drivetrain.frontRightModule.set(states[1].speedMetersPerSecond, states[1].angle.getRadians());
                     drivetrain.backLeftModule.set(states[2].speedMetersPerSecond, states[2].angle.getRadians()); 
                     drivetrain.backRightModule.set(states[3].speedMetersPerSecond, states[3].angle.getRadians()); 
             }, 
             drivetrain);
             this.drivetrain = drivetrain;
+    }
+    @Override
+    public void initialize() {
+        super.initialize();
+        drivetrain.odometry.resetPosition(trajectory.getInitialPose(), Rotation2d.fromDegrees(drivetrain.gyroscope.getYaw()));
     }
 
     @Override

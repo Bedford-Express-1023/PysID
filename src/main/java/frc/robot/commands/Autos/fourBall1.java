@@ -40,7 +40,7 @@ public class fourBall1 extends PPSwerveControllerCommand {
             new ProfiledPIDController(8, 0.0, 0.0, new TrapezoidProfile.Constraints(5.0,6.0)), 
             (states) -> {
                     drivetrain.updateOdometry();
-                    drivetrain.frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians()-Math.PI); //not sure why the Math.pi is there but don't remove it because it works
+                    drivetrain.frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians()); //not sure why the Math.pi is there but don't remove it because it works
                     drivetrain.frontRightModule.set(states[1].speedMetersPerSecond, states[1].angle.getRadians());
                     drivetrain.backLeftModule.set(states[2].speedMetersPerSecond, states[2].angle.getRadians()); 
                     drivetrain.backRightModule.set(states[3].speedMetersPerSecond, states[3].angle.getRadians()); 

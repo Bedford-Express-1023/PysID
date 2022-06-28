@@ -13,6 +13,7 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.PointTowardsHub;
 
 import frc.robot.commands.Autos.DoNothing;
+import frc.robot.commands.Autos.GiveToGavin;
 import frc.robot.commands.Autos.TwoBallAtTarmac;
 import frc.robot.commands.Autos.fourBall;
 import frc.robot.commands.Autos.threeBall;
@@ -102,6 +103,8 @@ public class RobotContainer {
         autoChooser.addOption("2-ball", twoBallAtTarmac);
         autoChooser.addOption("3-ball", new threeBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
         autoChooser.addOption("4-ball", new fourBall(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+        autoChooser.addOption("Testing", new GiveToGavin(m_intake, m_indexer, m_drivetrain, m_shooter, m_hood));
+
 
         SmartDashboard.putData(autoChooser);
 
