@@ -11,7 +11,7 @@ public class Constants {
     public static final double DRIVETRAIN_WHEELBASE_METERS = 0.521;
 
     public static final double SWERVE_MAX_VOLTAGE = 12;
-    public static final double SWERVE_SPEED_MULTIPLIER = 100; //use to limit speed
+    public static final double SWERVE_SPEED_MULTIPLIER = .45; //use to limit speed
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 5.25; //Literally a measure of how fast the swerves could possibly go
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
             Math.hypot(Constants.DRIVETRAIN_TRACKWIDTH_METERS / 4.0, Constants.DRIVETRAIN_WHEELBASE_METERS / 4.0);
@@ -21,22 +21,22 @@ public class Constants {
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 42;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(264);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(263);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 6;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 4;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(289);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(288);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9;
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(4.9);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(4.7);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 11;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 12;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 10;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(342);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(343);
 
     ///////////////////
     //SHOOTER CONSTANTS
@@ -85,62 +85,54 @@ public class Constants {
 			};
 
 		public static final double[][] SHOOTER_TOP_ARRAY = {
-            {17.6,7400},
-            {15.5, 7800},
-            {12.2,8000},
-			{10.7,8000},
-            {7.5,8300},
-            {5.5,8550},
-			{4,8600},
-			{0.0,8500},
-			{-1.1,8500},
-            {-2.4, 8500},
-            {-4.2,8500},
-			{-5.8,8500},
-            {-7.2, 9000},
-            {-8,9261},
-            {-8.5, 9800},
-            {-9.5, 10000},
-            {-10.1, 10200},
-            {-11.1, 10200},
-            {-12.5,10500},
-            {-14, 10558},
-            {-14.9,10858},
-            {-15.1, 10958},
-            {-15.6, 11100},
-            {-16.1, 11200},
-            {-17.4, 11900},
-            {-18.1, 12400}
+            {17.6,7500},
+            {15.5, 7900},
+            {12.2,8100},
+			{10.7,8100},
+            {7.5,8400},
+            {5.5,8650},
+			{4,8700},
+			{0.0,8600},
+			{-1.1,8600},
+            {-2.4, 8600},
+            {-4.2,8600},
+			{-5.8,8600},
+            {-7.2, 9100},
+            {-8,9361},
+            {-8.5, 9900},
+            {-9.5, 10100},
+            {-10.1, 10300},
+            {-11.1, 10300},
+            {-12.5,10600},
+            {-14, 10658},
+            {-14.9,10958},
+            {-15.1, 10758}
             
 		};
 
         public static final double[][] SHOOTER_BOTTOM_ARRAY = {
-            {17.6,11300},
-            {15.5,11300},
-            {12.2,11000},
-			{10.7,11000},
-            {7.5,11400},
-            {5.5,11050},
-			{4,11200},
-			{0.0,11600},
-			{-1.1,12300},
-            {-2.4, 12300},
-            {-4.2, 12400},
-			{-5.8,12000},
-            {-7.2, 11700},
-            {-8, 12680},
-            {-8.5, 12200},
-            {-9.5, 12550},
-            {-10.1, 13100},
-            {-11.1,12002},
-            {-12.5, 13600},
-            {-14,14000 },
-            {-14.9, 13585},
-            {-15.1, 13902},
-            {-15.6, 14202},
-            {-16.1, 14700},
-            {-17.4, 14702},
-            {-18.1, 14900}
+            {17.6,11500},
+            {15.5,11500},
+            {12.2,11100},
+			{10.7,11100},
+            {7.5,11600},
+            {5.5,11450},
+			{4,11300},
+			{0.0,11800},
+			{-1.1,12500},
+            {-2.4, 12500},
+            {-4.2, 12600},
+			{-5.8,12200},
+            {-7.2, 11900},
+            {-8, 12880},
+            {-8.5, 12300},
+            {-9.5, 12750},
+            {-10.1, 13300},
+            {-11.1,12202},
+            {-12.5, 13800},
+            {-14,14200 },
+            {-14.9, 13785},
+            {-15.1, 13802}
         };
 
 		public static final LinearInterpolator HOOD_INTERPOLATOR = new LinearInterpolator(HOOD_ARRAY);
