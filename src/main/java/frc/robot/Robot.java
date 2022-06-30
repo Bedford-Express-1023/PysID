@@ -7,10 +7,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
@@ -29,6 +27,7 @@ public class Robot extends TimedRobot {
   public Boolean staticOvercome = false;
 
   public double targetVelocity;
+  
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,11 +35,13 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = new RobotContainer();
+    SmartDashboard.putData("Options", options);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    SmartDashboard.putData("Options", options);
   }
 
   @Override
@@ -50,6 +51,8 @@ public class Robot extends TimedRobot {
     if (targetVelocity >= 12000) {
       SmartDashboard.putNumber("kv", kv);
       SmartDashboard.putNumber("ks", ks);
+      autonomousExit();
+      return;
     }
     motor.set(ControlMode.Velocity, targetVelocity);
     SmartDashboard.putNumber("Target Velocity", targetVelocity);
